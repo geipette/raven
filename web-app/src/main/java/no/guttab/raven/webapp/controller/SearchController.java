@@ -3,17 +3,12 @@ package no.guttab.raven.webapp.controller;
 import javax.validation.Valid;
 
 import no.guttab.raven.webapp.command.SearchRequest;
-import no.guttab.raven.webapp.search.SearchServer;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class SearchController {
-   @Autowired
-   private SearchServer searchServer;
-
    @RequestMapping(value = {"/"})
    public ModelAndView helloWorld(@Valid Hello hello) {
       return new ModelAndView("hello", "hello", hello);
