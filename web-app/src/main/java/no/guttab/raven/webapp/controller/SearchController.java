@@ -2,7 +2,6 @@ package no.guttab.raven.webapp.controller;
 
 import javax.validation.Valid;
 
-import no.guttab.raven.webapp.command.SearchRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
