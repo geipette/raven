@@ -1,4 +1,5 @@
 package no.guttab.raven.webapp.command;
 
-public interface SearchRequest {
+public class SearchRequest {
+
 }

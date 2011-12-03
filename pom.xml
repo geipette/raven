@@ -30,7 +30,19 @@
       <dependency>
          <groupId>junit</groupId>
          <artifactId>junit</artifactId>
-         <version>4.8.1</version>
+         <version>4.10</version>
+         <scope>test</scope>
+      </dependency>
+      <dependency>
+         <groupId>org.mockito</groupId>
+         <artifactId>mockito-all</artifactId>
+         <version>1.8.5</version>
+         <scope>test</scope>
+      </dependency>
+      <dependency>
+         <groupId>org.hamcrest</groupId>
+         <artifactId>hamcrest-all</artifactId>
+         <version>1.1</version>
          <scope>test</scope>
       </dependency>
    </dependencies>
@@ -54,8 +66,8 @@
             <version>${org.springframework.version}</version>
          </dependency>
          <dependency>
-             <groupId>org.springframework</groupId>
-             <artifactId>spring-context</artifactId>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
             <version>${org.springframework.version}</version>
          </dependency>
       </dependencies>
