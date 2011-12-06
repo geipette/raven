@@ -2,12 +2,14 @@ package no.guttab.raven.webapp.search.query;
 
 import java.lang.reflect.Field;
 
+import no.guttab.raven.webapp.annotations.AnnotationUtils;
 import no.guttab.raven.webapp.annotations.FilterQuery;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.ReflectionUtils;
 
+import static no.guttab.raven.webapp.annotations.AnnotationUtils.getIndexFieldName;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 public class FilterQueryProcessor implements QueryProcessor {
@@ -35,11 +37,7 @@ public class FilterQueryProcessor implements QueryProcessor {
       if (queryCriteria == null) {
          return null;
       }
-      return getIndexFieldName(filterQuery, field.getName()) + ':' + queryCriteria;
-   }
-
-   private String getIndexFieldName(FilterQuery filterQuery, String name) {
-      return isEmpty(filterQuery.indexFieldName()) ? name : filterQuery.indexFieldName();
+      return getIndexFieldName(field) + ':' + queryCriteria;
    }
 
    @SuppressWarnings({"unchecked"})

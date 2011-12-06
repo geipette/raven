@@ -1,6 +1,9 @@
 package no.guttab.raven.webapp.search.response;
 
-public interface Navigator {
+import java.util.List;
+
+public interface Navigator<T extends NavigatorItem> {
+   List<T> getItems();
    String getDisplayName();
    String getId();
 }

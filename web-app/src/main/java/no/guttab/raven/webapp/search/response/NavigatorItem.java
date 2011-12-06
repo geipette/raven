@@ -1,4 +1,4 @@
 package no.guttab.raven.webapp.search.response;
 
-public class NavigatorItem {
+public interface NavigatorItem {
 }

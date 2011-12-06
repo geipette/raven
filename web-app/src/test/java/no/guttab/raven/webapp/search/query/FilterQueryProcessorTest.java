@@ -1,6 +1,7 @@
 package no.guttab.raven.webapp.search.query;
 
 import no.guttab.raven.webapp.annotations.FilterQuery;
+import no.guttab.raven.webapp.annotations.IndexFieldName;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
@@ -66,7 +67,8 @@ public class FilterQueryProcessorTest {
    @Test
    public void filterQuery_for_annotated_field_should_use_indexFieldName_when_specified() throws Exception {
       Object queryInput = new Object() {
-         @FilterQuery(indexFieldName = "geo_id")
+         @IndexFieldName("geo_id")
+         @FilterQuery
          private String areaId = "500";
       };
 
