@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 
 import no.guttab.raven.webapp.annotations.AnnotatedFieldExecutor;
 import no.guttab.raven.webapp.annotations.FilterQuery;
+import no.guttab.raven.webapp.reflection.FieldUtils;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +12,7 @@ import org.springframework.util.ReflectionUtils;
 
 import static no.guttab.raven.webapp.annotations.AnnotationUtils.executeForEachAnnotatedFieldOn;
 import static no.guttab.raven.webapp.annotations.AnnotationUtils.getIndexFieldName;
+import static no.guttab.raven.webapp.reflection.FieldUtils.getFieldValue;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 public class FilterQueryProcessor implements QueryProcessor {
@@ -30,7 +32,7 @@ public class FilterQueryProcessor implements QueryProcessor {
    }
 
    private String buildFilterQuery(FilterQuery filterQuery, Object queryInput, Field field) {
-      Object fieldValue = getFieldValue(queryInput, field);
+      Object fieldValue = getFieldValue(field, queryInput);
       if (fieldValue == null) {
          return null;
       }
@@ -52,11 +54,6 @@ public class FilterQueryProcessor implements QueryProcessor {
          log.error("Could not instantiate class. FilterQuery skipped.", e);
       }
       return null;
-   }
-
-   private Object getFieldValue(Object queryInput, Field field) {
-      ReflectionUtils.makeAccessible(field);
-      return ReflectionUtils.getField(field, queryInput);
    }
 
 }
