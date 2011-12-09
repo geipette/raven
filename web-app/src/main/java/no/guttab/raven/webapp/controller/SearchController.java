@@ -5,6 +5,7 @@ import javax.validation.Valid;
 import no.guttab.raven.webapp.search.SearchServer;
 import no.guttab.raven.webapp.search.query.QueryProcessor;
 import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.response.QueryResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,10 +26,12 @@ public class SearchController {
    }
 
    @RequestMapping(value = {"/search"})
-   public ModelAndView search(SearchRequest searchRequest) {
+   public ModelAndView search(@Valid SearchRequest searchRequest) {
       SolrQuery solrQuery = new SolrQuery();
       queryProcessor.buildQuery(searchRequest, solrQuery);
-      return new ModelAndView("search-result", "searchResponse", searchServer.search(solrQuery));
+      QueryResponse queryResponse = searchServer.search(solrQuery);
+
+      return new ModelAndView("search-result", "queryResponse", queryResponse);
    }
 
 }

@@ -13,7 +13,7 @@ public class SearchServer {
 
    public QueryResponse search(SolrQuery solrQuery) throws SearchServerRuntimeException {
       try {
-         return searchResource.getServer().query(solrQuery.required());
+         return searchResource.getServer().query(solrQuery);
       } catch (SolrServerException e) {
          throw new SearchServerRuntimeException(e);
       }

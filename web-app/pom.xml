@@ -64,7 +64,12 @@
          <groupId>ch.qos.logback</groupId>
          <artifactId>logback-classic</artifactId>
          <version>1.0.0</version>
-         <scope>test</scope>
+      </dependency>
+
+      <dependency>
+         <groupId>jstl</groupId>
+         <artifactId>jstl</artifactId>
+         <version>1.2</version>
       </dependency>
 
 

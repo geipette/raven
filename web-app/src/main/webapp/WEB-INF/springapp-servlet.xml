@@ -19,6 +19,7 @@
          <list>
             <bean class="no.guttab.raven.webapp.search.query.FacetQueryProcessor"/>
             <bean class="no.guttab.raven.webapp.search.query.FilterQueryProcessor"/>
+            <bean class="no.guttab.raven.webapp.search.query.QueryStringQueryProcessor"/>
          </list>
       </constructor-arg>
    </bean>
