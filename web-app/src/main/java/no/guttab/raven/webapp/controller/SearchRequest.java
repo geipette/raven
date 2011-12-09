@@ -1,8 +1,10 @@
 package no.guttab.raven.webapp.controller;
 
 import no.guttab.raven.webapp.annotations.FilterQuery;
+import no.guttab.raven.webapp.annotations.IndexFieldName;
 
 public class SearchRequest {
-   @FilterQuery
-   private String geoIdTaxonomy;
+   @IndexFieldName("cat")
+   @FilterQuery(isFacetField = true)
+   private String category;
 }

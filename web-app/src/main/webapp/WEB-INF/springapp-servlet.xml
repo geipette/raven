@@ -8,14 +8,26 @@
    <mvc:annotation-driven/>
    <context:component-scan base-package="no.guttab.raven.webapp"/>
 
-
-   <!--<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">-->
-      <!--<property name="prefix" value="/WEB-INF/jsp/"/>-->
-      <!--<property name="suffix" value=".jsp"/>-->
-   <!--</bean>-->
    <bean id="viewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver">
-   <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
-   <property name="prefix" value="/WEB-INF/jsp/"/>
-   <property name="suffix" value=".jsp"/>
+      <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+      <property name="prefix" value="/WEB-INF/jsp/"/>
+      <property name="suffix" value=".jsp"/>
+   </bean>
+
+   <bean id="queryProcessor" class="no.guttab.raven.webapp.search.query.QueryProcessorList">
+      <constructor-arg>
+         <list>
+            <bean class="no.guttab.raven.webapp.search.query.FacetQueryProcessor"/>
+            <bean class="no.guttab.raven.webapp.search.query.FilterQueryProcessor"/>
+         </list>
+      </constructor-arg>
+   </bean>
+
+   <bean id="searchServer" class="no.guttab.raven.webapp.search.SearchServer">
+      <constructor-arg ref="searchResource"/>
+   </bean>
+
+   <bean id="searchResource" class="no.guttab.raven.webapp.search.UrlBasedSearchResource">
+      <constructor-arg value="http://localhost:8093"/>
    </bean>
 </beans>

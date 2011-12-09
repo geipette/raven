@@ -2,13 +2,14 @@ package no.guttab.raven.webapp.search.query;
 
 import java.lang.reflect.Field;
 
-import no.guttab.raven.webapp.annotations.AnnotationUtils;
+import no.guttab.raven.webapp.annotations.AnnotatedFieldExecutor;
 import no.guttab.raven.webapp.annotations.FilterQuery;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.ReflectionUtils;
 
+import static no.guttab.raven.webapp.annotations.AnnotationUtils.executeForEachAnnotatedFieldOn;
 import static no.guttab.raven.webapp.annotations.AnnotationUtils.getIndexFieldName;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
@@ -16,16 +17,16 @@ public class FilterQueryProcessor implements QueryProcessor {
    private static final Logger log = LoggerFactory.getLogger(FilterQueryProcessor.class);
 
    @Override
-   public void buildQuery(Object queryInput, SolrQuery solrQuery) {
-      for (Field field : queryInput.getClass().getDeclaredFields()) {
-         FilterQuery filterQueryAnnotation = field.getAnnotation(FilterQuery.class);
-         if (filterQueryAnnotation != null) {
-            String filterQuery = buildFilterQuery(filterQueryAnnotation, queryInput, field);
+   public void buildQuery(final Object queryInput, final SolrQuery solrQuery) {
+      executeForEachAnnotatedFieldOn(queryInput, FilterQuery.class, new AnnotatedFieldExecutor<FilterQuery>() {
+         @Override
+         public void execute(Field field, FilterQuery annotation) {
+            String filterQuery = buildFilterQuery(annotation, queryInput, field);
             if (!isEmpty(filterQuery)) {
                solrQuery.addFilterQuery(filterQuery);
             }
          }
-      }
+      });
    }
 
    private String buildFilterQuery(FilterQuery filterQuery, Object queryInput, Field field) {

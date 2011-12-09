@@ -7,7 +7,7 @@ import org.apache.solr.client.solrj.response.QueryResponse;
 public class SearchServer {
    private SearchResource searchResource;
 
-   public void setSearchResource(SearchResource searchResource) {
+   public SearchServer(SearchResource searchResource) {
       this.searchResource = searchResource;
    }
 

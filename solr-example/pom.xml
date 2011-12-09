@@ -22,6 +22,10 @@
                      <name>solr.solr.home</name>
                      <value>${basedir}/src/main/solr</value>
                   </systemProperty>
+                  <systemProperty>
+                     <name>jetty.port</name>
+                     <value>8093</value>
+                  </systemProperty>
                </systemProperties>
             </configuration>
          </plugin>
