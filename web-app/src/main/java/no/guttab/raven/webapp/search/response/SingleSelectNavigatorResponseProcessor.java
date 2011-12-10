@@ -2,6 +2,8 @@ package no.guttab.raven.webapp.search.response;
 
 import java.lang.reflect.Field;
 
+import no.guttab.raven.webapp.reflection.FieldCallback;
+import no.guttab.raven.webapp.reflection.FieldUtils;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,15 +15,16 @@ public class SingleSelectNavigatorResponseProcessor implements ResponseProcessor
    private static final Logger log = LoggerFactory.getLogger(SingleSelectNavigatorResponseProcessor.class);
 
    @Override
-   public void buildResponse(QueryResponse queryResponse, Object response) {
-      for (Field field : response.getClass().getDeclaredFields()) {
-         if (field.getType() == SingleSelectNavigator.class) {
+   public void buildResponse(final QueryResponse queryResponse, final Object response) {
+      FieldUtils.doForEachFieldOfType(response, SingleSelectNavigator.class, new FieldCallback() {
+         @Override
+         public void doFor(Field field) {
             String indexFieldName = getIndexFieldName(field);
             SingleSelectNavigatorBuilder builder = new SingleSelectNavigatorBuilder(indexFieldName);
             SingleSelectNavigator singleSelectNavigator = builder.buildNavigator(queryResponse);
             setNavigatorOnTarget(response, field, singleSelectNavigator);
          }
-      }
+      });
    }
 
    private void setNavigatorOnTarget(Object response, Field field, SingleSelectNavigator singleSelectNavigator) {

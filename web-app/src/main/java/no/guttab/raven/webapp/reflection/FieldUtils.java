@@ -2,11 +2,7 @@ package no.guttab.raven.webapp.reflection;
 
 import java.lang.reflect.Field;
 
-import org.springframework.util.ReflectionUtils;
-
-import static org.springframework.util.ReflectionUtils.getField;
-import static org.springframework.util.ReflectionUtils.makeAccessible;
-import static org.springframework.util.ReflectionUtils.setField;
+import static org.springframework.util.ReflectionUtils.*;
 
 public class FieldUtils {
    private FieldUtils() {
@@ -21,5 +17,34 @@ public class FieldUtils {
       makeAccessible(field);
       setField(field, target, value);
    }
+
+   public static Field findField(Class<?> type, FieldFilter fieldFilter) {
+      for (Field field : type.getDeclaredFields()) {
+         if (fieldFilter.matches(field)) {
+            return field;
+         }
+      }
+      return null;
+   }
+
+   public static void doForEachFieldOfType(Object target, Class<?> type, FieldCallback fieldCallback) {
+      for (Field field : target.getClass().getDeclaredFields()) {
+         if (field.getType() == type) {
+            fieldCallback.doFor(field);
+         }
+      }
+   }
+
+   public static void doForFirstFieldOfType(Object target, Class<?> type, FieldCallback fieldCallback) {
+      for (Field field : target.getClass().getDeclaredFields()) {
+         if (field.getType() == type) {
+            fieldCallback.doFor(field);
+            return;
+         }
+      }
+   }
+
+
+
 
 }

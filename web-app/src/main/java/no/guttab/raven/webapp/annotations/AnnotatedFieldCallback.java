@@ -3,6 +3,6 @@ package no.guttab.raven.webapp.annotations;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
-public interface AnnotatedFieldExecutor<T extends Annotation> {
-   void execute(Field field, T annotation);
+public interface AnnotatedFieldCallback<T extends Annotation> {
+   void doFor(Field field, T annotation);
 }

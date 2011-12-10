@@ -2,20 +2,20 @@ package no.guttab.raven.webapp.search.query;
 
 import java.lang.reflect.Field;
 
-import no.guttab.raven.webapp.annotations.AnnotatedFieldExecutor;
+import no.guttab.raven.webapp.annotations.AnnotatedFieldCallback;
 import no.guttab.raven.webapp.annotations.Query;
 import no.guttab.raven.webapp.reflection.FieldUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.client.solrj.SolrQuery;
 
-import static no.guttab.raven.webapp.annotations.AnnotationUtils.executeForFirstAnnotatedFieldOn;
+import static no.guttab.raven.webapp.annotations.AnnotationUtils.doForFirstAnnotatedFieldOn;
 
 public class QueryStringQueryProcessor implements QueryProcessor {
    @Override
    public void buildQuery(final Object queryInput, final SolrQuery solrQuery) {
-      executeForFirstAnnotatedFieldOn(queryInput, Query.class, new AnnotatedFieldExecutor<Query>() {
+      doForFirstAnnotatedFieldOn(queryInput, Query.class, new AnnotatedFieldCallback<Query>() {
          @Override
-         public void execute(Field field, Query annotation) {
+         public void doFor(Field field, Query annotation) {
             setQueryType(annotation, solrQuery);
             setQueryString(field, queryInput, solrQuery);
          }

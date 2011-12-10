@@ -12,36 +12,25 @@ public class AnnotationUtils {
       return indexFieldName == null ? field.getName() : indexFieldName.value();
    }
 
-   public static <T extends Annotation> void executeForEachAnnotatedFieldOn(
-         Object object, Class<T> annotationType, AnnotatedFieldExecutor<T> executor) {
-      for (Field field : object.getClass().getDeclaredFields()) {
+   public static <T extends Annotation> void doForEachAnnotatedFieldOn(
+         Object target, Class<T> annotationType, AnnotatedFieldCallback<T> callback) {
+      for (Field field : target.getClass().getDeclaredFields()) {
          T annotation = field.getAnnotation(annotationType);
          if (annotation != null) {
-            executor.execute(field, annotation);
+            callback.doFor(field, annotation);
          }
       }
    }
 
-   public static <T extends Annotation> void executeForFirstAnnotatedFieldOn(
-         Object object, Class<T> annotationType, AnnotatedFieldExecutor<T> executor) {
-      for (Field field : object.getClass().getDeclaredFields()) {
+   public static <T extends Annotation> void doForFirstAnnotatedFieldOn(
+         Object target, Class<T> annotationType, AnnotatedFieldCallback<T> callback) {
+      for (Field field : target.getClass().getDeclaredFields()) {
          T annotation = field.getAnnotation(annotationType);
          if (annotation != null) {
-            executor.execute(field, annotation);
+            callback.doFor(field, annotation);
             return;
          }
       }
-   }
-
-
-   public static Field findAnnotatedField(Object object, Class<? extends Annotation> annotationType) {
-      for (Field field : object.getClass().getDeclaredFields()) {
-         Annotation annotation = field.getAnnotation(annotationType);
-         if (annotation != null) {
-            return field;
-         }
-      }
-      return null;
    }
 
 }
