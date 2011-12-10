@@ -16,28 +16,28 @@ import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.assertThat;
 
 @RunWith(MockitoJUnitRunner.class)
-public class SelectNavigatorResponseProcessorTest {
+public class SingleSelectNavigatorResponseProcessorTest {
    @Mock
    QueryResponse queryResponse;
 
-   private SelectNavigatorResponseProcessor selectNavigatorResponseProcessor;
+   private SingleSelectNavigatorResponseProcessor singleSelectNavigatorResponseProcessor;
 
 
    @Before
    public void setUp() throws Exception {
-      selectNavigatorResponseProcessor = new SelectNavigatorResponseProcessor();
+      singleSelectNavigatorResponseProcessor = new SingleSelectNavigatorResponseProcessor();
    }
 
    @Test
    public void buildResponse_should_build_navigator_when_facetField_returned() throws Exception {
       class ResponseForTest {
-         SelectNavigator areaId;
+         SingleSelectNavigator areaId;
       }
       final ResponseForTest response = new ResponseForTest();
 
       Mockito.when(queryResponse.getFacetField("areaId")).thenReturn(facetFieldForTest());
 
-      selectNavigatorResponseProcessor.buildResponse(queryResponse, response);
+      singleSelectNavigatorResponseProcessor.buildResponse(queryResponse, response);
 
       assertThat(response.areaId, is(not(nullValue())));
       assertThat(response.areaId.getItems().size(), is(2));
@@ -46,11 +46,11 @@ public class SelectNavigatorResponseProcessorTest {
    @Test
    public void buildResponse_do_nothing_when_facetField_is_not_returned() throws Exception {
       class ResponseForTest {
-         SelectNavigator areaId;
+         SingleSelectNavigator areaId;
       }
       final ResponseForTest response = new ResponseForTest();
 
-      selectNavigatorResponseProcessor.buildResponse(queryResponse, response);
+      singleSelectNavigatorResponseProcessor.buildResponse(queryResponse, response);
 
       assertThat(response.areaId, is(nullValue()));
    }
@@ -59,13 +59,13 @@ public class SelectNavigatorResponseProcessorTest {
    public void buildResponse_should_use_indexFieldName_when_defined() throws Exception {
       class ResponseForTest {
          @IndexFieldName("indexFieldAreaId")
-         SelectNavigator areaId;
+         SingleSelectNavigator areaId;
       }
       final ResponseForTest response = new ResponseForTest();
 
       Mockito.when(queryResponse.getFacetField("indexFieldAreaId")).thenReturn(facetFieldForTest());
 
-      selectNavigatorResponseProcessor.buildResponse(queryResponse, response);
+      singleSelectNavigatorResponseProcessor.buildResponse(queryResponse, response);
 
       assertThat(response.areaId, is(not(nullValue())));
       assertThat(response.areaId.getItems().size(), is(2));

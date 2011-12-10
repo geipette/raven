@@ -24,6 +24,14 @@
       </constructor-arg>
    </bean>
 
+   <bean id="responseProcessor" class="no.guttab.raven.webapp.search.response.ResponseProcessorList">
+      <constructor-arg>
+         <list>
+            <bean class="no.guttab.raven.webapp.search.response.SingleSelectNavigatorResponseProcessor"/>
+         </list>
+      </constructor-arg>
+   </bean>
+
    <bean id="searchServer" class="no.guttab.raven.webapp.search.SearchServer">
       <constructor-arg ref="searchResource"/>
    </bean>

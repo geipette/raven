@@ -14,4 +14,12 @@ public class SearchRequest {
    @Query
    @NotNull
    private String keyword = "*:*";
+
+   public void setCategory(String category) {
+      this.category = category;
+   }
+
+   public void setKeyword(String keyword) {
+      this.keyword = keyword;
+   }
 }
