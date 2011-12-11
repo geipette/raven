@@ -48,7 +48,8 @@ public class SingleSelectNavigator implements Navigator<SingleSelectNavigatorIte
          if (isSelected(count, fq)) {
             String fqCriteria = responseFilterQueries.findFqCriteriaFor(facetField);
             String url = navigatorUrls.buildUrlFor(facetField.getName(), fqCriteria);
-            selectedItem = new SingleSelectNavigatorItem(count, url);
+            String deselectUrl = navigatorUrls.buildUrlFor(facetField.getName());
+            selectedItem = new SingleSelectNavigatorItem(count, url, deselectUrl);
             items.add(selectedItem);
             return;
          }

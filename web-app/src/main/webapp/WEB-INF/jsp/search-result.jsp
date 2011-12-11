@@ -7,7 +7,7 @@
 <h2>Selected</h2>
 <c:forEach var="item" items="${searchResponse.navigators.selectedNavigators}">
    <%--@elvariable id="item" type="no.guttab.raven.webapp.search.response.SingleSelectNavigator"--%>
-   <p><a href="${item.selectedItem.url}">${item.selectedItem.name} (${item.selectedItem.count})</a></p>
+   <p><a href="${item.selectedItem.url}">${item.selectedItem.name} (${item.selectedItem.count})</a> <a href="${item.selectedItem.deselectUrl}">x-deselect</a></p>
 </c:forEach>
 
 <h2>Unselected</h2>

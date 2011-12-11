@@ -29,6 +29,19 @@ public class NavigatorUrlsTest {
    }
 
    @Test
+   public void buildUrlFor_should_generate_correct_url_when_no_value_supplied() throws Exception {
+      NavigatorUrls navigatorUrls = new NavigatorUrls(searchRequestConfig);
+      navigatorUrls.addUrlFragment("sort", new UrlFragment("sortorder", "1"));
+      navigatorUrls.addUrlFragment("cat", new UrlFragment("category", "electronics"));
+      when(searchRequestConfig.requestFieldNameFor("sort")).thenReturn("sortorder");
+      when(searchRequestConfig.requestFieldNameFor("cat")).thenReturn("category");
+
+      String actual = navigatorUrls.buildUrlFor("cat");
+
+      assertThat(actual, equalTo("?sortorder=1"));
+   }
+
+   @Test
    public void buildUrlFor_should_generate_correct_url_when_first_fragment_key_used() throws Exception {
       NavigatorUrls navigatorUrls = new NavigatorUrls(searchRequestConfig);
       navigatorUrls.addUrlFragment("cat", new UrlFragment("category", "electronics"));

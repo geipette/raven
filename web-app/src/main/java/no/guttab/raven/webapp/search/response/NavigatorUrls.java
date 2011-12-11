@@ -23,20 +23,24 @@ public class NavigatorUrls {
       urlFragmentMap.put(indexFieldName, urlFragment);
    }
 
+   public String buildUrlFor(String indexFieldName) {
+      return buildUrlFor(indexFieldName, null);
+   }
+
    public String buildUrlFor(String indexFieldName, String value) {
       final StringBuilder urlBuilder = new StringBuilder();
 
-      appendActiveFragment(urlBuilder, indexFieldName, value);
+      if (value != null) {
+         appendActiveFragment(urlBuilder, indexFieldName, value);
+      }
       appendOtherFragments(indexFieldName, urlBuilder);
-      prependUrlQueryStringIfNeeded(urlBuilder);
+      prependUrlQueryString(urlBuilder);
 
       return urlBuilder.toString();
    }
 
-   private void prependUrlQueryStringIfNeeded(StringBuilder urlBuilder) {
-      if (urlBuilder.length() > 0) {
-         urlBuilder.insert(0, '?');
-      }
+   private void prependUrlQueryString(StringBuilder urlBuilder) {
+      urlBuilder.insert(0, '?');
    }
 
    private void appendOtherFragments(String indexFieldName, StringBuilder urlBuilder) {

@@ -28,7 +28,11 @@
       <constructor-arg>
          <list>
             <bean class="no.guttab.raven.webapp.search.response.NavigatorsResponseProcessor">
-               <constructor-arg value="no.guttab.raven.webapp.controller.SearchRequest"/>
+               <constructor-arg>
+                  <bean class="no.guttab.raven.webapp.search.config.SearchRequestConfig">
+                     <constructor-arg value="no.guttab.raven.webapp.controller.SearchRequest"/>
+                  </bean>
+               </constructor-arg>
             </bean>
          </list>
       </constructor-arg>
