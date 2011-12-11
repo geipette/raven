@@ -4,9 +4,11 @@ import org.apache.solr.client.solrj.response.FacetField;
 
 public class SingleSelectNavigatorItem implements NavigatorItem {
    private FacetField.Count count;
+   private String url;
 
-   public SingleSelectNavigatorItem(FacetField.Count count) {
+   public SingleSelectNavigatorItem(FacetField.Count count, String url) {
       this.count = count;
+      this.url = url;
    }
 
    public String getName() {
@@ -18,6 +20,6 @@ public class SingleSelectNavigatorItem implements NavigatorItem {
    }
 
    public String getUrl() {
-      return "";
+      return url;
    }
 }

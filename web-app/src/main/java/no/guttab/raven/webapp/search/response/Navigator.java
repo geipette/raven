@@ -7,5 +7,5 @@ public interface Navigator<T extends NavigatorItem> {
 
    boolean isSelected();
 
-   T selectedItem();
+   T getSelectedItem();
 }

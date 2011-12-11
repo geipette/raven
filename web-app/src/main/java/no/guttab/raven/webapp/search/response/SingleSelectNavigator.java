@@ -6,23 +6,61 @@ import java.util.List;
 
 import org.apache.solr.client.solrj.response.FacetField;
 
+import static no.guttab.raven.webapp.search.response.FilterQueries.extractFqCriteria;
+
 public class SingleSelectNavigator implements Navigator<SingleSelectNavigatorItem> {
    private FacetField facetField;
-   private SingleSelectNavigatorItem selectedItem;
+   private NavigatorUrls navigatorUrls;
+   private ResponseFilterQueries responseFilterQueries;
    private List<SingleSelectNavigatorItem> items;
+   private SingleSelectNavigatorItem selectedItem;
 
-   public SingleSelectNavigator(FacetField facetField, SingleSelectNavigatorItem selectedItem) {
+   public SingleSelectNavigator(
+         FacetField facetField, NavigatorUrls navigatorUrls, ResponseFilterQueries responseFilterQueries) {
       this.facetField = facetField;
-      this.selectedItem = selectedItem;
-      this.items = initItems(facetField);
+      this.navigatorUrls = navigatorUrls;
+      this.responseFilterQueries = responseFilterQueries;
+
+      initItems();
    }
 
-   private List<SingleSelectNavigatorItem> initItems(FacetField facetField) {
-      final List<SingleSelectNavigatorItem> items = new ArrayList<SingleSelectNavigatorItem>();
-      for (FacetField.Count count : facetField.getValues()) {
-         items.add(new SingleSelectNavigatorItem(count));
+   private void initItems() {
+      items = new ArrayList<SingleSelectNavigatorItem>();
+      final String fq = responseFilterQueries.findFqFor(facetField);
+      if (fq == null) {
+         generateNavigatorItems();
+      } else {
+         generateSelectedNavigatorItem(fq);
       }
-      return items;
+   }
+
+   private void generateNavigatorItems() {
+      for (FacetField.Count count : facetField.getValues()) {
+         String fqCriteria = extractFqCriteria(count.getAsFilterQuery());
+         String url = buildNavigatorUrl(fqCriteria);
+         SingleSelectNavigatorItem navigatorItem = new SingleSelectNavigatorItem(count, url);
+         items.add(navigatorItem);
+      }
+   }
+
+   private void generateSelectedNavigatorItem(String fq) {
+      for (FacetField.Count count : facetField.getValues()) {
+         if (isSelected(count, fq)) {
+            String fqCriteria = responseFilterQueries.findFqCriteriaFor(facetField);
+            String url = navigatorUrls.buildUrlFor(facetField.getName(), fqCriteria);
+            selectedItem = new SingleSelectNavigatorItem(count, url);
+            items.add(selectedItem);
+            return;
+         }
+      }
+   }
+
+   private boolean isSelected(FacetField.Count count, String fq) {
+      return count.getAsFilterQuery().equals(fq);
+   }
+
+   private String buildNavigatorUrl(String fqCriteria) {
+      return navigatorUrls.buildUrlFor(facetField.getName(), fqCriteria);
    }
 
    public List<SingleSelectNavigatorItem> getItems() {
@@ -35,8 +73,8 @@ public class SingleSelectNavigator implements Navigator<SingleSelectNavigatorIte
    }
 
    @Override
-   public SingleSelectNavigatorItem selectedItem() {
-      return null;  //To change body of implemented methods use File | Settings | File Templates.
+   public SingleSelectNavigatorItem getSelectedItem() {
+      return selectedItem;
    }
 
 }
