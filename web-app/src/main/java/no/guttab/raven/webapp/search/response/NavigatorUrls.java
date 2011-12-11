@@ -3,15 +3,20 @@ package no.guttab.raven.webapp.search.response;
 import java.util.HashMap;
 import java.util.Map;
 
+import no.guttab.raven.webapp.search.config.SearchRequestConfig;
+
 public class NavigatorUrls {
 
    private final Map<String, UrlFragment> urlFragmentMap = new HashMap<String, UrlFragment>();
+   private SearchRequestConfig searchRequestConfig;
 
-   public NavigatorUrls() {
+   public NavigatorUrls(SearchRequestConfig searchRequestConfig) {
+      this.searchRequestConfig = searchRequestConfig;
    }
 
-   public void addUrlFragment(String indexFieldName, String urlFragmentKey, String urlFragmentValue) {
-      addUrlFragment(indexFieldName, new UrlFragment(urlFragmentKey, urlFragmentValue));
+   public void addUrlFragment(String indexFieldName, String fqCriteria) {
+      addUrlFragment(indexFieldName,
+            new UrlFragment(searchRequestConfig.requestFieldNameFor(indexFieldName), fqCriteria));
    }
 
    public void addUrlFragment(String indexFieldName, UrlFragment urlFragment) {
@@ -20,24 +25,36 @@ public class NavigatorUrls {
 
    public String buildUrlFor(String indexFieldName, String value) {
       final StringBuilder urlBuilder = new StringBuilder();
+
+      appendActiveFragment(urlBuilder, indexFieldName, value);
+      appendOtherFragments(indexFieldName, urlBuilder);
+      prependUrlQueryStringIfNeeded(urlBuilder);
+
+      return urlBuilder.toString();
+   }
+
+   private void prependUrlQueryStringIfNeeded(StringBuilder urlBuilder) {
+      if (urlBuilder.length() > 0) {
+         urlBuilder.insert(0, '?');
+      }
+   }
+
+   private void appendOtherFragments(String indexFieldName, StringBuilder urlBuilder) {
       for (Map.Entry<String, UrlFragment> entry : urlFragmentMap.entrySet()) {
-         appendAmpersandIfNeeded(urlBuilder);
-         if (entryIsTheActiveFragment(indexFieldName, entry)) {
-            appendActiveFragment(urlBuilder, entry, value);
-         } else {
+         if (!entryIsTheActiveFragment(indexFieldName, entry)) {
+            appendAmpersandIfNeeded(urlBuilder);
             appendOtherFragment(urlBuilder, entry);
          }
       }
-      urlBuilder.insert(0, '?');
-      return urlBuilder.toString();
    }
 
    private boolean entryIsTheActiveFragment(String indexFieldName, Map.Entry<String, UrlFragment> entry) {
       return entry.getKey().equals(indexFieldName);
    }
 
-   private void appendActiveFragment(StringBuilder urlBuilder, Map.Entry<String, UrlFragment> entry, String value) {
-      urlBuilder.append(new UrlFragment(entry.getValue().getKey(), value));
+   private void appendActiveFragment(StringBuilder urlBuilder, String indexFieldName, String value) {
+      UrlFragment activeFragment = new UrlFragment(searchRequestConfig.requestFieldNameFor(indexFieldName), value);
+      urlBuilder.append(activeFragment);
    }
 
    private void appendOtherFragment(StringBuilder urlBuilder, Map.Entry<String, UrlFragment> entry) {

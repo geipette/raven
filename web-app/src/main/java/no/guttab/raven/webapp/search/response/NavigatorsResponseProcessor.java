@@ -2,23 +2,20 @@ package no.guttab.raven.webapp.search.response;
 
 import java.lang.reflect.Field;
 
-import no.guttab.raven.webapp.annotations.FilterQuery;
 import no.guttab.raven.webapp.reflection.FieldCallback;
-import no.guttab.raven.webapp.reflection.FieldFilter;
-import no.guttab.raven.webapp.reflection.FieldUtils;
+import no.guttab.raven.webapp.search.config.SearchRequestConfig;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.QueryResponse;
 
-import static no.guttab.raven.webapp.annotations.AnnotationUtils.getIndexFieldName;
 import static no.guttab.raven.webapp.reflection.FieldUtils.doForFirstFieldOfType;
 import static no.guttab.raven.webapp.reflection.FieldUtils.setFieldValue;
 
 public class NavigatorsResponseProcessor implements ResponseProcessor {
-   private Class<?> requestType;
+   private SearchRequestConfig searchRequestConfig;
 
-   public NavigatorsResponseProcessor(Class<?> requestType) {
-      this.requestType = requestType;
+   public NavigatorsResponseProcessor(SearchRequestConfig searchRequestConfig) {
+      this.searchRequestConfig = searchRequestConfig;
    }
 
    @Override
@@ -45,28 +42,16 @@ public class NavigatorsResponseProcessor implements ResponseProcessor {
    }
 
    private NavigatorUrls buildNavigatorUrls(QueryResponse queryResponse, ResponseFilterQueries responseFilterQueries) {
-      final NavigatorUrls navigatorUrls = new NavigatorUrls();
+      final NavigatorUrls navigatorUrls = new NavigatorUrls(searchRequestConfig);
 
       for (final FacetField facetField : queryResponse.getFacetFields()) {
          String fqCriteria = responseFilterQueries.findFqCriteriaFor(facetField);
          if (!StringUtils.isEmpty(fqCriteria)) {
-            Field requestField = findMatchingFilterQueryFacetFieldOnRequest(facetField);
-            navigatorUrls.addUrlFragment(getIndexFieldName(requestField), requestField.getName(), fqCriteria);
+            navigatorUrls.addUrlFragment(facetField.getName(), fqCriteria);
          }
       }
       return navigatorUrls;
    }
 
-   private Field findMatchingFilterQueryFacetFieldOnRequest(final FacetField facetField) {
-      return FieldUtils.findField(requestType, new FieldFilter() {
-         @Override
-         public boolean matches(Field field) {
-            FilterQuery filterQuery = field.getAnnotation(FilterQuery.class);
-            return filterQuery != null &&
-                  filterQuery.isFacetField() &&
-                  getIndexFieldName(field).equals(facetField.getName());
-         }
-      });
-   }
 
 }
