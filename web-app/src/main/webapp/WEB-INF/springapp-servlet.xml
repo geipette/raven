@@ -14,22 +14,22 @@
       <property name="suffix" value=".jsp"/>
    </bean>
 
-   <bean id="queryProcessor" class="no.guttab.raven.webapp.search.query.QueryProcessorList">
+   <bean id="queryProcessor" class="no.guttab.raven.search.query.QueryProcessorList">
       <constructor-arg>
          <list>
-            <bean class="no.guttab.raven.webapp.search.query.FacetQueryProcessor"/>
-            <bean class="no.guttab.raven.webapp.search.query.FilterQueryProcessor"/>
-            <bean class="no.guttab.raven.webapp.search.query.QueryStringQueryProcessor"/>
+            <bean class="no.guttab.raven.search.query.FacetQueryProcessor"/>
+            <bean class="no.guttab.raven.search.query.FilterQueryProcessor"/>
+            <bean class="no.guttab.raven.search.query.QueryStringQueryProcessor"/>
          </list>
       </constructor-arg>
    </bean>
 
-   <bean id="responseProcessor" class="no.guttab.raven.webapp.search.response.ResponseProcessorList">
+   <bean id="responseProcessor" class="no.guttab.raven.search.response.ResponseProcessorList">
       <constructor-arg>
          <list>
-            <bean class="no.guttab.raven.webapp.search.response.NavigatorsResponseProcessor">
+            <bean class="no.guttab.raven.search.response.NavigatorsResponseProcessor">
                <constructor-arg>
-                  <bean class="no.guttab.raven.webapp.search.config.SearchRequestConfig">
+                  <bean class="no.guttab.raven.search.config.SearchRequestConfig">
                      <constructor-arg value="no.guttab.raven.webapp.controller.SearchRequest"/>
                   </bean>
                </constructor-arg>
@@ -38,11 +38,11 @@
       </constructor-arg>
    </bean>
 
-   <bean id="searchServer" class="no.guttab.raven.webapp.search.SearchServer">
+   <bean id="searchServer" class="no.guttab.raven.search.SearchServer">
       <constructor-arg ref="searchResource"/>
    </bean>
 
-   <bean id="searchResource" class="no.guttab.raven.webapp.search.UrlBasedSearchResource">
+   <bean id="searchResource" class="no.guttab.raven.search.UrlBasedSearchResource">
       <constructor-arg value="http://localhost:8093"/>
    </bean>
 </beans>

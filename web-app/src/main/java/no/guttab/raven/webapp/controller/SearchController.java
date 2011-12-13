@@ -4,9 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.validation.Valid;
 
-import no.guttab.raven.webapp.search.SearchServer;
-import no.guttab.raven.webapp.search.query.QueryProcessor;
-import no.guttab.raven.webapp.search.response.ResponseProcessor;
+import no.guttab.raven.search.SearchServer;
+import no.guttab.raven.search.query.QueryProcessor;
+import no.guttab.raven.search.response.ResponseProcessor;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.springframework.beans.factory.annotation.Autowired;

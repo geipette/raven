@@ -12,6 +12,7 @@
    <modules>
       <module>solr-example</module>
       <module>web-app</module>
+      <module>core</module>
    </modules>
 
    <build>
@@ -50,6 +51,12 @@
 
    <dependencyManagement>
       <dependencies>
+         <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>core</artifactId>
+            <version>${project.version}</version>
+         </dependency>
+
          <!-- Spring framework -->
          <dependency>
             <groupId>org.springframework</groupId>
@@ -71,11 +78,51 @@
             <artifactId>spring-context</artifactId>
             <version>${org.springframework.version}</version>
          </dependency>
+
+         <dependency>
+            <groupId>org.apache.solr</groupId>
+            <artifactId>solr-solrj</artifactId>
+            <version>3.5.0</version>
+         </dependency>
+
+         <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>4.2.0.Final</version>
+         </dependency>
+
+         <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.1</version>
+         </dependency>
+
+         <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+            <version>2.0</version>
+         </dependency>
+
+         <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.0.0</version>
+         </dependency>
+
+         <dependency>
+            <groupId>jstl</groupId>
+            <artifactId>jstl</artifactId>
+            <version>1.2</version>
+         </dependency>
+
       </dependencies>
+
+
    </dependencyManagement>
 
    <properties>
       <org.springframework.version>3.0.6.RELEASE</org.springframework.version>
+      <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
    </properties>
 
 
