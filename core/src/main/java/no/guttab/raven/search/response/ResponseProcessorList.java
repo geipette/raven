@@ -12,9 +12,9 @@ public class ResponseProcessorList implements ResponseProcessor {
    }
 
    @Override
-   public void buildResponse(QueryResponse queryResponse, Object response) {
+   public void processResponse(QueryResponse queryResponse, SearchResponse response) {
       for (ResponseProcessor responseProcessor : responseProcessors) {
-         responseProcessor.buildResponse(queryResponse, response);
+         responseProcessor.processResponse(queryResponse, response);
       }
    }
 }

@@ -1,4 +1,4 @@
-package no.guttab.raven.search.response;
+package no.guttab.raven.search.response.navigators;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -19,8 +19,7 @@ public class Navigators {
    public void addNavigator(Navigator<?> navigator) {
       if (navigator.isSelected()) {
          selectedNavigators.add(navigator);
-      } else {
-         navigators.add(navigator);
       }
+      navigators.add(navigator);
    }
 }

@@ -1,17 +1,14 @@
 package no.guttab.raven.search.response;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import no.guttab.raven.search.config.SearchRequestConfig;
 
 public class NavigatorUrls {
-
-   private final Map<String, UrlFragment> urlFragmentMap = new HashMap<String, UrlFragment>();
+   private final UrlFragments urlFragments;
    private SearchRequestConfig searchRequestConfig;
 
    public NavigatorUrls(SearchRequestConfig searchRequestConfig) {
       this.searchRequestConfig = searchRequestConfig;
+      urlFragments = new UrlFragments(searchRequestConfig);
    }
 
    public void addUrlFragment(String indexFieldName, String fqCriteria) {
@@ -20,7 +17,7 @@ public class NavigatorUrls {
    }
 
    public void addUrlFragment(String indexFieldName, UrlFragment urlFragment) {
-      urlFragmentMap.put(indexFieldName, urlFragment);
+      urlFragments.addFragment(indexFieldName, urlFragment);
    }
 
    public String buildUrlFor(String indexFieldName) {
@@ -44,15 +41,15 @@ public class NavigatorUrls {
    }
 
    private void appendOtherFragments(String indexFieldName, StringBuilder urlBuilder) {
-      for (Map.Entry<String, UrlFragment> entry : urlFragmentMap.entrySet()) {
-         if (!entryIsTheActiveFragment(indexFieldName, entry)) {
+      for (UrlFragments.Entry entry : urlFragments) {
+//         if (!entryIsTheActiveFragment(indexFieldName, entry)) {
             appendAmpersandIfNeeded(urlBuilder);
             appendOtherFragment(urlBuilder, entry);
-         }
+//         }
       }
    }
 
-   private boolean entryIsTheActiveFragment(String indexFieldName, Map.Entry<String, UrlFragment> entry) {
+   private boolean entryIsTheActiveFragment(String indexFieldName, UrlFragments.Entry entry) {
       return entry.getKey().equals(indexFieldName);
    }
 
@@ -61,8 +58,8 @@ public class NavigatorUrls {
       urlBuilder.append(activeFragment);
    }
 
-   private void appendOtherFragment(StringBuilder urlBuilder, Map.Entry<String, UrlFragment> entry) {
-      urlBuilder.append(entry.getValue());
+   private void appendOtherFragment(StringBuilder urlBuilder, UrlFragments.Entry entry) {
+      urlBuilder.append(entry.getFragment());
    }
 
    private void appendAmpersandIfNeeded(StringBuilder urlBuilder) {

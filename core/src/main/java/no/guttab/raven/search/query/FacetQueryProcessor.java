@@ -6,8 +6,7 @@ import no.guttab.raven.annotations.AnnotatedFieldCallback;
 import no.guttab.raven.annotations.FilterQuery;
 import org.apache.solr.client.solrj.SolrQuery;
 
-import static no.guttab.raven.annotations.AnnotationUtils.doForEachAnnotatedFieldOn;
-import static no.guttab.raven.annotations.AnnotationUtils.getIndexFieldName;
+import static no.guttab.raven.annotations.AnnotationUtils.*;
 
 public class FacetQueryProcessor implements QueryProcessor {
    @Override
@@ -15,7 +14,7 @@ public class FacetQueryProcessor implements QueryProcessor {
       doForEachAnnotatedFieldOn(queryInput, FilterQuery.class, new AnnotatedFieldCallback<FilterQuery>() {
          @Override
          public void doFor(Field field, FilterQuery annotation) {
-            if (annotation.isFacetField()) {
+            if (isFacetField(field)) {
                solrQuery.setFacet(true);
                solrQuery.addFacetField(getIndexFieldName(field));
             }

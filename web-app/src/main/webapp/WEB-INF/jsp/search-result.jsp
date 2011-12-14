@@ -1,20 +1,21 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%--@elvariable id="queryResponse" type="org.apache.solr.client.solrj.response.QueryResponse"--%>
-<%--@elvariable id="searchResponse" type="no.guttab.raven.webapp.controller.SearchResponse"--%>
+<%--@elvariable id="searchResponse" type="no.guttab.raven.webapp.controller.DemoSearchResponse"--%>
 <html>
 
 <body>
 <h2>Selected</h2>
-<c:forEach var="item" items="${searchResponse.navigators.selectedNavigators}">
-   <%--@elvariable id="item" type="no.guttab.raven.search.response.SingleSelectNavigator"--%>
-   <p><a href="${item.selectedItem.url}">${item.selectedItem.name} (${item.selectedItem.count})</a> <a href="${item.selectedItem.deselectUrl}">x-deselect</a></p>
+<c:forEach var="navigator" items="${searchResponse.navigators.selectedNavigators}">
+   <c:forEach var="item" items="${navigator.selectedItems}">
+      <p><a href="${item.url}">${item.name} (${item.count})</a> <a href="${item.deselectUrl}">(x) - deselect</a></p>
+   </c:forEach>
 </c:forEach>
 
 <h2>Unselected</h2>
 <c:forEach var="navigator" items="${searchResponse.navigators.navigators}">
    <h3></h3>
    <c:forEach var="item" items="${navigator.items}">
-      <%--@elvariable id="item" type="no.guttab.raven.search.response.SingleSelectNavigatorItem"--%>
+      <%--@elvariable id="item" type="no.guttab.raven.search.response.navigators.SelectNavigatorItem"--%>
       <p><a href="${item.url}">${item.name} (${item.count})</a></p>
    </c:forEach>
 </c:forEach>

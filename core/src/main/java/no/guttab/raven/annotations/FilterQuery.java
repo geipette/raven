@@ -11,6 +11,5 @@ import no.guttab.raven.search.query.StringValueFilterQueryCriteriaBuilder;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD})
 public @interface FilterQuery {
-   boolean isFacetField() default false;
    Class<? extends FilterQueryCriteriaBuilder<?>> queryCriteriaBuilder() default StringValueFilterQueryCriteriaBuilder.class;
 }

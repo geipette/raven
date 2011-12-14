@@ -1,4 +1,4 @@
-package no.guttab.raven.search.response;
+package no.guttab.raven.search.response.navigators;
 
 import org.junit.Before;
 import org.junit.Test;

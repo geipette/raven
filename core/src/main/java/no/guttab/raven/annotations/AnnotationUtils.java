@@ -12,6 +12,11 @@ public class AnnotationUtils {
       return indexFieldName == null ? field.getName() : indexFieldName.value();
    }
 
+   public static boolean isFacetField(Field field) {
+      FacetField facetField = field.getAnnotation(FacetField.class);
+      return facetField != null;
+   }
+
    public static <T extends Annotation> void doForEachAnnotatedFieldOn(
          Class<?> type, Class<T> annotationType, AnnotatedFieldCallback<T> callback) {
       for (Field field : type.getDeclaredFields()) {

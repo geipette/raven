@@ -24,17 +24,15 @@
       </constructor-arg>
    </bean>
 
-   <bean id="responseProcessor" class="no.guttab.raven.search.response.ResponseProcessorList">
+   <bean id="responseProcessor" class="no.guttab.raven.search.response.NavigatorsResponseProcessor">
       <constructor-arg>
-         <list>
-            <bean class="no.guttab.raven.search.response.NavigatorsResponseProcessor">
-               <constructor-arg>
-                  <bean class="no.guttab.raven.search.config.SearchRequestConfig">
-                     <constructor-arg value="no.guttab.raven.webapp.controller.SearchRequest"/>
-                  </bean>
-               </constructor-arg>
-            </bean>
-         </list>
+         <bean class="no.guttab.raven.search.response.navigators.NavigatorBuilder">
+            <constructor-arg>
+               <bean class="no.guttab.raven.search.config.SearchRequestConfig">
+                  <constructor-arg value="no.guttab.raven.webapp.controller.SearchRequest"/>
+               </bean>
+            </constructor-arg>
+         </bean>
       </constructor-arg>
    </bean>
 

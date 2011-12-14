@@ -1,4 +1,4 @@
-package no.guttab.raven.search.response;
+package no.guttab.raven.search.response.navigators;
 
 import java.util.List;
 
@@ -7,5 +7,7 @@ public interface Navigator<T extends NavigatorItem> {
 
    boolean isSelected();
 
-   T getSelectedItem();
+   T getFirstSelectedItem();
+
+   List<T> getSelectedItems();
 }

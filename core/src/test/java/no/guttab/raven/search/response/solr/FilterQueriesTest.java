@@ -1,5 +1,6 @@
-package no.guttab.raven.search.response;
+package no.guttab.raven.search.response.solr;
 
+import no.guttab.raven.search.solr.FilterQueries;
 import org.junit.Test;
 
 import static org.hamcrest.core.IsEqual.equalTo;

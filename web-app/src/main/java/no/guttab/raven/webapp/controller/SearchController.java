@@ -36,12 +36,12 @@ public class SearchController {
       SolrQuery solrQuery = new SolrQuery();
       queryProcessor.buildQuery(searchRequest, solrQuery);
       QueryResponse queryResponse = searchServer.search(solrQuery);
-      SearchResponse searchResponse = new SearchResponse();
-      responseProcessor.buildResponse(queryResponse, searchResponse);
+      DemoSearchResponse demoSearchResponse = new DemoSearchResponse();
+      responseProcessor.processResponse(queryResponse, demoSearchResponse);
 
       Map<String, Object> modelMap = new HashMap<String, Object>();
       modelMap.put("queryResponse", queryResponse);
-      modelMap.put("searchResponse", searchResponse);
+      modelMap.put("searchResponse", demoSearchResponse);
 
       return new ModelAndView("search-result", modelMap);
    }
