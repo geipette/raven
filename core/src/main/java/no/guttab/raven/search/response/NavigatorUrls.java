@@ -20,8 +20,12 @@ public class NavigatorUrls {
       urlFragments.addFragment(indexFieldName, urlFragment);
    }
 
-   public String buildUrlFor(String indexFieldName) {
+   public String resetUrlFor(String indexFieldName) {
       return buildUrlFor(indexFieldName, null);
+   }
+
+   public String resetUrlFor(String cat, String cars) {
+      return null; // Not implemented
    }
 
    public String buildUrlFor(String indexFieldName, String value) {

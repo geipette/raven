@@ -64,7 +64,7 @@ public class SelectNavigator implements Navigator<SelectNavigatorItem> {
    }
 
    private SelectNavigatorItem generateSelectedNavigatorItem(FacetField.Count count, String url) {
-      String deselectUrl = navigatorUrls.buildUrlFor(facetField.getName());
+      String deselectUrl = navigatorUrls.resetUrlFor(facetField.getName());
       return new SelectNavigatorItem(count, url, deselectUrl);
    }
 

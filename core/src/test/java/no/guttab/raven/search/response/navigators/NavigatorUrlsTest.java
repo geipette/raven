@@ -31,7 +31,25 @@ public class NavigatorUrlsTest {
    }
 
    @Test
-   public void buildUrlFor_should_reset_values_for_key_when_no_value_supplied() throws Exception {
+   public void resetUrlFor_should_reset_a_specific_value_when_both_key_and_value_supplied() throws Exception {
+      NavigatorUrls navigatorUrls = new NavigatorUrls(searchRequestConfig);
+      when(searchRequestConfig.requestFieldNameFor("sort")).thenReturn("sortorder");
+      when(searchRequestConfig.requestFieldNameFor("cat")).thenReturn("category");
+
+      navigatorUrls.addUrlFragment("sort", new UrlFragment("sortorder", "1"));
+      navigatorUrls.addUrlFragment("cat", new UrlFragment("category", "electronics"));
+      navigatorUrls.addUrlFragment("cat", new UrlFragment("category", "cars"));
+
+      String actual = navigatorUrls.resetUrlFor("cat", "cars");
+
+      assertThat(actual, anyOf(
+            equalTo("?sortorder=1&cat=electronics"),
+            equalTo("?cat=electronics&sortorder=1")));
+   }
+
+
+   @Test
+   public void resetUrlFor_should_reset_values_for_key_when_no_value_supplied() throws Exception {
       NavigatorUrls navigatorUrls = new NavigatorUrls(searchRequestConfig);
       when(searchRequestConfig.requestFieldNameFor("sort")).thenReturn("sortorder");
       when(searchRequestConfig.requestFieldNameFor("cat")).thenReturn("category");
@@ -39,9 +57,19 @@ public class NavigatorUrlsTest {
       navigatorUrls.addUrlFragment("sort", new UrlFragment("sortorder", "1"));
       navigatorUrls.addUrlFragment("cat", new UrlFragment("category", "electronics"));
 
-      String actual = navigatorUrls.buildUrlFor("cat");
+      String actual = navigatorUrls.resetUrlFor("cat");
 
       assertThat(actual, equalTo("?sortorder=1"));
+   }
+
+   @Test
+   public void resetUrlFor_should_generate_correct_empty_url() throws Exception {
+      NavigatorUrls navigatorUrls = new NavigatorUrls(searchRequestConfig);
+      when(searchRequestConfig.requestFieldNameFor("sort")).thenReturn("sortorder");
+
+      String actual = navigatorUrls.resetUrlFor("sort");
+
+      assertThat(actual, equalTo("?"));
    }
 
    @Test
