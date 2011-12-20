@@ -40,7 +40,7 @@ public class SearchRequestConfig {
    }
 
    public boolean isRequestFieldMultiSelect(String requestFieldName) {
-      final Field field = getDeclaredField(requestType, requestFieldName);
+      final Field field = getDeclaredField(requestType, requestFieldName, true);
       final FacetField facetField = field.getAnnotation(FacetField.class);
       final FacetFieldType facetFieldType;
 

@@ -28,6 +28,11 @@ public class SelectNavigator implements Navigator<SelectNavigatorItem> {
       initItems();
    }
 
+   @Override
+   public String getDisplayName() {
+      return facetField.getName();
+   }
+
    private void initItems() {
       final Set<String> fqs = filterQueries.findFqsFor(facetField);
       if (isEmpty(fqs)) {
@@ -96,5 +101,6 @@ public class SelectNavigator implements Navigator<SelectNavigatorItem> {
    public List<SelectNavigatorItem> getSelectedItems() {
       return selectedItems;
    }
+
 
 }

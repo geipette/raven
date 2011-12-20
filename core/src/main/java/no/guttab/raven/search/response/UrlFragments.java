@@ -19,6 +19,10 @@ public class UrlFragments implements Iterable<UrlFragments.Entry> {
       this.searchRequestConfig = searchRequestConfig;
    }
 
+   public void addFragment(String indexFieldName, String fqCriteria) {
+      addFragment(indexFieldName, new UrlFragment(searchRequestConfig.requestFieldNameFor(indexFieldName), fqCriteria));
+   }
+
    public void addFragment(String indexFieldName, UrlFragment fragment) {
       if (searchRequestConfig.isIndexFieldMultiSelect(indexFieldName)) {
          urlFragmentMap.add(indexFieldName, fragment);
@@ -27,13 +31,51 @@ public class UrlFragments implements Iterable<UrlFragments.Entry> {
       }
    }
 
+   public UrlFragments withAddedFragment(String indexFieldName, String fqCriteria) {
+      return withAddedFragment(indexFieldName,
+            new UrlFragment(searchRequestConfig.requestFieldNameFor(indexFieldName), fqCriteria));
+   }
+
+   public UrlFragments withoutFragment(String indexFieldName, String fqCriteria) {
+      return withoutFragment(
+            new UrlFragment(searchRequestConfig.requestFieldNameFor(indexFieldName), fqCriteria));
+   }
+
+   public UrlFragments withAddedFragment(String indexFieldName, UrlFragment fragment) {
+      final UrlFragments urlFragments = new UrlFragments(searchRequestConfig);
+      for (Entry entry : this) {
+         urlFragments.addFragment(entry.getIndexFieldName(), entry.getFragment());
+      }
+      urlFragments.addFragment(indexFieldName, fragment);
+      return urlFragments;
+   }
+
+   public UrlFragments withoutFragment(UrlFragment fragment) {
+      final UrlFragments urlFragments = new UrlFragments(searchRequestConfig);
+      for (Entry entry : this) {
+         if (!fragment.equals(entry.getFragment())) {
+            urlFragments.addFragment(entry.getIndexFieldName(), entry.getFragment());
+         }
+      }
+      return urlFragments;
+   }
+
+   public UrlFragments withoutIndexField(String indexFieldName) {
+      final UrlFragments urlFragments = new UrlFragments(searchRequestConfig);
+      for (Entry entry : this) {
+         if (!indexFieldName.equals(entry.getIndexFieldName())) {
+            urlFragments.addFragment(entry.getIndexFieldName(), entry.getFragment());
+         }
+      }
+      return urlFragments;
+   }
+
    @Override
    public Iterator<Entry> iterator() {
       return new Iterator<Entry>() {
          Iterator<Map.Entry<String, List<UrlFragment>>> entryIterator = urlFragmentMap.entrySet().iterator();
          Iterator<UrlFragment> fragmentIterator = Collections.<UrlFragment>emptyList().iterator();
          Map.Entry<String,List<UrlFragment>> currentFragmentEntry;
-
 
          @Override
          public boolean hasNext() {
@@ -63,23 +105,36 @@ public class UrlFragments implements Iterable<UrlFragments.Entry> {
    }
 
    public static class Entry {
-      private String key;
+      private String indexFieldName;
       private UrlFragment fragment;
 
-      public Entry(String key, UrlFragment fragment) {
-         this.key = key;
+      public Entry(String indexFieldName, UrlFragment fragment) {
+         this.indexFieldName = indexFieldName;
          this.fragment = fragment;
       }
 
-      public String getKey() {
-         return key;
+      public String getIndexFieldName() {
+         return indexFieldName;
       }
 
       public UrlFragment getFragment() {
          return fragment;
       }
+
+      @Override
+      public String toString() {
+         return "Entry{" +
+               "indexFieldName='" + indexFieldName + '\'' +
+               ", fragment=[" + fragment + ']' +
+               '}';
+      }
    }
 
 
-
+   @Override
+   public String toString() {
+      return "UrlFragments{" +
+            "urlFragmentMap=" + urlFragmentMap +
+            '}';
+   }
 }

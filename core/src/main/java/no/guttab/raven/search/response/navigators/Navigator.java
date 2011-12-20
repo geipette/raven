@@ -10,4 +10,6 @@ public interface Navigator<T extends NavigatorItem> {
    T getFirstSelectedItem();
 
    List<T> getSelectedItems();
+
+   String getDisplayName();
 }

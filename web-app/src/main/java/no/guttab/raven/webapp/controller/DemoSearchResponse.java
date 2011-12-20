@@ -1,6 +1,9 @@
 package no.guttab.raven.webapp.controller;
 
+import java.util.List;
+
 import no.guttab.raven.search.response.SearchResponse;
+import no.guttab.raven.search.response.navigators.Navigator;
 import no.guttab.raven.search.response.navigators.Navigators;
 
 public class DemoSearchResponse implements SearchResponse {
@@ -11,7 +14,11 @@ public class DemoSearchResponse implements SearchResponse {
       this.navigators = navigators;
    }
 
-   public Navigators getNavigators() {
-      return navigators;
+   public List<Navigator<?>> getSelectedNavigators() {
+      return navigators.getSelectedNavigators();
+   }
+
+   public List<Navigator<?>> getNavigators() {
+      return navigators.getNavigators();
    }
 }

@@ -2,7 +2,6 @@ package no.guttab.raven.search.response.navigators;
 
 import no.guttab.raven.search.config.SearchRequestConfig;
 import no.guttab.raven.search.response.NavigatorUrls;
-import no.guttab.raven.search.response.UrlFragment;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -33,18 +32,19 @@ public class NavigatorUrlsTest {
    @Test
    public void resetUrlFor_should_reset_a_specific_value_when_both_key_and_value_supplied() throws Exception {
       NavigatorUrls navigatorUrls = new NavigatorUrls(searchRequestConfig);
+      when(searchRequestConfig.isIndexFieldMultiSelect("cat")).thenReturn(true);
       when(searchRequestConfig.requestFieldNameFor("sort")).thenReturn("sortorder");
       when(searchRequestConfig.requestFieldNameFor("cat")).thenReturn("category");
 
-      navigatorUrls.addUrlFragment("sort", new UrlFragment("sortorder", "1"));
-      navigatorUrls.addUrlFragment("cat", new UrlFragment("category", "electronics"));
-      navigatorUrls.addUrlFragment("cat", new UrlFragment("category", "cars"));
+      navigatorUrls.addUrlFragment("sort", "1");
+      navigatorUrls.addUrlFragment("cat", "electronics");
+      navigatorUrls.addUrlFragment("cat", "cars");
 
       String actual = navigatorUrls.resetUrlFor("cat", "cars");
 
       assertThat(actual, anyOf(
-            equalTo("?sortorder=1&cat=electronics"),
-            equalTo("?cat=electronics&sortorder=1")));
+            equalTo("?sortorder=1&category=electronics"),
+            equalTo("?category=electronics&sortorder=1")));
    }
 
 
@@ -54,8 +54,8 @@ public class NavigatorUrlsTest {
       when(searchRequestConfig.requestFieldNameFor("sort")).thenReturn("sortorder");
       when(searchRequestConfig.requestFieldNameFor("cat")).thenReturn("category");
 
-      navigatorUrls.addUrlFragment("sort", new UrlFragment("sortorder", "1"));
-      navigatorUrls.addUrlFragment("cat", new UrlFragment("category", "electronics"));
+      navigatorUrls.addUrlFragment("sort", "1");
+      navigatorUrls.addUrlFragment("cat", "electronics");
 
       String actual = navigatorUrls.resetUrlFor("cat");
 
@@ -79,8 +79,8 @@ public class NavigatorUrlsTest {
       when(searchRequestConfig.requestFieldNameFor("cat")).thenReturn("category");
       when(searchRequestConfig.isRequestFieldMultiSelect("cat")).thenReturn(false);
 
-      navigatorUrls.addUrlFragment("cat", new UrlFragment("category", "electronics"));
-      navigatorUrls.addUrlFragment("sort", new UrlFragment("sortorder", "1"));
+      navigatorUrls.addUrlFragment("cat", "electronics");
+      navigatorUrls.addUrlFragment("sort", "1");
 
       String actual = navigatorUrls.buildUrlFor("cat", "cars");
 
@@ -92,10 +92,10 @@ public class NavigatorUrlsTest {
       NavigatorUrls navigatorUrls = new NavigatorUrls(searchRequestConfig);
       when(searchRequestConfig.requestFieldNameFor("sort")).thenReturn("sortorder");
       when(searchRequestConfig.requestFieldNameFor("cat")).thenReturn("category");
-      when(searchRequestConfig.isRequestFieldMultiSelect("cat")).thenReturn(true);
+      when(searchRequestConfig.isIndexFieldMultiSelect("cat")).thenReturn(true);
 
-      navigatorUrls.addUrlFragment("cat", new UrlFragment("category", "electronics"));
-      navigatorUrls.addUrlFragment("sort", new UrlFragment("sortorder", "2"));
+      navigatorUrls.addUrlFragment("cat", "electronics");
+      navigatorUrls.addUrlFragment("sort", "2");
 
       String actual = navigatorUrls.buildUrlFor("cat", "cars");
 

@@ -5,15 +5,15 @@
 
 <body>
 <h2>Selected</h2>
-<c:forEach var="navigator" items="${searchResponse.navigators.selectedNavigators}">
+<c:forEach var="navigator" items="${searchResponse.selectedNavigators}">
    <c:forEach var="item" items="${navigator.selectedItems}">
       <p><a href="${item.url}">${item.name} (${item.count})</a> <a href="${item.deselectUrl}">(x) - deselect</a></p>
    </c:forEach>
 </c:forEach>
 
 <h2>Unselected</h2>
-<c:forEach var="navigator" items="${searchResponse.navigators.navigators}">
-   <h3></h3>
+<c:forEach var="navigator" items="${searchResponse.navigators}">
+   <h3>${navigator.displayName}</h3>
    <c:forEach var="item" items="${navigator.items}">
       <%--@elvariable id="item" type="no.guttab.raven.search.response.navigators.SelectNavigatorItem"--%>
       <p><a href="${item.url}">${item.name} (${item.count})</a></p>
