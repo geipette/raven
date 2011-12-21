@@ -6,7 +6,9 @@ import no.guttab.raven.annotations.AnnotatedFieldCallback;
 import no.guttab.raven.annotations.FilterQuery;
 import org.apache.solr.client.solrj.SolrQuery;
 
-import static no.guttab.raven.annotations.AnnotationUtils.*;
+import static no.guttab.raven.annotations.AnnotationUtils.doForEachAnnotatedFieldOn;
+import static no.guttab.raven.annotations.SearchAnnotationUtils.getIndexFieldName;
+import static no.guttab.raven.annotations.SearchAnnotationUtils.isFacetField;
 
 public class FacetQueryProcessor implements QueryProcessor {
    @Override

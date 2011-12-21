@@ -3,18 +3,8 @@ package no.guttab.raven.annotations;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
-public class AnnotationUtils {
+public final class AnnotationUtils {
    private AnnotationUtils() {
-   }
-
-   public static String getIndexFieldName(Field field) {
-      IndexFieldName indexFieldName = field.getAnnotation(IndexFieldName.class);
-      return indexFieldName == null ? field.getName() : indexFieldName.value();
-   }
-
-   public static boolean isFacetField(Field field) {
-      FacetField facetField = field.getAnnotation(FacetField.class);
-      return facetField != null;
    }
 
    public static <T extends Annotation> void doForEachAnnotatedFieldOn(

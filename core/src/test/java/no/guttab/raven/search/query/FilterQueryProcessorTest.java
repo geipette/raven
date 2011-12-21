@@ -1,6 +1,13 @@
 package no.guttab.raven.search.query;
 
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+
+import no.guttab.raven.annotations.FacetField;
+import no.guttab.raven.annotations.FacetFieldMode;
 import no.guttab.raven.annotations.FilterQuery;
+import no.guttab.raven.annotations.FilterQueryCriteriaBuilder;
 import no.guttab.raven.annotations.IndexFieldName;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.joda.time.DateTime;
@@ -65,6 +72,34 @@ public class FilterQueryProcessorTest {
    }
 
    @Test
+   public void buildQuery_should_add_complex_filterQuery_when_filterQuery_is_multivalue() throws Exception {
+      Object queryInput = new Object() {
+         @FacetField
+         @FilterQuery
+         private List<String> areaIds = Arrays.asList("500", "600");
+      };
+
+      filterQueryProcessor.buildQuery(queryInput, solrQuery);
+
+      verify(solrQuery).addFilterQuery("areaIds:(500 AND 600)");
+   }
+
+   @Test
+   public void buildQuery_complex_filterQuery_should_honor_FacetField_mode_when_filterQuery_is_multivalue() throws Exception {
+      Object queryInput = new Object() {
+         @FacetField(mode = FacetFieldMode.OR)
+         @FilterQuery
+         private List<String> areaIds = Arrays.asList("500", "600");
+      };
+
+      filterQueryProcessor.buildQuery(queryInput, solrQuery);
+
+      verify(solrQuery).addFilterQuery("areaIds:(500 OR 600)");
+   }
+
+
+
+   @Test
    public void filterQuery_for_annotated_field_should_use_indexFieldName_when_specified() throws Exception {
       Object queryInput = new Object() {
          @IndexFieldName("geo_id")
@@ -97,13 +132,13 @@ public class FilterQueryProcessorTest {
 
    static class DateRangeBuilder implements FilterQueryCriteriaBuilder<DateRange> {
       @Override
-      public String buildQueryCriteria(DateRange fieldValue) {
+      public Collection<String> buildQueryCriterias(DateRange fieldValue) {
          DateTimeFormatter dateTimeFormatter = ISODateTimeFormat.dateTimeNoMillis();
-         return "[" +
+         return Arrays.asList("[" +
                dateTimeFormatter.print(fieldValue.fromDate) +
                " TO " +
                dateTimeFormatter.print(fieldValue.toDate) +
-               "]";
+               "]");
       }
    }
 

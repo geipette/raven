@@ -4,7 +4,7 @@ import java.lang.reflect.Field;
 
 import static org.springframework.util.ReflectionUtils.*;
 
-public class FieldUtils {
+public final class FieldUtils {
    private FieldUtils() {
    }
 
