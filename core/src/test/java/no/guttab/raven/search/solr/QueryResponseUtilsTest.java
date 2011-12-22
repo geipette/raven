@@ -16,6 +16,7 @@ import static org.hamcrest.collection.IsCollectionContaining.hasItem;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.internal.matchers.IsCollectionContaining.hasItems;
+import static org.mockito.Mockito.mock;
 
 @RunWith(MockitoJUnitRunner.class)
 public class QueryResponseUtilsTest {
@@ -50,6 +51,24 @@ public class QueryResponseUtilsTest {
    }
 
    @Test
+   public void getFqsFromHeader_should_handle_multiValue_with_quoted_values() throws Exception {
+      setupQueryResponse("cat:(electronics OR \"quoted value\")");
+      Set<String> fq = QueryResponseUtils.getFqsFromHeader(queryResponse);
+
+      assertThat(fq, hasItems("cat:electronics", "cat:\"quoted value\""));
+      assertThat(fq.size(), is(2));
+   }
+
+   @Test
+   public void getFqsFromHeader_should_handle_multiValue_with_escaped_space_values() throws Exception {
+      setupQueryResponse("cat:(electronics OR escaped\\ space)");
+      Set<String> fq = QueryResponseUtils.getFqsFromHeader(queryResponse);
+
+      assertThat(fq, hasItems("cat:electronics", "cat:escaped\\ space"));
+      assertThat(fq.size(), is(2));
+   }
+
+   @Test
    public void getFqsFromHeader_should_handle_multiple_fqs() throws Exception {
       setupQueryResponse("cat:electronics", "cat:memory");
       Set<String> fq = QueryResponseUtils.getFqsFromHeader(queryResponse);
@@ -61,10 +80,10 @@ public class QueryResponseUtilsTest {
 
 
    private void setupQueryResponse(String... fqs) {
-      NamedList namedList = Mockito.mock(NamedList.class);
+      NamedList namedList = mock(NamedList.class);
       Mockito.when(queryResponse.getHeader()).thenReturn(namedList);
 
-      SimpleOrderedMap<String> simpleOrderedMap = Mockito.mock(SimpleOrderedMap.class);
+      SimpleOrderedMap<String> simpleOrderedMap = mock(SimpleOrderedMap.class);
       Mockito.when(namedList.get("params")).thenReturn(simpleOrderedMap);
 
       Mockito.when(simpleOrderedMap.getAll("fq")).thenReturn(Arrays.asList(fqs));

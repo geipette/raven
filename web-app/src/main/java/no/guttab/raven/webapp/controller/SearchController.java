@@ -11,6 +11,7 @@ import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -32,7 +33,7 @@ public class SearchController {
    }
 
    @RequestMapping(value = {"/search"})
-   public ModelAndView search(@Valid SearchRequest searchRequest) {
+   public ModelAndView search(@Valid SearchRequest searchRequest, BindingResult bindingResult) {
       SolrQuery solrQuery = new SolrQuery();
       queryProcessor.buildQuery(searchRequest, solrQuery);
       QueryResponse queryResponse = searchServer.search(solrQuery);

@@ -1,5 +1,6 @@
 package no.guttab.raven.webapp.controller;
 
+import java.util.List;
 import javax.validation.constraints.NotNull;
 
 import no.guttab.raven.annotations.FacetField;
@@ -13,7 +14,7 @@ public class SearchRequest {
    @IndexFieldName("cat")
    @FacetField(type = FacetFieldType.MULTI_SELECT)
    @FilterQuery
-   private String category;
+   private List<String> category;
 
    @FacetField
    @FilterQuery
@@ -23,7 +24,7 @@ public class SearchRequest {
    @NotNull
    private String keyword = "*:*";
 
-   public void setCategory(String category) {
+   public void setCategory(List<String> category) {
       this.category = category;
    }
 
