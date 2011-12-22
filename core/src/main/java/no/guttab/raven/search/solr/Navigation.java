@@ -1,35 +1,24 @@
-package no.guttab.raven.search.response.navigators;
+package no.guttab.raven.search.solr;
 
 import java.util.List;
 import java.util.Set;
 
 import no.guttab.raven.search.config.SearchRequestConfig;
 import no.guttab.raven.search.response.NavigatorUrls;
-import no.guttab.raven.search.solr.FilterQueries;
-import no.guttab.raven.search.solr.QueryResponseHeaderParams;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.QueryResponse;
 
 import static org.springframework.util.CollectionUtils.isEmpty;
 
-public class NavigatorBuilder {
+public class Navigation {
    private SearchRequestConfig searchRequestConfig;
 
-   public NavigatorBuilder(SearchRequestConfig searchRequestConfig) {
-      this.searchRequestConfig = searchRequestConfig;
-   }
+   NavigatorUrls navigatorUrls;
+   FilterQueries filterQueries;
 
-   public Navigators buildFor(QueryResponse queryResponse) {
+   private FilterQueries buildFilterQueries(QueryResponse queryResponse) {
       final QueryResponseHeaderParams headerParams = new QueryResponseHeaderParams(queryResponse.getResponseHeader());
-      final FilterQueries filterQueries = headerParams.getFilterQueries();
-      final NavigatorUrls navigatorUrls = buildNavigatorUrls(queryResponse.getFacetFields(), filterQueries);
-
-      final Navigators navigators = new Navigators();
-      for (FacetField facetField : queryResponse.getFacetFields()) {
-         Navigator navigator = createNavigator(filterQueries, navigatorUrls, facetField);
-         navigators.addNavigator(navigator);
-      }
-      return navigators;
+      return headerParams.getFilterQueries();
    }
 
    private NavigatorUrls buildNavigatorUrls(List<FacetField> facetFields, FilterQueries filterQueries) {
@@ -45,10 +34,5 @@ public class NavigatorBuilder {
       }
       return navigatorUrls;
    }
-
-   private SelectNavigator createNavigator(FilterQueries filterQueries, NavigatorUrls navigatorUrls, FacetField facetField) {
-      return new SelectNavigator(facetField, navigatorUrls, filterQueries);
-   }
-
 
 }

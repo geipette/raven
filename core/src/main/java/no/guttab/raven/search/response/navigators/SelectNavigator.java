@@ -51,15 +51,13 @@ public class SelectNavigator implements Navigator<SelectNavigatorItem> {
    }
 
    private void generateSelectedNavigatorItems(Set<String> fqs) {
-      for (String fq : fqs) {
-         for (FacetField.Count count : facetField.getValues()) {
-            if (isSelected(count, fq)) {
-               SelectNavigatorItem navigatorItem =
-                     generateSelectedNavigatorItem(count, buildUrlForFilterQuery(fq));
-               selectedItems.add(navigatorItem);
-            } else {
-               items.add(generateNavigatorItem(count, buildUrlForFilterQuery(count.getAsFilterQuery())));
-            }
+      for (FacetField.Count count : facetField.getValues()) {
+         if (isSelected(count, fqs)) {
+            SelectNavigatorItem navigatorItem =
+                  generateSelectedNavigatorItem(count, buildUrlForFilterQuery(count.getAsFilterQuery()));
+            selectedItems.add(navigatorItem);
+         } else {
+            items.add(generateNavigatorItem(count, buildUrlForFilterQuery(count.getAsFilterQuery())));
          }
       }
    }
@@ -78,8 +76,8 @@ public class SelectNavigator implements Navigator<SelectNavigatorItem> {
       return navigatorUrls.buildUrlFor(facetField.getName(), fqCriteria);
    }
 
-   private boolean isSelected(FacetField.Count count, String fq) {
-      return count.getAsFilterQuery().equals(fq);
+   private boolean isSelected(FacetField.Count count, Set<String> fqs) {
+      return fqs.contains(count.getAsFilterQuery());
    }
 
    public List<SelectNavigatorItem> getItems() {

@@ -1,6 +1,7 @@
 package no.guttab.raven.search.solr;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.solr.client.solrj.response.FacetField;
@@ -8,8 +9,8 @@ import org.apache.solr.client.solrj.response.FacetField;
 public class FilterQueries {
    private Set<String> fqs;
 
-   public FilterQueries(Set<String> fqs) {
-      this.fqs = fqs;
+   public FilterQueries(List<String> fqs) {
+      this.fqs = new FilterQuerySplitter(fqs).splitFqs();
    }
 
    public Set<String> findFqCriteriasFor(FacetField facetField) {
