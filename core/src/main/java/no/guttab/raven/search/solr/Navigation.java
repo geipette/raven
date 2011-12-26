@@ -8,17 +8,35 @@ import no.guttab.raven.search.response.NavigatorUrls;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.QueryResponse;
 
+import static no.guttab.raven.search.solr.FilterQueries.filterQueriesFor;
 import static org.springframework.util.CollectionUtils.isEmpty;
 
 public class Navigation {
    private SearchRequestConfig searchRequestConfig;
 
-   NavigatorUrls navigatorUrls;
-   FilterQueries filterQueries;
+   private NavigatorUrls navigatorUrls;
+   private FilterQueries filterQueries;
 
-   private FilterQueries buildFilterQueries(QueryResponse queryResponse) {
-      final QueryResponseHeaderParams headerParams = new QueryResponseHeaderParams(queryResponse.getResponseHeader());
-      return headerParams.getFilterQueries();
+   public Navigation(SearchRequestConfig searchRequestConfig, QueryResponse queryResponse) {
+      this.searchRequestConfig = searchRequestConfig;
+      filterQueries = filterQueriesFor(queryResponse);
+      navigatorUrls = buildNavigatorUrls(queryResponse.getFacetFields(), filterQueries);
+   }
+
+   public NavigationField navigationFieldFor(FacetField facetField) {
+      return new NavigationField(filterQueries.findFqsFor(facetField));
+   }
+
+   public String urlFor(String indexFieldName, String fqCriteria) {
+      return navigatorUrls.buildUrlFor(indexFieldName, fqCriteria);
+   }
+
+   public String resetUrlFor(String indexFieldName) {
+      return navigatorUrls.resetUrlFor(indexFieldName);
+   }
+
+   public String resetUrlFor(String indexFieldName, String fqCriteria) {
+      return navigatorUrls.resetUrlFor(indexFieldName, fqCriteria);
    }
 
    private NavigatorUrls buildNavigatorUrls(List<FacetField> facetFields, FilterQueries filterQueries) {

@@ -64,10 +64,10 @@ public class NavigatorUrlsTest {
 
    @Test
    public void resetUrlFor_should_generate_correct_empty_url() throws Exception {
-      NavigatorUrls navigatorUrls = new NavigatorUrls(searchRequestConfig);
+      NavigatorUrls urlStringBuilder = new NavigatorUrls(searchRequestConfig);
       when(searchRequestConfig.requestFieldNameFor("sort")).thenReturn("sortorder");
 
-      String actual = navigatorUrls.resetUrlFor("sort");
+      String actual = urlStringBuilder.resetUrlFor("sort");
 
       assertThat(actual, equalTo("?"));
    }

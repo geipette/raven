@@ -5,9 +5,14 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.solr.client.solrj.response.FacetField;
+import org.apache.solr.client.solrj.response.QueryResponse;
 
 public class FilterQueries {
    private Set<String> fqs;
+
+   public static FilterQueries filterQueriesFor(QueryResponse queryResponse) {
+      return new QueryResponseHeaderParams(queryResponse.getResponseHeader()).getFilterQueries();
+   }
 
    public FilterQueries(List<String> fqs) {
       this.fqs = new FilterQuerySplitter(fqs).splitFqs();
