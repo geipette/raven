@@ -23,8 +23,8 @@ public class Navigation {
       navigatorUrls = buildNavigatorUrls(queryResponse.getFacetFields(), filterQueries);
    }
 
-   public NavigationField navigationFieldFor(FacetField facetField) {
-      return new NavigationField(filterQueries.findFqsFor(facetField));
+   public Set<String> fqsFor(FacetField facetField) {
+      return filterQueries.findFqsFor(facetField);
    }
 
    public String urlFor(String indexFieldName, String fqCriteria) {

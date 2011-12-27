@@ -2,9 +2,9 @@ package no.guttab.raven.search.response.navigators;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import no.guttab.raven.search.solr.Navigation;
-import no.guttab.raven.search.solr.NavigationField;
 import org.apache.solr.client.solrj.response.FacetField;
 
 import static no.guttab.raven.search.solr.FilterQueries.extractFqCriteria;
@@ -19,7 +19,7 @@ public class SelectNavigatorBuilder {
 
    public SelectNavigator buildFor(FacetField facetField) {
       final ItemBuilder itemBuilder = new ItemBuilder(facetField);
-      itemBuilder.generateNavigatorItems(navigation.navigationFieldFor(facetField));
+      itemBuilder.generateNavigatorItems(navigation.fqsFor(facetField));
       return new SelectNavigator(facetField, itemBuilder.items, itemBuilder.selectedItems);
    }
 
@@ -32,14 +32,18 @@ public class SelectNavigatorBuilder {
          this.facetField = facetField;
       }
 
-      private void generateNavigatorItems(NavigationField navigationField) {
+      private void generateNavigatorItems(Set<String> fqs) {
          for (FacetField.Count count : facetField.getValues()) {
-            if (navigationField.isFilterQuerySelected(count.getAsFilterQuery())) {
+            if (isFacetFieldCountSelected(fqs, count)) {
                addSelectedNavigatorItem(count);
             } else {
                addNavigatorItem(count);
             }
          }
+      }
+
+      private boolean isFacetFieldCountSelected(Set<String> fqs, FacetField.Count count) {
+         return fqs.contains(count.getAsFilterQuery());
       }
 
       private void addNavigatorItem(FacetField.Count count) {
