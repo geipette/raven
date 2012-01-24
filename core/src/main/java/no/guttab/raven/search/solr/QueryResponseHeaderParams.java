@@ -1,5 +1,7 @@
 package no.guttab.raven.search.solr;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.solr.common.util.NamedList;
@@ -26,6 +28,16 @@ public class QueryResponseHeaderParams {
 
    @SuppressWarnings({"unchecked"})
    private List<String> getFqList() {
-      return (List<String>) map.getAll("fq");
+      final List<String> fqs = new ArrayList<String>();
+
+      for (Object fq : map.getAll("fq")) {
+         if (fq instanceof String) {
+            fqs.add((String) fq);
+         } else if (fq instanceof List) {
+            fqs.addAll((Collection<? extends String>) fq);
+         }
+      }
+
+      return fqs;
    }
 }
