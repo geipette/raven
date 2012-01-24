@@ -1,5 +1,6 @@
 package no.guttab.raven.search.solr;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -27,6 +28,9 @@ public class FilterQueries {
    }
 
    public Set<String> findFqsFor(FacetField facetField) {
+      if (facetField.getValues() == null) {
+         return Collections.emptySet();
+      }
       final Set<String> resultFqs = new HashSet<String>();
       for (FacetField.Count count : facetField.getValues()) {
          if (fqs.contains(count.getAsFilterQuery())) {

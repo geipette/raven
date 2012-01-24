@@ -31,4 +31,8 @@ public class SearchRequest {
    public void setKeyword(String keyword) {
       this.keyword = keyword;
    }
+
+   public void setInStock(String inStock) {
+      this.inStock = inStock;
+   }
 }

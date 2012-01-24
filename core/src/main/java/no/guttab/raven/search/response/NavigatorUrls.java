@@ -30,9 +30,9 @@ public class NavigatorUrls {
 
    private String buildUrlFor(UrlFragments significantFragments) {
       final StringBuilder urlBuilder = new StringBuilder();
-      for (UrlFragments.Entry entry : significantFragments) {
+      for (UrlFragments.UrlFragmentEntry urlFragmentEntry : significantFragments) {
          appendAmpersandIfNeeded(urlBuilder);
-         appendFragment(urlBuilder, entry);
+         appendFragment(urlBuilder, urlFragmentEntry);
       }
       prependUrlQueryString(urlBuilder);
       return urlBuilder.toString();
@@ -42,8 +42,8 @@ public class NavigatorUrls {
       urlBuilder.insert(0, '?');
    }
 
-   private void appendFragment(StringBuilder urlBuilder, UrlFragments.Entry entry) {
-      urlBuilder.append(entry.getFragment());
+   private void appendFragment(StringBuilder urlBuilder, UrlFragments.UrlFragmentEntry urlFragmentEntry) {
+      urlBuilder.append(urlFragmentEntry.getFragment());
    }
 
    private void appendAmpersandIfNeeded(StringBuilder urlBuilder) {

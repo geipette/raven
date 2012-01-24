@@ -105,8 +105,28 @@ public class NavigatorUrlsTest {
             equalTo("?category=electronics&category=cars&sortorder=2"),
             equalTo("?sortorder=2&category=cars&category=electronics"),
             equalTo("?category=electronics&sortorder=2&category=cars"),
-            equalTo("?sortorder=2&category=electronics&category=cars&")
+            equalTo("?sortorder=2&category=electronics&category=cars")
       ));
    }
+
+   @Test
+   public void buildUrlFor_should_not_add_a_already_selected_value_when_the_facetField_is_multiSelect()
+         throws Exception {
+      NavigatorUrls navigatorUrls = new NavigatorUrls(searchRequestConfig);
+      when(searchRequestConfig.requestFieldNameFor("sort")).thenReturn("sortorder");
+      when(searchRequestConfig.requestFieldNameFor("cat")).thenReturn("category");
+      when(searchRequestConfig.isIndexFieldMultiSelect("cat")).thenReturn(true);
+
+      navigatorUrls.addUrlFragment("cat", "electronics");
+      navigatorUrls.addUrlFragment("sort", "2");
+
+      String actual = navigatorUrls.buildUrlFor("cat", "electronics");
+
+      assertThat(actual, anyOf(
+            equalTo("?category=electronics&sortorder=2"),
+            equalTo("?sortorder=2&category=electronics")
+      ));
+   }
+
 
 }

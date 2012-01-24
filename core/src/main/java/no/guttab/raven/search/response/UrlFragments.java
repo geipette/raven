@@ -10,7 +10,7 @@ import no.guttab.raven.search.config.SearchRequestConfig;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
-public class UrlFragments implements Iterable<UrlFragments.Entry> {
+public class UrlFragments implements Iterable<UrlFragments.UrlFragmentEntry> {
    private final MultiValueMap<String, UrlFragment> urlFragmentMap = new LinkedMultiValueMap<String, UrlFragment>();
    private SearchRequestConfig searchRequestConfig;
 
@@ -43,18 +43,20 @@ public class UrlFragments implements Iterable<UrlFragments.Entry> {
 
    public UrlFragments withAddedFragment(String indexFieldName, UrlFragment fragment) {
       final UrlFragments urlFragments = new UrlFragments(searchRequestConfig);
-      for (Entry entry : this) {
-         urlFragments.addFragment(entry.getIndexFieldName(), entry.getFragment());
+      for (UrlFragmentEntry urlFragmentEntry : this) {
+         urlFragments.addFragment(urlFragmentEntry.getIndexFieldName(), urlFragmentEntry.getFragment());
       }
-      urlFragments.addFragment(indexFieldName, fragment);
+      if (!urlFragments.hasFragment(indexFieldName, fragment)) {
+         urlFragments.addFragment(indexFieldName, fragment);
+      }
       return urlFragments;
    }
 
    public UrlFragments withoutFragment(UrlFragment fragment) {
       final UrlFragments urlFragments = new UrlFragments(searchRequestConfig);
-      for (Entry entry : this) {
-         if (!fragment.equals(entry.getFragment())) {
-            urlFragments.addFragment(entry.getIndexFieldName(), entry.getFragment());
+      for (UrlFragmentEntry urlFragmentEntry : this) {
+         if (!fragment.equals(urlFragmentEntry.getFragment())) {
+            urlFragments.addFragment(urlFragmentEntry.getIndexFieldName(), urlFragmentEntry.getFragment());
          }
       }
       return urlFragments;
@@ -62,53 +64,37 @@ public class UrlFragments implements Iterable<UrlFragments.Entry> {
 
    public UrlFragments withoutIndexField(String indexFieldName) {
       final UrlFragments urlFragments = new UrlFragments(searchRequestConfig);
-      for (Entry entry : this) {
-         if (!indexFieldName.equals(entry.getIndexFieldName())) {
-            urlFragments.addFragment(entry.getIndexFieldName(), entry.getFragment());
+      for (UrlFragmentEntry urlFragmentEntry : this) {
+         if (!indexFieldName.equals(urlFragmentEntry.getIndexFieldName())) {
+            urlFragments.addFragment(urlFragmentEntry.getIndexFieldName(), urlFragmentEntry.getFragment());
          }
       }
       return urlFragments;
    }
 
-   @Override
-   public Iterator<Entry> iterator() {
-      return new Iterator<Entry>() {
-         Iterator<Map.Entry<String, List<UrlFragment>>> entryIterator = urlFragmentMap.entrySet().iterator();
-         Iterator<UrlFragment> fragmentIterator = Collections.<UrlFragment>emptyList().iterator();
-         Map.Entry<String,List<UrlFragment>> currentFragmentEntry;
-
-         @Override
-         public boolean hasNext() {
-            if (fragmentIterator.hasNext()) {
-               return true;
-            } else if (entryIterator.hasNext()) {
-               currentFragmentEntry = entryIterator.next();
-               fragmentIterator = currentFragmentEntry.getValue().iterator();
-               return true;
-            }
-            return false;
-         }
-
-         @Override
-         public Entry next() {
-            if (!hasNext()) {
-               throw new NoSuchElementException();
-            }
-            return new Entry(currentFragmentEntry.getKey(), fragmentIterator.next());
-         }
-
-         @Override
-         public void remove() {
-            throw new UnsupportedOperationException();
-         }
-      };
+   private boolean hasFragment(String indexFieldName, UrlFragment fragment) {
+      final List<UrlFragment> fragments = urlFragmentMap.get(indexFieldName);
+      return fragments != null && fragments.contains(fragment);
    }
 
-   public static class Entry {
+   @Override
+   public Iterator<UrlFragmentEntry> iterator() {
+      return new UrlFragmentEntryIterator(this);
+   }
+
+   @Override
+   public String toString() {
+      return "UrlFragments{" +
+            "urlFragmentMap=" + urlFragmentMap +
+            '}';
+   }
+
+   public static class UrlFragmentEntry {
       private String indexFieldName;
+
       private UrlFragment fragment;
 
-      public Entry(String indexFieldName, UrlFragment fragment) {
+      public UrlFragmentEntry(String indexFieldName, UrlFragment fragment) {
          this.indexFieldName = indexFieldName;
          this.fragment = fragment;
       }
@@ -120,7 +106,6 @@ public class UrlFragments implements Iterable<UrlFragments.Entry> {
       public UrlFragment getFragment() {
          return fragment;
       }
-
       @Override
       public String toString() {
          return "Entry{" +
@@ -130,11 +115,38 @@ public class UrlFragments implements Iterable<UrlFragments.Entry> {
       }
    }
 
+   private static class UrlFragmentEntryIterator implements Iterator<UrlFragmentEntry> {
+      private Iterator<Map.Entry<String, List<UrlFragment>>> entryIterator;
+      private Iterator<UrlFragment> fragmentIterator = Collections.<UrlFragment>emptyList().iterator();
+      private Map.Entry<String,List<UrlFragment>> currentFragmentEntry;
 
-   @Override
-   public String toString() {
-      return "UrlFragments{" +
-            "urlFragmentMap=" + urlFragmentMap +
-            '}';
+      public UrlFragmentEntryIterator(UrlFragments urlFragments) {
+         entryIterator = urlFragments.urlFragmentMap.entrySet().iterator();
+      }
+
+      @Override
+      public boolean hasNext() {
+         if (fragmentIterator.hasNext()) {
+            return true;
+         } else if (entryIterator.hasNext()) {
+            currentFragmentEntry = entryIterator.next();
+            fragmentIterator = currentFragmentEntry.getValue().iterator();
+            return true;
+         }
+         return false;
+      }
+
+      @Override
+      public UrlFragmentEntry next() {
+         if (!hasNext()) {
+            throw new NoSuchElementException();
+         }
+         return new UrlFragmentEntry(currentFragmentEntry.getKey(), fragmentIterator.next());
+      }
+
+      @Override
+      public void remove() {
+         throw new UnsupportedOperationException();
+      }
    }
 }
