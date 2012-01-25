@@ -15,7 +15,7 @@
 <c:forEach var="navigator" items="${searchResponse.navigators}">
    <h3>${navigator.displayName}</h3>
    <c:forEach var="item" items="${navigator.items}">
-      <%--@elvariable id="item" type="no.guttab.raven.search.response.navigators.SelectNavigatorItem"--%>
+      <%--@elvariable id="item" type="no.guttab.raven.search.response.navigators.select.SelectNavigatorItem"--%>
       <p><a href="${item.url}">${item.name} (${item.count})</a></p>
    </c:forEach>
 </c:forEach>

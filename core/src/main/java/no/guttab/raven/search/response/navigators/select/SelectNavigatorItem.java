@@ -1,5 +1,6 @@
-package no.guttab.raven.search.response.navigators;
+package no.guttab.raven.search.response.navigators.select;
 
+import no.guttab.raven.search.response.navigators.NavigatorItem;
 import org.apache.solr.client.solrj.response.FacetField;
 
 public class SelectNavigatorItem implements NavigatorItem {

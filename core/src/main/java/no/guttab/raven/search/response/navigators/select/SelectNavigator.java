@@ -1,10 +1,11 @@
-package no.guttab.raven.search.response.navigators;
+package no.guttab.raven.search.response.navigators.select;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import no.guttab.raven.search.response.navigators.Navigator;
 import org.apache.solr.client.solrj.response.FacetField;
 
 import static org.springframework.util.CollectionUtils.isEmpty;

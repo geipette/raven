@@ -1,4 +1,4 @@
-package no.guttab.raven.search.response.navigators;
+package no.guttab.raven.search.response.navigators.select;
 
 import java.util.ArrayList;
 import java.util.Arrays;
