@@ -1,47 +1,65 @@
 package no.guttab.raven.search.response.navigators.select;
 
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.List;
 
 import no.guttab.raven.search.solr.Navigation;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
+import static org.powermock.api.mockito.PowerMockito.*;
 
-@RunWith(MockitoJUnitRunner.class)
+
+@PrepareForTest(SelectNavigatorBuilder.class)
+@RunWith(PowerMockRunner.class)
 public class SelectNavigatorBuilderTest {
    @Mock
    Navigation navigation;
 
    @Test
-   public void build_should_return_no_navigators_when_facetField_has_no_values() throws Exception {
+   public void build_should_create_SelectNavigatorItemBuilder() throws Exception {
       FacetField facetField = new FacetField("facetName");
+      mockSelectNavigatorItemBuilderConstructor(facetField);
 
-      SelectNavigatorBuilder selectNavigatorBuilder = new SelectNavigatorBuilder(navigation);
-      SelectNavigator actual = selectNavigatorBuilder.buildFor(facetField);
-
-      assertThat(actual.getSelectedItems().size(), is(0));
-      assertThat(actual.getItems().size(), is(0));
+      new SelectNavigatorBuilder(navigation);
+      verifyNew(SelectNavigatorItemBuilder.class);
    }
-
 
    @Test
-   public void build_should_return_only_unselected_navigators_when_no_fqs_defined_for_the_facetField() throws Exception {
+   public void build_should_create_SelectNavigatorItemBuilder_to_get_input_when_creating_SelectNavigator() throws Exception {
       FacetField facetField = new FacetField("facetName");
-      facetField.add("facet", 10);
-      when(navigation.fqsFor(facetField)).thenReturn(Collections.<String>emptySet());
+      SelectNavigatorItemBuilder itemBuilder = mockSelectNavigatorItemBuilderConstructor(facetField);
+      mockSelectNavigatorConstructor();
+      List<SelectNavigatorItem> items = new ArrayList<SelectNavigatorItem>();
+      List<SelectNavigatorItem> selectedItems = new ArrayList<SelectNavigatorItem>();
 
-      SelectNavigatorBuilder selectNavigatorBuilder = new SelectNavigatorBuilder(navigation);
+      when(itemBuilder.getItems()).thenReturn(items);
+      when(itemBuilder.getSelectedItems()).thenReturn(selectedItems);
 
-      SelectNavigator actual = selectNavigatorBuilder.buildFor(facetField);
+      new SelectNavigatorBuilder(navigation).buildFor(facetField);
 
-      assertThat(actual.getSelectedItems().size(), is(0));
-      assertThat(actual.getItems().size(), is(1));
-
+      verifyNew(SelectNavigator.class).withArguments(facetField, items, selectedItems);
    }
+
+
+   private SelectNavigatorItemBuilder mockSelectNavigatorItemBuilderConstructor(FacetField facetField) throws Exception {
+      SelectNavigatorItemBuilder itemBuilder = mock(SelectNavigatorItemBuilder.class);
+      whenNew(SelectNavigatorItemBuilder.class).withArguments(navigation, facetField).thenReturn(itemBuilder);
+      return itemBuilder;
+   }
+
+   private SelectNavigator mockSelectNavigatorConstructor() throws Exception {
+      SelectNavigator selectNavigator = mock(SelectNavigator.class);
+      whenNew(SelectNavigator.class).withArguments(any(FacetField.class), any(List.class), any(List.class))
+            .thenReturn(selectNavigator);
+      return selectNavigator;
+   }
+
+
 }
