@@ -1,6 +1,8 @@
 package no.guttab.raven.search.response.navigators.select;
 
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 
 import no.guttab.raven.search.solr.Navigation;
 import org.apache.solr.client.solrj.response.FacetField;
@@ -42,6 +44,24 @@ public class SelectNavigatorBuilderTest {
 
       assertThat(actual.getSelectedItems().size(), is(0));
       assertThat(actual.getItems().size(), is(1));
+   }
+
+   @Test
+   public void build_should_return_selected_navigator_when_a_fq_exists_for_the_facetField() throws Exception {
+       FacetField facetField = new FacetField("facetName");
+       facetField.add("facet", 10);
+       when(navigation.fqsFor(facetField)).thenReturn(new HashSet<String>(
+               Arrays.asList(
+                       "facetName:facet"
+               )
+       ));
+
+       SelectNavigatorBuilder selectNavigatorBuilder = new SelectNavigatorBuilder(navigation);
+
+       SelectNavigator actual = selectNavigatorBuilder.buildFor(facetField);
+
+       assertThat(actual.getSelectedItems().size(), is(1));
+       assertThat(actual.getItems().size(), is(0));
 
    }
 }

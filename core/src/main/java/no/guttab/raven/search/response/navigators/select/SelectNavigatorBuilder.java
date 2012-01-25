@@ -20,11 +20,11 @@ public class SelectNavigatorBuilder {
    }
 
    public SelectNavigator buildFor(FacetField facetField) {
-      generateNavigatorItems(facetField);
+      generateNavigatorItemsForEachFacetFieldValue(facetField);
       return new SelectNavigator(facetField, items, selectedItems);
    }
 
-   private void generateNavigatorItems(FacetField facetField) {
+   private void generateNavigatorItemsForEachFacetFieldValue(FacetField facetField) {
       if (facetField.getValueCount() == 0) {
          return;
       }
@@ -43,7 +43,7 @@ public class SelectNavigatorBuilder {
    }
 
    private void addSelectedNavigatorItem(String facetFieldName, FacetField.Count count) {
-      final String filterQueryUrl = buildUrlForFilterQuery(count.getName(), count.getAsFilterQuery());
+      final String filterQueryUrl = buildUrlForFilterQuery(facetFieldName, count.getAsFilterQuery());
       final String filterQueryDeselectUrl = buildResetUrlForFilterQuery(facetFieldName, count.getAsFilterQuery());
       selectedItems.add(new SelectNavigatorItem(count, filterQueryUrl, filterQueryDeselectUrl));
    }
