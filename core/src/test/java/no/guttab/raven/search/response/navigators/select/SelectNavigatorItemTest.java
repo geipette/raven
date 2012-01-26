@@ -29,4 +29,18 @@ public class SelectNavigatorItemTest {
       assertThat(item.getName(), is("aName"));
    }
 
+    @Test
+    public void getUrl_should_return_supplied_url() throws Exception {
+       SelectNavigatorItem item = new SelectNavigatorItem(facetFieldCount, "aUrl");
+       assertThat(item.getUrl(), is("aUrl"));
+    }
+
+    @Test
+    public void getDeselectUrl_should_return_supplied_DeselectUrl() throws Exception {
+       SelectNavigatorItem item = new SelectNavigatorItem(facetFieldCount, "aUrl", "deselectUrl");
+       assertThat(item.getDeselectUrl(), is("deselectUrl"));
+    }
+
+
+
 }
