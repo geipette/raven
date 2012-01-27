@@ -1,15 +1,10 @@
 package no.guttab.raven.search.response.navigators;
 
-import java.util.List;
-
-public interface Navigator<T extends NavigatorItem> {
-   List<T> getItems();
+public interface Navigator<T extends NavigatorItem> extends NavigatorItems<T> {
+   String getDisplayName();
 
    boolean isSelected();
 
    T getFirstSelectedItem();
 
-   List<T> getSelectedItems();
-
-   String getDisplayName();
 }

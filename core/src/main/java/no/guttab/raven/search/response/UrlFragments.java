@@ -24,6 +24,9 @@ public class UrlFragments implements Iterable<UrlFragments.UrlFragmentEntry> {
    }
 
    public void addFragment(String indexFieldName, UrlFragment fragment) {
+      if (hasFragment(indexFieldName, fragment)) {
+         return;
+      }
       if (searchRequestConfig.isIndexFieldMultiSelect(indexFieldName)) {
          urlFragmentMap.add(indexFieldName, fragment);
       } else {
@@ -43,23 +46,23 @@ public class UrlFragments implements Iterable<UrlFragments.UrlFragmentEntry> {
 
    public UrlFragments withAddedFragment(String indexFieldName, UrlFragment fragment) {
       final UrlFragments urlFragments = new UrlFragments(searchRequestConfig);
-      for (UrlFragmentEntry urlFragmentEntry : this) {
-         urlFragments.addFragment(urlFragmentEntry.getIndexFieldName(), urlFragmentEntry.getFragment());
-      }
-      if (!urlFragments.hasFragment(indexFieldName, fragment)) {
-         urlFragments.addFragment(indexFieldName, fragment);
-      }
+      copyUrlFragmentEntries(this, urlFragments);
+      addFragment(indexFieldName, fragment, urlFragments);
       return urlFragments;
    }
 
    public UrlFragments withoutFragment(UrlFragment fragment) {
       final UrlFragments urlFragments = new UrlFragments(searchRequestConfig);
       for (UrlFragmentEntry urlFragmentEntry : this) {
-         if (!fragment.equals(urlFragmentEntry.getFragment())) {
-            urlFragments.addFragment(urlFragmentEntry.getIndexFieldName(), urlFragmentEntry.getFragment());
-         }
+         addFragmentEntryIfNotEqualTo(fragment, urlFragmentEntry, urlFragments);
       }
       return urlFragments;
+   }
+
+   private void addFragmentEntryIfNotEqualTo(UrlFragment fragment, UrlFragmentEntry urlFragmentEntry, UrlFragments urlFragments) {
+      if (!fragment.equals(urlFragmentEntry.getFragment())) {
+         urlFragments.addFragment(urlFragmentEntry.getIndexFieldName(), urlFragmentEntry.getFragment());
+      }
    }
 
    public UrlFragments withoutIndexField(String indexFieldName) {
@@ -70,6 +73,16 @@ public class UrlFragments implements Iterable<UrlFragments.UrlFragmentEntry> {
          }
       }
       return urlFragments;
+   }
+
+   private void addFragment(String indexFieldName, UrlFragment fragment, UrlFragments urlFragments) {
+      urlFragments.addFragment(indexFieldName, fragment);
+   }
+
+   private void copyUrlFragmentEntries(UrlFragments srcUrlFragments, UrlFragments destUrlFragments) {
+      for (UrlFragmentEntry urlFragmentEntry : srcUrlFragments) {
+         destUrlFragments.addFragment(urlFragmentEntry.getIndexFieldName(), urlFragmentEntry.getFragment());
+      }
    }
 
    private boolean hasFragment(String indexFieldName, UrlFragment fragment) {

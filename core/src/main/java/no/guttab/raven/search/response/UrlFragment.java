@@ -19,14 +19,6 @@ public class UrlFragment {
       this.fqCriteria = fqCriteria;
    }
 
-   public String getRequestFieldName() {
-      return requestFieldName;
-   }
-
-   public String getFqCriteria() {
-      return fqCriteria;
-   }
-
    @Override
    public String toString() {
       return encode(requestFieldName) + '=' + encode(fqCriteria);

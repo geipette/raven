@@ -1,30 +1,20 @@
 package no.guttab.raven.search.response.navigators.select;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 
 import no.guttab.raven.search.response.navigators.Navigator;
+import no.guttab.raven.search.response.navigators.NavigatorItems;
 import org.apache.solr.client.solrj.response.FacetField;
 
 import static org.springframework.util.CollectionUtils.isEmpty;
 
 public class SelectNavigator implements Navigator<SelectNavigatorItem> {
    private final FacetField facetField;
-   private final List<SelectNavigatorItem> items;
-   private final List<SelectNavigatorItem> selectedItems;
+   private final NavigatorItems<SelectNavigatorItem> selectNavigatorItems;
 
-   public SelectNavigator(FacetField facetField) {
-      this(facetField, new ArrayList<SelectNavigatorItem>(), new ArrayList<SelectNavigatorItem>());
-   }
-
-   public SelectNavigator(FacetField facetField,
-                          List<SelectNavigatorItem> items,
-                          List<SelectNavigatorItem> selectedItems) {
+   public SelectNavigator(FacetField facetField, NavigatorItems<SelectNavigatorItem> selectNavigatorItems) {
       this.facetField = facetField;
-      this.items = items;
-      this.selectedItems = selectedItems;
+      this.selectNavigatorItems = selectNavigatorItems;
    }
 
    @Override
@@ -33,27 +23,23 @@ public class SelectNavigator implements Navigator<SelectNavigatorItem> {
    }
 
    @Override
-   public List<SelectNavigatorItem> getItems() {
-      return Collections.unmodifiableList(items);
-   }
-
-   @Override
    public boolean isSelected() {
-      return !isEmpty(selectedItems);
+      return !isEmpty(selectNavigatorItems.getSelectedItems());
    }
 
    @Override
    public SelectNavigatorItem getFirstSelectedItem() {
-      if (selectedItems == null) {
-         return null;
-      }
-      final Iterator<SelectNavigatorItem> it = selectedItems.iterator();
-      return it.hasNext() ? it.next() : null;
+      return selectNavigatorItems.getSelectedItems().isEmpty() ? null : selectNavigatorItems.getSelectedItems().get(0);
+   }
+
+   @Override
+   public List<SelectNavigatorItem> getItems() {
+      return selectNavigatorItems.getItems();
    }
 
    @Override
    public List<SelectNavigatorItem> getSelectedItems() {
-      return Collections.unmodifiableList(selectedItems);
+      return selectNavigatorItems.getSelectedItems();
    }
 
 }
