@@ -21,15 +21,15 @@
 </c:forEach>
 
 
-<hr/>
-<h1>Facets</h1>
-<c:forEach var="facetField" items="${queryResponse.facetFields}">
-   <%--@elvariable id="facetField" type="org.apache.solr.client.solrj.response.FacetField"--%>
-   <h2>${facetField.name}</h2>
-   <c:forEach var="count" items="${facetField.values}">
-      <%--@elvariable id="count" type="org.apache.solr.client.solrj.response.FacetField.Count"--%>
-      <p>${count.name} (${count.count}) -- ${count.asFilterQuery}</p>
-   </c:forEach>
-</c:forEach>
+<%--<hr/>--%>
+<%--<h1>Facets</h1>--%>
+<%--<c:forEach var="facetField" items="${queryResponse.facetFields}">--%>
+<%--&lt;%&ndash;@elvariable id="facetField" type="org.apache.solr.client.solrj.response.FacetField"&ndash;%&gt;--%>
+<%--<h2>${facetField.name}</h2>--%>
+<%--<c:forEach var="count" items="${facetField.values}">--%>
+<%--&lt;%&ndash;@elvariable id="count" type="org.apache.solr.client.solrj.response.FacetField.Count"&ndash;%&gt;--%>
+<%--<p>${count.name} (${count.count}) -- ${count.asFilterQuery}</p>--%>
+<%--</c:forEach>--%>
+<%--</c:forEach>--%>
 </body>
 </html>
