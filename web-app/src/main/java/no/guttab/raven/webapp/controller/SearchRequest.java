@@ -4,20 +4,17 @@ import java.util.List;
 import javax.validation.constraints.NotNull;
 
 import no.guttab.raven.annotations.FacetField;
-import no.guttab.raven.annotations.FacetFieldType;
-import no.guttab.raven.annotations.FilterQuery;
 import no.guttab.raven.annotations.IndexFieldName;
 import no.guttab.raven.annotations.Query;
 
 
+@SuppressWarnings({"FieldCanBeLocal"})
 public class SearchRequest {
    @IndexFieldName("cat")
-   @FacetField(type = FacetFieldType.MULTI_SELECT)
-   @FilterQuery
+   @FacetField
    private List<String> category;
 
    @FacetField
-   @FilterQuery
    private String inStock;
 
    @Query

@@ -2,14 +2,13 @@ package no.guttab.raven.search.config;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.util.Collection;
 
 import no.guttab.raven.annotations.AnnotatedFieldCallback;
 import no.guttab.raven.annotations.AnnotationUtils;
-import no.guttab.raven.annotations.FacetFieldType;
 import no.guttab.raven.annotations.FilterQuery;
 import no.guttab.raven.common.ReverseLookupMap;
 
-import static no.guttab.raven.annotations.SearchAnnotationUtils.getFacetFieldType;
 import static no.guttab.raven.annotations.SearchAnnotationUtils.getIndexFieldName;
 import static org.apache.commons.lang3.reflect.FieldUtils.getDeclaredField;
 
@@ -41,9 +40,12 @@ public class SearchRequestConfig {
 
    public boolean isRequestFieldMultiSelect(String requestFieldName) {
       final Field field = getDeclaredField(requestType, requestFieldName, true);
-      final FacetFieldType facetFieldType = getFacetFieldType(field);
-
-      return facetFieldType == FacetFieldType.MULTI_SELECT;
+      return isCollectionType(field);
    }
+
+   private boolean isCollectionType(Field field) {
+      return Collection.class.isAssignableFrom(field.getType()) || field.getType().isArray();
+   }
+
 
 }
