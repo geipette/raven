@@ -16,37 +16,37 @@ public final class AnnotationUtils {
 
    public static void doForEachAnnotatedFieldOn(Class<?> type, AnnotationsWithCallback annotationsWithCallback) {
       for (Field field : type.getDeclaredFields()) {
-         callbackIfAnnotationPresent(annotationsWithCallback, field);
+         callbackIfFieldAnnotated(field, annotationsWithCallback);
       }
    }
 
    public static void doForEachAnnotatedFieldOn(
-         Object target, AnnotatedFieldCallback callback, Class<? extends Annotation> annotationType) {
-      doForEachAnnotatedFieldOn(target.getClass(), callback, annotationType);
+         Object target, Class<? extends Annotation> annotationType, AnnotatedFieldCallback callback) {
+      doForEachAnnotatedFieldOn(target.getClass(), annotationType, callback);
    }
 
    public static void doForEachAnnotatedFieldOn(
-         Class<?> type, AnnotatedFieldCallback callback, Class<? extends Annotation> annotationType) {
+         Class<?> type, Class<? extends Annotation> annotationType, AnnotatedFieldCallback callback) {
       for (Field field : type.getDeclaredFields()) {
-         callbackIfAnnotationPresent(callback, field, field.getAnnotation(annotationType));
+         callbackIfFieldAnnotated(field, field.getAnnotation(annotationType), callback);
       }
    }
 
    public static void doForFirstAnnotatedFieldOn(
-         Object target, AnnotatedFieldCallback callback, Class<? extends Annotation> annotationType) {
-      doForFirstAnnotatedFieldOn(target.getClass(), callback, annotationType);
+         Object target, Class<? extends Annotation> annotationType, AnnotatedFieldCallback callback) {
+      doForFirstAnnotatedFieldOn(target.getClass(), annotationType, callback);
    }
 
    public static void doForFirstAnnotatedFieldOn(
-         Class<?> type, AnnotatedFieldCallback callback, Class<? extends Annotation> annotationType) {
+         Class<?> type, Class<? extends Annotation> annotationType, AnnotatedFieldCallback callback) {
       for (Field field : type.getDeclaredFields()) {
-         if (callbackIfAnnotationPresent(callback, field, field.getAnnotation(annotationType))) {
+         if (callbackIfFieldAnnotated(field, field.getAnnotation(annotationType), callback)) {
             return;
          }
       }
    }
 
-   private static boolean callbackIfAnnotationPresent(AnnotatedFieldCallback callback, Field field, Annotation annotation) {
+   private static boolean callbackIfFieldAnnotated(Field field, Annotation annotation, AnnotatedFieldCallback callback) {
       if (annotation != null) {
          callback.doFor(field, annotation);
          return true;
@@ -54,7 +54,7 @@ public final class AnnotationUtils {
       return false;
    }
 
-   private static void callbackIfAnnotationPresent(AnnotationsWithCallback annotationsWithCallback, Field field) {
+   private static void callbackIfFieldAnnotated(Field field, AnnotationsWithCallback annotationsWithCallback) {
       final Map<Class<? extends Annotation>, Annotation> annotations =
             findAnnotationsFor(field, annotationsWithCallback.getAnnotationTypes());
       if (!annotations.isEmpty()) {
@@ -62,7 +62,8 @@ public final class AnnotationUtils {
       }
    }
 
-   private static Map<Class<? extends Annotation>, Annotation> findAnnotationsFor(Field field, List<Class<? extends Annotation>> annotationTypes) {
+   private static Map<Class<? extends Annotation>, Annotation> findAnnotationsFor(
+         Field field, List<Class<? extends Annotation>> annotationTypes) {
       final Map<Class<? extends Annotation>, Annotation> annotations = new HashMap<Class<? extends Annotation>, Annotation>();
       for (Class<? extends Annotation> annotationType : annotationTypes) {
          Annotation annotation = field.getAnnotation(annotationType);

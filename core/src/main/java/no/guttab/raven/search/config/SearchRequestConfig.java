@@ -19,12 +19,12 @@ public class SearchRequestConfig {
 
    public SearchRequestConfig(Class<?> requestType) {
       this.requestType = requestType;
-      AnnotationUtils.doForEachAnnotatedFieldOn(requestType, new AnnotatedFieldCallback() {
+      AnnotationUtils.doForEachAnnotatedFieldOn(requestType, FilterQuery.class, new AnnotatedFieldCallback() {
          @Override
          public void doFor(Field field, Annotation annotation) {
             indexFieldNameMap.put(field.getName(), getIndexFieldName(field));
          }
-      }, FilterQuery.class);
+      });
    }
 
    public String indexFieldNameFor(String requestFieldName) {

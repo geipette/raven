@@ -14,7 +14,7 @@ import static no.guttab.raven.annotations.SearchAnnotationUtils.isFacetField;
 public class FacetQueryProcessor implements QueryProcessor {
    @Override
    public void buildQuery(final Object queryInput, final SolrQuery solrQuery) {
-      doForEachAnnotatedFieldOn(queryInput, new AnnotatedFieldCallback() {
+      doForEachAnnotatedFieldOn(queryInput, FilterQuery.class, new AnnotatedFieldCallback() {
          @Override
          public void doFor(Field field, Annotation annotation) {
             if (isFacetField(field)) {
@@ -22,6 +22,6 @@ public class FacetQueryProcessor implements QueryProcessor {
                solrQuery.addFacetField(getIndexFieldName(field));
             }
          }
-      }, FilterQuery.class);
+      });
    }
 }
