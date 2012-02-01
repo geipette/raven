@@ -18,7 +18,7 @@ class SelectNavigatorItemsBuilder {
    private List<SelectNavigatorItem> items = new ArrayList<SelectNavigatorItem>();
    private List<SelectNavigatorItem> selectedItems = new ArrayList<SelectNavigatorItem>();
 
-   SelectNavigatorItemsBuilder(Navigation navigation, FacetField facetField) {
+   private SelectNavigatorItemsBuilder(Navigation navigation, FacetField facetField) {
       this.navigation = navigation;
       this.facetField = facetField;
    }

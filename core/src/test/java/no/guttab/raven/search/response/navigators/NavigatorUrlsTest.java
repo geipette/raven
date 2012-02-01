@@ -17,7 +17,7 @@ import static org.mockito.Mockito.when;
 public class NavigatorUrlsTest {
 
    @Mock
-   SearchRequestConfig searchRequestConfig;
+   private SearchRequestConfig searchRequestConfig;
 
    @Test
    public void buildUrlFor_should_generate_correct_url_when_no_fragments_has_been_added() throws Exception {

@@ -6,7 +6,7 @@ import org.mockito.Mockito;
 
 public class NavigatorsTest {
 
-   Navigators navigators;
+   private Navigators navigators;
 
    @Before
    public void setUp() throws Exception {

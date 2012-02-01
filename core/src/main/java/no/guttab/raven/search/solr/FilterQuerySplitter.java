@@ -8,7 +8,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class FilterQuerySplitter {
+class FilterQuerySplitter {
    private static final Pattern GROUPED_FIELD_FQ = Pattern.compile("^([^:]+):\\((.+)\\)$");
    private static final Pattern GROUP_TOKEN = Pattern.compile("[^\"\\s\\\\]+(?:\\\\\\s[^\"\\s\\\\]+)*|(\"[^\"]+\")");
    private static final Set<String> BOOLEAN_OPERATORS = new HashSet<String>(Arrays.asList(

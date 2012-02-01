@@ -18,6 +18,7 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.when;
 
+@SuppressWarnings({"unchecked"})
 @RunWith(MockitoJUnitRunner.class)
 public class QueryResponseHeaderParamsTest {
    @Mock

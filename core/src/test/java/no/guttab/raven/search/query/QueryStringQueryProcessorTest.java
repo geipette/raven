@@ -13,7 +13,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 public class QueryStringQueryProcessorTest {
    @Mock
-   SolrQuery solrQuery;
+   private SolrQuery solrQuery;
 
    private QueryStringQueryProcessor queryStringQueryProcessor;
 

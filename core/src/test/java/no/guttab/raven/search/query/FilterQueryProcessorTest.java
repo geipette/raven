@@ -26,9 +26,9 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 @RunWith(MockitoJUnitRunner.class)
 public class FilterQueryProcessorTest {
    @Mock
-   SolrQuery solrQuery;
+   private SolrQuery solrQuery;
 
-   FilterQueryProcessor filterQueryProcessor;
+   private FilterQueryProcessor filterQueryProcessor;
 
    @Before
    public void setUp() throws Exception {

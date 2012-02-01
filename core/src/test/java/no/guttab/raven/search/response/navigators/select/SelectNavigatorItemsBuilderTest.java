@@ -25,7 +25,7 @@ import static org.powermock.api.mockito.PowerMockito.*;
 @RunWith(PowerMockRunner.class)
 public class SelectNavigatorItemsBuilderTest {
    @Mock
-   Navigation navigation;
+   private Navigation navigation;
 
    private FacetField facetField;
 

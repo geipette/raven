@@ -9,7 +9,7 @@ import org.apache.solr.common.util.SimpleOrderedMap;
 
 import static org.springframework.util.Assert.notNull;
 
-public class QueryResponseHeaderParams {
+class QueryResponseHeaderParams {
 
    private final SimpleOrderedMap<?> map;
    private FilterQueries filterQueries;

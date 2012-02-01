@@ -31,10 +31,6 @@ public class Navigation {
       return navigatorUrls.buildUrlFor(indexFieldName, fqCriteria);
    }
 
-   public String resetUrlFor(String indexFieldName) {
-      return navigatorUrls.resetUrlFor(indexFieldName);
-   }
-
    public String resetUrlFor(String indexFieldName, String fqCriteria) {
       return navigatorUrls.resetUrlFor(indexFieldName, fqCriteria);
    }

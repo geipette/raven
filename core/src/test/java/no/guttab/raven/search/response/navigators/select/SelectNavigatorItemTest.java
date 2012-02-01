@@ -13,7 +13,7 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class SelectNavigatorItemTest {
    @Mock
-   FacetField.Count facetFieldCount;
+   private FacetField.Count facetFieldCount;
 
    @Test
    public void getCount_should_get_count_from_supplied_facetFieldCount() throws Exception {
