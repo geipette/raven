@@ -2,7 +2,6 @@ package no.guttab.raven.search.query;
 
 
 import no.guttab.raven.annotations.FacetField;
-import no.guttab.raven.annotations.FilterQuery;
 import no.guttab.raven.annotations.IndexFieldName;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.junit.Before;
@@ -14,22 +13,21 @@ import org.mockito.runners.MockitoJUnitRunner;
 import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
-public class FacetQueryProcessorTest {
+public class FacetFieldQueryProcessorTest {
 
-   private FacetQueryProcessor facetQueryProcessor;
+   private FacetFieldQueryProcessor facetQueryProcessor;
    @Mock
    private SolrQuery solrQuery;
 
    @Before
    public void setUp() throws Exception {
-      facetQueryProcessor = new FacetQueryProcessor();
+      facetQueryProcessor = new FacetFieldQueryProcessor();
    }
 
    @Test
    public void buildQuery_should_set_facet_to_true_when_a_field_is_defined_as_facetField() throws Exception {
       class TestQuery {
          @FacetField
-         @FilterQuery
          int areaId;
       }
       facetQueryProcessor.buildQuery(new TestQuery(), solrQuery);
@@ -42,7 +40,6 @@ public class FacetQueryProcessorTest {
    public void buildQuery_should_add_facetField_when_a_field_is_defined_as_facetField() throws Exception {
       class TestQuery {
          @FacetField
-         @FilterQuery
          int areaId;
       }
       facetQueryProcessor.buildQuery(new TestQuery(), solrQuery);
@@ -55,7 +52,6 @@ public class FacetQueryProcessorTest {
       class TestQuery {
          @IndexFieldName("newAreaId")
          @FacetField
-         @FilterQuery
          int areaId;
       }
       facetQueryProcessor.buildQuery(new TestQuery(), solrQuery);
