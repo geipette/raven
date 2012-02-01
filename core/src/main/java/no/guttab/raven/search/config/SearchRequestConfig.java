@@ -3,12 +3,14 @@ package no.guttab.raven.search.config;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.Collection;
+import java.util.Map;
 
-import no.guttab.raven.annotations.AnnotatedFieldCallback;
-import no.guttab.raven.annotations.AnnotationUtils;
+import no.guttab.raven.annotations.AnnotationsWithCallback;
+import no.guttab.raven.annotations.FacetField;
 import no.guttab.raven.annotations.FilterQuery;
 import no.guttab.raven.common.ReverseLookupMap;
 
+import static no.guttab.raven.annotations.AnnotationUtils.doForEachAnnotatedFieldOn;
 import static no.guttab.raven.annotations.SearchAnnotationUtils.getIndexFieldName;
 import static org.apache.commons.lang3.reflect.FieldUtils.getDeclaredField;
 
@@ -18,9 +20,9 @@ public class SearchRequestConfig {
 
    public SearchRequestConfig(Class<?> requestType) {
       this.requestType = requestType;
-      AnnotationUtils.doForEachAnnotatedFieldOn(requestType, FilterQuery.class, new AnnotatedFieldCallback() {
+      doForEachAnnotatedFieldOn(requestType, new AnnotationsWithCallback(FilterQuery.class, FacetField.class) {
          @Override
-         public void doFor(Field field, Annotation annotation) {
+         public void doFor(Field field, Map<Class<? extends Annotation>, ? extends Annotation> annotations) {
             indexFieldNameMap.put(field.getName(), getIndexFieldName(field));
          }
       });

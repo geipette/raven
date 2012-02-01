@@ -1,5 +1,6 @@
 package no.guttab.raven.search.config;
 
+import no.guttab.raven.annotations.FacetField;
 import no.guttab.raven.annotations.FilterQuery;
 import no.guttab.raven.annotations.IndexFieldName;
 import org.junit.Test;
@@ -62,5 +63,20 @@ public class SearchRequestConfigTest {
 
       assertThat(actual, is("aRequestFieldName"));
    }
+
+   @Test
+   public void indexFieldNameFor_should_return_requestFieldName_when_FacetField_annotation_implies_FilterQuery()
+         throws Exception {
+      class TestRequest {
+         @FacetField
+         String aRequestFieldName;
+      }
+      SearchRequestConfig searchRequestConfig = new SearchRequestConfig(TestRequest.class);
+
+      String actual = searchRequestConfig.indexFieldNameFor("aRequestFieldName");
+
+      assertThat(actual, is("aRequestFieldName"));
+   }
+
 
 }
