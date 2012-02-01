@@ -1,9 +1,12 @@
 package no.guttab.raven.search.query;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.Collection;
+import java.util.Map;
 
-import no.guttab.raven.annotations.AnnotatedFieldCallback;
+import no.guttab.raven.annotations.AnnotationsWithCallback;
+import no.guttab.raven.annotations.FacetField;
 import no.guttab.raven.annotations.FacetFieldMode;
 import no.guttab.raven.annotations.FilterQuery;
 import no.guttab.raven.annotations.FilterQueryCriteriaBuilder;
@@ -17,21 +20,22 @@ import static no.guttab.raven.annotations.SearchAnnotationUtils.getFacetFieldMod
 import static no.guttab.raven.annotations.SearchAnnotationUtils.getIndexFieldName;
 import static no.guttab.raven.reflection.FieldUtils.getFieldValue;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
+import static org.springframework.core.annotation.AnnotationUtils.getDefaultValue;
 
 public class FilterQueryProcessor implements QueryProcessor {
    private static final Logger log = LoggerFactory.getLogger(FilterQueryProcessor.class);
 
    @Override
    public void buildQuery(final Object queryInput, final SolrQuery solrQuery) {
-      doForEachAnnotatedFieldOn(queryInput, FilterQuery.class, new AnnotatedFieldCallback<FilterQuery>() {
-         @Override
-         public void doFor(Field field, FilterQuery annotation) {
-            String filterQuery = buildFilterQuery(annotation, queryInput, field);
-            if (!isEmpty(filterQuery)) {
-               solrQuery.addFilterQuery(filterQuery);
-            }
-         }
-      });
+      doForEachAnnotatedFieldOn(queryInput, new FilterQueryAnnotationsWithCallback(queryInput, solrQuery));
+   }
+
+   private FilterQuery getFilterQueryAnnotation(Map<Class<? extends Annotation>, ? extends Annotation> annotations) {
+      FilterQuery filterQueryAnnotation = (FilterQuery) annotations.get(FilterQuery.class);
+      if (filterQueryAnnotation == null) {
+         filterQueryAnnotation = new DefaultFilterQueryAnnotation();
+      }
+      return filterQueryAnnotation;
    }
 
    private String buildFilterQuery(FilterQuery filterQuery, Object queryInput, Field field) {
@@ -95,6 +99,44 @@ public class FilterQueryProcessor implements QueryProcessor {
          log.error("Could not instantiate class. FilterQuery skipped.", e);
       }
       return null;
+   }
+
+   private class FilterQueryAnnotationsWithCallback extends AnnotationsWithCallback {
+      private final Object queryInput;
+      private final SolrQuery solrQuery;
+
+      @SuppressWarnings({"unchecked"})
+      public FilterQueryAnnotationsWithCallback(Object queryInput, SolrQuery solrQuery) {
+         super(FilterQuery.class, FacetField.class);
+         this.queryInput = queryInput;
+         this.solrQuery = solrQuery;
+      }
+
+      @Override
+      public void doFor(Field field, Map<Class<? extends Annotation>, ? extends Annotation> annotations) {
+         final FilterQuery filterQueryAnnotation = getFilterQueryAnnotation(annotations);
+         if (filterQueryAnnotation != null) {
+            String filterQuery = buildFilterQuery(filterQueryAnnotation, queryInput, field);
+            if (!isEmpty(filterQuery)) {
+               solrQuery.addFilterQuery(filterQuery);
+            }
+         }
+      }
+   }
+
+   @SuppressWarnings({"ClassExplicitlyAnnotation"})
+   private static class DefaultFilterQueryAnnotation implements FilterQuery {
+      @Override
+      public Class<? extends FilterQueryCriteriaBuilder<?>> queryCriteriaBuilder() {
+         //noinspection unchecked
+         return (Class<? extends FilterQueryCriteriaBuilder<?>>)
+               getDefaultValue(FilterQuery.class, "queryCriteriaBuilder");
+      }
+
+      @Override
+      public Class<? extends Annotation> annotationType() {
+         return FilterQuery.class;
+      }
    }
 
 }

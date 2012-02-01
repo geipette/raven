@@ -98,6 +98,17 @@ public class FilterQueryProcessorTest {
    }
 
 
+   @Test
+   public void buildQuery_should_add_filterQuery_when_FacetField_implies_FilterQuery() throws Exception {
+      Object queryInput = new Object() {
+         @FacetField
+         private String areaId = "500";
+      };
+
+      filterQueryProcessor.buildQuery(queryInput, solrQuery);
+
+      verify(solrQuery).addFilterQuery("areaId:500");
+   }
 
    @Test
    public void filterQuery_for_annotated_field_should_use_indexFieldName_when_specified() throws Exception {

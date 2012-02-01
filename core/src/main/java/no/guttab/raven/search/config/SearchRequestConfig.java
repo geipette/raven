@@ -1,5 +1,6 @@
 package no.guttab.raven.search.config;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
 import no.guttab.raven.annotations.AnnotatedFieldCallback;
@@ -18,12 +19,12 @@ public class SearchRequestConfig {
 
    public SearchRequestConfig(Class<?> requestType) {
       this.requestType = requestType;
-      AnnotationUtils.doForEachAnnotatedFieldOn(requestType, FilterQuery.class, new AnnotatedFieldCallback<FilterQuery>() {
+      AnnotationUtils.doForEachAnnotatedFieldOn(requestType, new AnnotatedFieldCallback() {
          @Override
-         public void doFor(Field field, FilterQuery annotation) {
+         public void doFor(Field field, Annotation annotation) {
             indexFieldNameMap.put(field.getName(), getIndexFieldName(field));
          }
-      });
+      }, FilterQuery.class);
    }
 
    public String indexFieldNameFor(String requestFieldName) {
