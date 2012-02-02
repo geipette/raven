@@ -44,4 +44,11 @@
    <bean id="searchResource" class="no.guttab.raven.search.UrlBasedSearchResource">
       <constructor-arg value="http://localhost:8093"/>
    </bean>
+
+   <bean id="ravenSearcher" class="no.guttab.raven.webapp.controller.RavenSearcher">
+      <constructor-arg index="0" value="no.guttab.raven.webapp.controller.DemoSearchResponse"/>
+      <constructor-arg index="1" ref="queryProcessor"/>
+      <constructor-arg index="2" ref="responseProcessor"/>
+      <constructor-arg index="3" ref="searchServer"/>
+   </bean>
 </beans>
