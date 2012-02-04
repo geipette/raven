@@ -19,7 +19,7 @@ public class SearchServer {
       }
    }
 
-   private class SearchServerRuntimeException extends RuntimeException {
+   private static class SearchServerRuntimeException extends RuntimeException {
       public SearchServerRuntimeException(SolrServerException e) {
          super(e);
       }

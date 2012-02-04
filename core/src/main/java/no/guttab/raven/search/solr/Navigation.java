@@ -3,7 +3,7 @@ package no.guttab.raven.search.solr;
 import java.util.List;
 import java.util.Set;
 
-import no.guttab.raven.search.config.SearchRequestConfig;
+import no.guttab.raven.search.config.SearchRequestTypeInfo;
 import no.guttab.raven.search.response.NavigatorUrls;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.QueryResponse;
@@ -12,13 +12,13 @@ import static no.guttab.raven.search.solr.FilterQueries.filterQueriesFor;
 import static org.springframework.util.CollectionUtils.isEmpty;
 
 public class Navigation {
-   private SearchRequestConfig searchRequestConfig;
+   private SearchRequestTypeInfo searchRequestTypeInfo;
 
    private NavigatorUrls navigatorUrls;
    private FilterQueries filterQueries;
 
-   public Navigation(SearchRequestConfig searchRequestConfig, QueryResponse queryResponse) {
-      this.searchRequestConfig = searchRequestConfig;
+   public Navigation(SearchRequestTypeInfo searchRequestTypeInfo, QueryResponse queryResponse) {
+      this.searchRequestTypeInfo = searchRequestTypeInfo;
       filterQueries = filterQueriesFor(queryResponse);
       navigatorUrls = buildNavigatorUrls(queryResponse.getFacetFields(), filterQueries);
    }
@@ -36,7 +36,7 @@ public class Navigation {
    }
 
    private NavigatorUrls buildNavigatorUrls(List<FacetField> facetFields, FilterQueries filterQueries) {
-      final NavigatorUrls navigatorUrls = new NavigatorUrls(searchRequestConfig);
+      final NavigatorUrls navigatorUrls = new NavigatorUrls(searchRequestTypeInfo);
 
       for (final FacetField facetField : facetFields) {
          Set<String> fqCriterias = filterQueries.findFqCriteriasFor(facetField);

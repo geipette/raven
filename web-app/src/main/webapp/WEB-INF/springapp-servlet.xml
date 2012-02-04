@@ -14,41 +14,5 @@
       <property name="suffix" value=".jsp"/>
    </bean>
 
-   <bean id="queryProcessor" class="no.guttab.raven.search.query.QueryProcessorList">
-      <constructor-arg>
-         <list>
-            <bean class="no.guttab.raven.search.query.FacetFieldQueryProcessor"/>
-            <bean class="no.guttab.raven.search.query.FilterQueryProcessor"/>
-            <bean class="no.guttab.raven.search.query.QueryStringQueryProcessor"/>
-         </list>
-      </constructor-arg>
-   </bean>
 
-   <bean id="responseProcessor" class="no.guttab.raven.search.response.NavigatorsResponseProcessor">
-      <constructor-arg>
-         <bean class="no.guttab.raven.search.response.navigators.NavigatorBuilder">
-            <constructor-arg>
-
-               <bean class="no.guttab.raven.search.config.SearchRequestConfig">
-                  <constructor-arg value="no.guttab.raven.webapp.controller.SearchRequest"/>
-               </bean>
-            </constructor-arg>
-         </bean>
-      </constructor-arg>
-   </bean>
-
-   <bean id="searchServer" class="no.guttab.raven.search.SearchServer">
-      <constructor-arg ref="searchResource"/>
-   </bean>
-
-   <bean id="searchResource" class="no.guttab.raven.search.UrlBasedSearchResource">
-      <constructor-arg value="http://localhost:8093"/>
-   </bean>
-
-   <bean id="ravenSearcher" class="no.guttab.raven.webapp.controller.RavenSearcher">
-      <constructor-arg index="0" value="no.guttab.raven.webapp.controller.DemoSearchResponse"/>
-      <constructor-arg index="1" ref="queryProcessor"/>
-      <constructor-arg index="2" ref="responseProcessor"/>
-      <constructor-arg index="3" ref="searchServer"/>
-   </bean>
 </beans>

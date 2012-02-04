@@ -1,12 +1,12 @@
 package no.guttab.raven.search.response;
 
-import no.guttab.raven.search.config.SearchRequestConfig;
+import no.guttab.raven.search.config.SearchRequestTypeInfo;
 
 public class NavigatorUrls {
    private final UrlFragments urlFragments;
 
-   public NavigatorUrls(SearchRequestConfig searchRequestConfig) {
-      urlFragments = new UrlFragments(searchRequestConfig);
+   public NavigatorUrls(SearchRequestTypeInfo searchRequestTypeInfo) {
+      urlFragments = new UrlFragments(searchRequestTypeInfo);
    }
 
    public void addUrlFragment(String indexFieldName, String fqCriteria) {

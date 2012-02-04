@@ -1,6 +1,6 @@
 package no.guttab.raven.search.response;
 
-import no.guttab.raven.search.config.SearchRequestConfig;
+import no.guttab.raven.search.config.SearchRequestTypeInfo;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 import org.junit.Before;
@@ -17,7 +17,7 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class UrlFragmentsTest {
    @Mock
-   private SearchRequestConfig searchRequestConfig;
+   private SearchRequestTypeInfo searchRequestConfig;
 
    private UrlFragments urlFragments;
 
@@ -188,7 +188,6 @@ public class UrlFragmentsTest {
    private UrlFragments.UrlFragmentEntry entry(String indexFieldName, String requestFieldName, String fqCriteria) {
       return new UrlFragments.UrlFragmentEntry(indexFieldName, new UrlFragment(requestFieldName, fqCriteria));
    }
-
 
 
    static class FragmentCount extends BaseMatcher<UrlFragments> {

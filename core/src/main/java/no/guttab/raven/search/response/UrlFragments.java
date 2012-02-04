@@ -6,28 +6,28 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
-import no.guttab.raven.search.config.SearchRequestConfig;
+import no.guttab.raven.search.config.SearchRequestTypeInfo;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 public class UrlFragments implements Iterable<UrlFragments.UrlFragmentEntry> {
    private final MultiValueMap<String, UrlFragment> urlFragmentMap = new LinkedMultiValueMap<String, UrlFragment>();
-   private SearchRequestConfig searchRequestConfig;
+   private SearchRequestTypeInfo searchRequestTypeInfo;
 
 
-   public UrlFragments(SearchRequestConfig searchRequestConfig) {
-      this.searchRequestConfig = searchRequestConfig;
+   public UrlFragments(SearchRequestTypeInfo searchRequestTypeInfo) {
+      this.searchRequestTypeInfo = searchRequestTypeInfo;
    }
 
    public void addFragment(String indexFieldName, String fqCriteria) {
-      addFragment(indexFieldName, new UrlFragment(searchRequestConfig.requestFieldNameFor(indexFieldName), fqCriteria));
+      addFragment(indexFieldName, new UrlFragment(searchRequestTypeInfo.requestFieldNameFor(indexFieldName), fqCriteria));
    }
 
    public void addFragment(String indexFieldName, UrlFragment fragment) {
       if (hasFragment(indexFieldName, fragment)) {
          return;
       }
-      if (searchRequestConfig.isIndexFieldMultiSelect(indexFieldName)) {
+      if (searchRequestTypeInfo.isIndexFieldMultiSelect(indexFieldName)) {
          urlFragmentMap.add(indexFieldName, fragment);
       } else {
          urlFragmentMap.set(indexFieldName, fragment);
@@ -36,23 +36,23 @@ public class UrlFragments implements Iterable<UrlFragments.UrlFragmentEntry> {
 
    public UrlFragments withAddedFragment(String indexFieldName, String fqCriteria) {
       return withAddedFragment(indexFieldName,
-            new UrlFragment(searchRequestConfig.requestFieldNameFor(indexFieldName), fqCriteria));
+            new UrlFragment(searchRequestTypeInfo.requestFieldNameFor(indexFieldName), fqCriteria));
    }
 
    public UrlFragments withoutFragment(String indexFieldName, String fqCriteria) {
       return withoutFragment(
-            new UrlFragment(searchRequestConfig.requestFieldNameFor(indexFieldName), fqCriteria));
+            new UrlFragment(searchRequestTypeInfo.requestFieldNameFor(indexFieldName), fqCriteria));
    }
 
    public UrlFragments withAddedFragment(String indexFieldName, UrlFragment fragment) {
-      final UrlFragments urlFragments = new UrlFragments(searchRequestConfig);
+      final UrlFragments urlFragments = new UrlFragments(searchRequestTypeInfo);
       copyUrlFragmentEntries(this, urlFragments);
       addFragment(indexFieldName, fragment, urlFragments);
       return urlFragments;
    }
 
    public UrlFragments withoutFragment(UrlFragment fragment) {
-      final UrlFragments urlFragments = new UrlFragments(searchRequestConfig);
+      final UrlFragments urlFragments = new UrlFragments(searchRequestTypeInfo);
       for (UrlFragmentEntry urlFragmentEntry : this) {
          addFragmentEntryIfNotEqualTo(fragment, urlFragmentEntry, urlFragments);
       }
@@ -66,7 +66,7 @@ public class UrlFragments implements Iterable<UrlFragments.UrlFragmentEntry> {
    }
 
    public UrlFragments withoutIndexField(String indexFieldName) {
-      final UrlFragments urlFragments = new UrlFragments(searchRequestConfig);
+      final UrlFragments urlFragments = new UrlFragments(searchRequestTypeInfo);
       for (UrlFragmentEntry urlFragmentEntry : this) {
          if (!indexFieldName.equals(urlFragmentEntry.getIndexFieldName())) {
             urlFragments.addFragment(urlFragmentEntry.getIndexFieldName(), urlFragmentEntry.getFragment());
@@ -119,6 +119,7 @@ public class UrlFragments implements Iterable<UrlFragments.UrlFragmentEntry> {
       public UrlFragment getFragment() {
          return fragment;
       }
+
       @Override
       public String toString() {
          return "Entry{" +
@@ -131,7 +132,7 @@ public class UrlFragments implements Iterable<UrlFragments.UrlFragmentEntry> {
    private static class UrlFragmentEntryIterator implements Iterator<UrlFragmentEntry> {
       private Iterator<Map.Entry<String, List<UrlFragment>>> entryIterator;
       private Iterator<UrlFragment> fragmentIterator = Collections.<UrlFragment>emptyList().iterator();
-      private Map.Entry<String,List<UrlFragment>> currentFragmentEntry;
+      private Map.Entry<String, List<UrlFragment>> currentFragmentEntry;
 
       public UrlFragmentEntryIterator(UrlFragments urlFragments) {
          entryIterator = urlFragments.urlFragmentMap.entrySet().iterator();

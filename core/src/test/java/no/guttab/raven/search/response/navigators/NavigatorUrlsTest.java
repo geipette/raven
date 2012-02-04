@@ -1,6 +1,6 @@
 package no.guttab.raven.search.response.navigators;
 
-import no.guttab.raven.search.config.SearchRequestConfig;
+import no.guttab.raven.search.config.SearchRequestTypeInfo;
 import no.guttab.raven.search.response.NavigatorUrls;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,7 +17,7 @@ import static org.mockito.Mockito.when;
 public class NavigatorUrlsTest {
 
    @Mock
-   private SearchRequestConfig searchRequestConfig;
+   private SearchRequestTypeInfo searchRequestConfig;
 
    @Test
    public void buildUrlFor_should_generate_correct_url_when_no_fragments_has_been_added() throws Exception {

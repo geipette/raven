@@ -8,7 +8,7 @@ import org.junit.Test;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
-public class SearchRequestConfigTest {
+public class SearchRequestTypeInfoTest {
 
    @Test
    public void indexFieldNameFor_should_return_requestFieldName_when_no_indexFieldName_annotated() throws Exception {
@@ -16,7 +16,7 @@ public class SearchRequestConfigTest {
          @FilterQuery
          String aRequestFieldName;
       }
-      SearchRequestConfig searchRequestConfig = new SearchRequestConfig(TestRequest.class);
+      SearchRequestTypeInfo searchRequestConfig = new SearchRequestTypeInfo(TestRequest.class);
 
       String actual = searchRequestConfig.indexFieldNameFor("aRequestFieldName");
 
@@ -29,7 +29,7 @@ public class SearchRequestConfigTest {
          @FilterQuery
          String aRequestFieldName;
       }
-      SearchRequestConfig searchRequestConfig = new SearchRequestConfig(TestRequest.class);
+      SearchRequestTypeInfo searchRequestConfig = new SearchRequestTypeInfo(TestRequest.class);
 
       String actual = searchRequestConfig.requestFieldNameFor("aRequestFieldName");
 
@@ -43,7 +43,7 @@ public class SearchRequestConfigTest {
          @FilterQuery
          String aRequestFieldName;
       }
-      SearchRequestConfig searchRequestConfig = new SearchRequestConfig(TestRequest.class);
+      SearchRequestTypeInfo searchRequestConfig = new SearchRequestTypeInfo(TestRequest.class);
 
       String actual = searchRequestConfig.indexFieldNameFor("aRequestFieldName");
 
@@ -57,7 +57,7 @@ public class SearchRequestConfigTest {
          @FilterQuery
          String aRequestFieldName;
       }
-      SearchRequestConfig searchRequestConfig = new SearchRequestConfig(TestRequest.class);
+      SearchRequestTypeInfo searchRequestConfig = new SearchRequestTypeInfo(TestRequest.class);
 
       String actual = searchRequestConfig.requestFieldNameFor("req");
 
@@ -71,7 +71,7 @@ public class SearchRequestConfigTest {
          @FacetField
          String aRequestFieldName;
       }
-      SearchRequestConfig searchRequestConfig = new SearchRequestConfig(TestRequest.class);
+      SearchRequestTypeInfo searchRequestConfig = new SearchRequestTypeInfo(TestRequest.class);
 
       String actual = searchRequestConfig.indexFieldNameFor("aRequestFieldName");
 

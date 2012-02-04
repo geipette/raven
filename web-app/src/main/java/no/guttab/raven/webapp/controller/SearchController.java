@@ -1,10 +1,14 @@
 package no.guttab.raven.webapp.controller;
 
+import java.net.MalformedURLException;
 import java.util.HashMap;
 import java.util.Map;
 import javax.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import no.guttab.raven.search.RavenSearcher;
+import no.guttab.raven.search.SearchServer;
+import no.guttab.raven.search.UrlBasedSearchResource;
+import no.guttab.raven.search.config.SearchRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -12,12 +16,23 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class SearchController {
 
-   @Autowired
-   RavenSearcher<SearchRequest, DemoSearchResponse> searcher;
+   private SearchServer searchServer;
+   private RavenSearcher<DemoSearchResponse> searcher;
+
+   public SearchController() {
+      String solrServerUrl = "http://localhost:8093";
+      try {
+         searchServer = new SearchServer(new UrlBasedSearchResource(solrServerUrl));
+         searcher = new RavenSearcher<DemoSearchResponse>(searchServer);
+      } catch (MalformedURLException e) {
+         throw new CouldNotInitializeSolrServerException(solrServerUrl, e);
+      }
+   }
 
    @RequestMapping(value = {"/search", "/"})
-   public ModelAndView search(@Valid SearchRequest searchRequest) {
-      DemoSearchResponse searchResponse = searcher.search(searchRequest);
+   public ModelAndView search(@Valid DemoSearchRequest searchRequest) {
+      DemoSearchResponse searchResponse = searcher.search(
+            new SearchRequest<DemoSearchResponse>(searchRequest, DemoSearchResponse.class));
 
       Map<String, Object> modelMap = new HashMap<String, Object>();
       modelMap.put("searchResponse", searchResponse);
@@ -25,4 +40,9 @@ public class SearchController {
       return new ModelAndView("search-result", modelMap);
    }
 
+   private class CouldNotInitializeSolrServerException extends RuntimeException {
+      public CouldNotInitializeSolrServerException(String solrServerUrl, MalformedURLException e) {
+         super("Could not initialize solr server at: " + solrServerUrl, e);
+      }
+   }
 }

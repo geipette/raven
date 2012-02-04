@@ -9,7 +9,7 @@ import no.guttab.raven.annotations.Query;
 
 
 @SuppressWarnings({"FieldCanBeLocal"})
-public class SearchRequest {
+public class DemoSearchRequest {
    @IndexFieldName("cat")
    @FacetField
    private List<String> category;
