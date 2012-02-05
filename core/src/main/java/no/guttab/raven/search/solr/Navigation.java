@@ -3,7 +3,7 @@ package no.guttab.raven.search.solr;
 import java.util.List;
 import java.util.Set;
 
-import no.guttab.raven.search.config.SearchRequestTypeInfo;
+import no.guttab.raven.search.SearchRequestTypeInfo;
 import no.guttab.raven.search.response.NavigatorUrls;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.QueryResponse;

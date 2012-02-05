@@ -1,6 +1,6 @@
 package no.guttab.raven.search.response.navigators;
 
-import no.guttab.raven.search.config.SearchRequestTypeInfo;
+import no.guttab.raven.search.SearchRequestTypeInfo;
 import no.guttab.raven.search.response.NavigatorUrls;
 import org.junit.Test;
 import org.junit.runner.RunWith;

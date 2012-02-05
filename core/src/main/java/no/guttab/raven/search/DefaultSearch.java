@@ -1,32 +1,30 @@
-package no.guttab.raven.search.config;
-
-import java.util.List;
+package no.guttab.raven.search;
 
 import no.guttab.raven.search.query.QueryBuilder;
 import no.guttab.raven.search.response.DefaultConstructorSearchResponseFactory;
-import no.guttab.raven.search.response.ResponseProcessor;
 import no.guttab.raven.search.response.ResponseProcessors;
 import no.guttab.raven.search.response.SearchResponse;
 import no.guttab.raven.search.response.SearchResponseFactory;
+import org.apache.solr.client.solrj.SolrQuery;
 
-public class SearchRequest<T extends SearchResponse> {
+public class DefaultSearch<T extends SearchResponse> implements Search<T> {
+   private Object searchRequest;
    private SearchResponseFactory<T> searchResponseFactory;
    private QueryBuilder queryBuilder;
-   private Object searchRequest;
    private ResponseProcessors<T> responseProcessors;
 
-   public SearchRequest(Object searchRequest, Class<T> searchResponseType) {
+   public DefaultSearch(Object searchRequest, Class<T> searchResponseType) {
       this(searchRequest, new DefaultConstructorSearchResponseFactory<T>(searchResponseType));
    }
 
-   public SearchRequest(Object searchRequest, SearchResponseFactory<T> searchResponseFactory) {
+   public DefaultSearch(Object searchRequest, SearchResponseFactory<T> searchResponseFactory) {
       this(searchRequest,
             searchResponseFactory,
             new QueryBuilder(),
             ResponseProcessors.<T>defaultProcessors(searchRequest.getClass()));
    }
 
-   private SearchRequest(
+   private DefaultSearch(
          Object searchRequest,
          SearchResponseFactory<T> searchResponseFactory,
          QueryBuilder queryBuilder,
@@ -37,31 +35,34 @@ public class SearchRequest<T extends SearchResponse> {
       this.responseProcessors = responseProcessors;
    }
 
-   public SearchRequest<T> withQueryBuilder(QueryBuilder queryBuilder) {
-      return new SearchRequest<T>(searchRequest, searchResponseFactory, queryBuilder, responseProcessors);
+   public Search<T> withQueryBuilder(QueryBuilder queryBuilder) {
+      return new DefaultSearch<T>(searchRequest, searchResponseFactory, queryBuilder, responseProcessors);
    }
 
-   public SearchRequest<T> withSearchResponseFactory(SearchResponseFactory<T> searchResponseFactory) {
-      return new SearchRequest<T>(searchRequest, searchResponseFactory, queryBuilder, responseProcessors);
+   public Search<T> withSearchResponseFactory(SearchResponseFactory<T> searchResponseFactory) {
+      return new DefaultSearch<T>(searchRequest, searchResponseFactory, queryBuilder, responseProcessors);
    }
 
-   public SearchRequest<T> withResponseProcessors(List<ResponseProcessor<T>> responseProcessors) {
-      return new SearchRequest<T>(
-            searchRequest, searchResponseFactory, queryBuilder, new ResponseProcessors<T>(responseProcessors));
+   public Search<T> withResponseProcessors(ResponseProcessors<T> responseProcessors) {
+      return new DefaultSearch<T>(searchRequest, searchResponseFactory, queryBuilder, responseProcessors);
    }
 
+   @Override
    public Object getSearchRequest() {
       return searchRequest;
    }
 
-   public QueryBuilder getQueryBuilder() {
-      return queryBuilder;
+   @Override
+   public SolrQuery buildQuery() {
+      return queryBuilder.buildQuery(searchRequest);
    }
 
+   @Override
    public SearchResponseFactory<T> getSearchResponseFactory() {
       return searchResponseFactory;
    }
 
+   @Override
    public ResponseProcessors<T> getResponseProcessors() {
       return responseProcessors;
    }

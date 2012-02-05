@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-import no.guttab.raven.search.config.SearchRequestTypeInfo;
+import no.guttab.raven.search.SearchRequestTypeInfo;
 
 public class ResponseProcessors<T extends SearchResponse> implements Iterable<ResponseProcessor<T>> {
    private final List<ResponseProcessor<T>> processors;

@@ -5,10 +5,10 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.validation.Valid;
 
+import no.guttab.raven.search.DefaultSearch;
 import no.guttab.raven.search.RavenSearcher;
 import no.guttab.raven.search.SearchServer;
 import no.guttab.raven.search.UrlBasedSearchResource;
-import no.guttab.raven.search.config.SearchRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -31,8 +31,9 @@ public class SearchController {
 
    @RequestMapping(value = {"/search", "/"})
    public ModelAndView search(@Valid DemoSearchRequest searchRequest) {
-      DemoSearchResponse searchResponse = searcher.search(
-            new SearchRequest<DemoSearchResponse>(searchRequest, DemoSearchResponse.class));
+      final DefaultSearch<DemoSearchResponse> search =
+            new DefaultSearch<DemoSearchResponse>(searchRequest, DemoSearchResponse.class);
+      DemoSearchResponse searchResponse = searcher.search(search);
 
       Map<String, Object> modelMap = new HashMap<String, Object>();
       modelMap.put("searchResponse", searchResponse);

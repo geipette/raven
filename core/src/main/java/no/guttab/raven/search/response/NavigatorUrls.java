@@ -1,6 +1,6 @@
 package no.guttab.raven.search.response;
 
-import no.guttab.raven.search.config.SearchRequestTypeInfo;
+import no.guttab.raven.search.SearchRequestTypeInfo;
 
 public class NavigatorUrls {
    private final UrlFragments urlFragments;

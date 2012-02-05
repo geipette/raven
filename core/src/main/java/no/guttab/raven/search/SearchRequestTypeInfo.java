@@ -1,4 +1,4 @@
-package no.guttab.raven.search.config;
+package no.guttab.raven.search;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;

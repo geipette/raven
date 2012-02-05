@@ -3,7 +3,7 @@ package no.guttab.raven.search.query;
 import java.util.ArrayList;
 import java.util.List;
 
-import no.guttab.raven.search.config.SearchRequest;
+import no.guttab.raven.search.Search;
 import org.apache.solr.client.solrj.SolrQuery;
 
 import static java.util.Arrays.asList;
@@ -33,8 +33,8 @@ public class QueryBuilder {
       return defaultQueryBuilder;
    }
 
-   public SolrQuery buildQuery(SearchRequest<?> searchRequest) {
-      return buildQuery(searchRequest.getSearchRequest());
+   public SolrQuery buildQuery(Search<?> search) {
+      return buildQuery(search.getSearchRequest());
    }
 
    public SolrQuery buildQuery(Object queryInput) {

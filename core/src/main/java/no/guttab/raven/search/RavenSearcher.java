@@ -1,8 +1,7 @@
 package no.guttab.raven.search;
 
-import no.guttab.raven.search.config.SearchRequest;
+import no.guttab.raven.search.response.ResponseBuilder;
 import no.guttab.raven.search.response.SearchResponse;
-import no.guttab.raven.search.response.SearchResponseBuilder;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.response.QueryResponse;
 
@@ -13,10 +12,10 @@ public class RavenSearcher<T extends SearchResponse> {
       this.searchServer = searchServer;
    }
 
-   public T search(SearchRequest<T> searchRequest) {
-      SolrQuery solrQuery = searchRequest.getQueryBuilder().buildQuery(searchRequest);
+   public T search(Search<T> search) {
+      SolrQuery solrQuery = search.buildQuery();
       QueryResponse queryResponse = searchServer.search(solrQuery);
-      return new SearchResponseBuilder<T>(searchRequest).buildResponse(queryResponse);
+      return new ResponseBuilder<T>(search).buildResponse(queryResponse);
    }
 
 }

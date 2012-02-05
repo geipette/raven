@@ -1,6 +1,6 @@
 package no.guttab.raven.search.response;
 
-import no.guttab.raven.search.config.SearchRequestTypeInfo;
+import no.guttab.raven.search.SearchRequestTypeInfo;
 import no.guttab.raven.search.response.navigators.Navigator;
 import no.guttab.raven.search.response.navigators.Navigators;
 import no.guttab.raven.search.response.navigators.select.SelectNavigatorBuilder;
