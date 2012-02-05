@@ -35,15 +35,15 @@ class FilterQuerySplitter {
    }
 
    private Collection<? extends String> splitGroupedFq(String indexFieldName, String groupedFq) {
-      Set<String> fqs = new HashSet<String>();
+      Set<String> result = new HashSet<String>();
       Matcher tokenMatcher = GROUP_TOKEN.matcher(groupedFq);
       while (tokenMatcher.find()) {
          String token = tokenMatcher.group(0);
          if (!BOOLEAN_OPERATORS.contains(token)) {
-            fqs.add(indexFieldName + ":" + token);
+            result.add(indexFieldName + ":" + token);
          }
       }
-      return fqs;
+      return result;
    }
 
 }

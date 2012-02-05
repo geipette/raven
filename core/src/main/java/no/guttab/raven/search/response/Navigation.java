@@ -1,10 +1,10 @@
-package no.guttab.raven.search.solr;
+package no.guttab.raven.search.response;
 
 import java.util.List;
 import java.util.Set;
 
 import no.guttab.raven.search.SearchRequestTypeInfo;
-import no.guttab.raven.search.response.NavigatorUrls;
+import no.guttab.raven.search.solr.FilterQueries;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.QueryResponse;
 
@@ -20,7 +20,7 @@ public class Navigation {
    public Navigation(SearchRequestTypeInfo searchRequestTypeInfo, QueryResponse queryResponse) {
       this.searchRequestTypeInfo = searchRequestTypeInfo;
       filterQueries = filterQueriesFor(queryResponse);
-      navigatorUrls = buildNavigatorUrls(queryResponse.getFacetFields(), filterQueries);
+      buildNavigatorUrls(queryResponse.getFacetFields(), filterQueries);
    }
 
    public Set<String> fqsFor(FacetField facetField) {
@@ -35,18 +35,25 @@ public class Navigation {
       return navigatorUrls.resetUrlFor(indexFieldName, fqCriteria);
    }
 
-   private NavigatorUrls buildNavigatorUrls(List<FacetField> facetFields, FilterQueries filterQueries) {
-      final NavigatorUrls navigatorUrls = new NavigatorUrls(searchRequestTypeInfo);
+   private void buildNavigatorUrls(List<FacetField> facetFields, FilterQueries filterQueries) {
+      navigatorUrls = new NavigatorUrls(searchRequestTypeInfo);
 
       for (final FacetField facetField : facetFields) {
-         Set<String> fqCriterias = filterQueries.findFqCriteriasFor(facetField);
-         if (!isEmpty(fqCriterias)) {
-            for (String fqCriteria : fqCriterias) {
-               navigatorUrls.addUrlFragment(facetField.getName(), fqCriteria);
-            }
-         }
+         addUrlFragmentsFor(facetField, filterQueries);
       }
-      return navigatorUrls;
+   }
+
+   private void addUrlFragmentsFor(FacetField facetField, FilterQueries filterQueries) {
+      final Set<String> fqCriterias = filterQueries.findFqCriteriasFor(facetField);
+      if (!isEmpty(fqCriterias)) {
+         addUrlFragmentForEachFqCriteria(facetField, fqCriterias);
+      }
+   }
+
+   private void addUrlFragmentForEachFqCriteria(FacetField facetField, Set<String> fqCriterias) {
+      for (String fqCriteria : fqCriterias) {
+         navigatorUrls.addUrlFragment(facetField.getName(), fqCriteria);
+      }
    }
 
 }

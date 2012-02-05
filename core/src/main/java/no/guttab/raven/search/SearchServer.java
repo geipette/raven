@@ -11,7 +11,7 @@ public class SearchServer {
       this.searchResource = searchResource;
    }
 
-   public QueryResponse search(SolrQuery solrQuery) throws SearchServerRuntimeException {
+   public QueryResponse search(SolrQuery solrQuery) {
       try {
          return searchResource.getServer().query(solrQuery);
       } catch (SolrServerException e) {

@@ -76,11 +76,12 @@ public class FilterQueryProcessor implements QueryProcessor {
       for (String queryCriteria : queryCriterias) {
          if (criteria.length() > 0) {
             switch (facetFieldMode) {
-               case AND:
-                  criteria.append(" AND ");
-                  break;
                case OR:
                   criteria.append(" OR ");
+                  break;
+               case AND:
+               default:
+                  criteria.append(" AND ");
                   break;
             }
          }

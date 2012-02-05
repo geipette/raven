@@ -5,9 +5,9 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
+import no.guttab.raven.search.response.Navigation;
 import no.guttab.raven.search.response.navigators.ImmutableNavigatorItems;
 import no.guttab.raven.search.response.navigators.NavigatorItems;
-import no.guttab.raven.search.solr.Navigation;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.junit.Test;
 import org.junit.runner.RunWith;

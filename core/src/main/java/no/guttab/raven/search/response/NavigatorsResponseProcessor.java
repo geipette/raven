@@ -4,7 +4,6 @@ import no.guttab.raven.search.SearchRequestTypeInfo;
 import no.guttab.raven.search.response.navigators.Navigator;
 import no.guttab.raven.search.response.navigators.Navigators;
 import no.guttab.raven.search.response.navigators.select.SelectNavigatorBuilder;
-import no.guttab.raven.search.solr.Navigation;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.QueryResponse;
 
