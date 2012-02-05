@@ -50,6 +50,10 @@ public class SearchRequest<T extends SearchResponse> {
             searchRequest, searchResponseFactory, queryBuilder, new ResponseProcessors<T>(responseProcessors));
    }
 
+   public Object getSearchRequest() {
+      return searchRequest;
+   }
+
    public QueryBuilder getQueryBuilder() {
       return queryBuilder;
    }
