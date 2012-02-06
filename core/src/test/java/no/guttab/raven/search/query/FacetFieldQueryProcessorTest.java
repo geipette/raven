@@ -2,6 +2,7 @@ package no.guttab.raven.search.query;
 
 
 import no.guttab.raven.annotations.FacetField;
+import no.guttab.raven.annotations.FacetSettings;
 import no.guttab.raven.annotations.IndexFieldName;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.junit.Before;
@@ -10,6 +11,8 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.IsNull.nullValue;
 import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -58,6 +61,60 @@ public class FacetFieldQueryProcessorTest {
 
       verify(solrQuery).setFacet(true);
       verify(solrQuery).addFacetField("newAreaId");
+   }
+
+   @Test
+   public void buildQuery_should_not_add_minCount_for_the_facetField_if_default() throws Exception {
+      class TestQuery {
+         @FacetField
+         String category;
+      }
+
+      SolrQuery sq = new SolrQuery();
+      facetQueryProcessor.buildQuery(new TestQuery(), sq);
+
+      String actual = sq.get("f.category.facet.mincount");
+      assertThat(actual, nullValue());
+   }
+
+   @Test
+   public void buildQuery_should_add_minCount_for_the_facetField_if_defined() throws Exception {
+      class TestQuery {
+         @FacetField(minCount = 1)
+         String category;
+      }
+
+      facetQueryProcessor.buildQuery(new TestQuery(), solrQuery);
+
+      verify(solrQuery).set("f.category.facet.mincount", 1);
+   }
+
+   @Test
+   public void buildQuery_set_minCount_when_FacetSettings_indicates_it() throws Exception {
+      @FacetSettings(minCount = 1)
+      class TestQuery {
+         @FacetField
+         String category;
+      }
+
+      facetQueryProcessor.buildQuery(new TestQuery(), solrQuery);
+
+      verify(solrQuery).setFacetMinCount(1);
+   }
+
+   @Test
+   public void buildQuery_not_set_minCount_when_FacetSettings_has_default_minCount() throws Exception {
+      @FacetSettings
+      class TestQuery {
+         @FacetField
+         String category;
+      }
+
+      SolrQuery sq = new SolrQuery();
+      facetQueryProcessor.buildQuery(new TestQuery(), sq);
+
+      String actual = sq.get("facet.mincount");
+      assertThat(actual, nullValue());
    }
 
 }

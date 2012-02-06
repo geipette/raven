@@ -1,6 +1,6 @@
 package no.guttab.raven.annotations;
 
-public enum FacetFieldMode {
+public enum FilterQueryMode {
    AND,
    OR
 }

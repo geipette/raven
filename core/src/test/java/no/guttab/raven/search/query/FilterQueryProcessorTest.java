@@ -5,9 +5,9 @@ import java.util.Collection;
 import java.util.List;
 
 import no.guttab.raven.annotations.FacetField;
-import no.guttab.raven.annotations.FacetFieldMode;
 import no.guttab.raven.annotations.FilterQuery;
 import no.guttab.raven.annotations.FilterQueryCriteriaBuilder;
+import no.guttab.raven.annotations.FilterQueryMode;
 import no.guttab.raven.annotations.IndexFieldName;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.joda.time.DateTime;
@@ -85,10 +85,9 @@ public class FilterQueryProcessorTest {
    }
 
    @Test
-   public void buildQuery_complex_filterQuery_should_honor_FacetField_mode_when_filterQuery_is_multivalue() throws Exception {
+   public void buildQuery_should_honor_FilterQuery_mode_when_filterQuery_is_multivalue() throws Exception {
       Object queryInput = new Object() {
-         @FacetField(mode = FacetFieldMode.OR)
-         @FilterQuery
+         @FilterQuery(mode = FilterQueryMode.OR)
          private List<String> areaIds = Arrays.asList("500", "600");
       };
 
@@ -152,10 +151,6 @@ public class FilterQueryProcessorTest {
                "]");
       }
    }
-
-
-
-
 
 
 }

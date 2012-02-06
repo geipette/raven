@@ -7,16 +7,15 @@ import java.util.Map;
 
 import no.guttab.raven.annotations.AnnotationsWithCallback;
 import no.guttab.raven.annotations.FacetField;
-import no.guttab.raven.annotations.FacetFieldMode;
 import no.guttab.raven.annotations.FilterQuery;
 import no.guttab.raven.annotations.FilterQueryCriteriaBuilder;
+import no.guttab.raven.annotations.FilterQueryMode;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;
 
 import static no.guttab.raven.annotations.AnnotationUtils.doForEachAnnotatedFieldOn;
-import static no.guttab.raven.annotations.SearchAnnotationUtils.getFacetFieldMode;
 import static no.guttab.raven.annotations.SearchAnnotationUtils.getIndexFieldName;
 import static no.guttab.raven.reflection.FieldUtils.getFieldValue;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
@@ -30,14 +29,6 @@ public class FilterQueryProcessor implements QueryProcessor {
       doForEachAnnotatedFieldOn(queryInput, new FilterQueryAnnotationsWithCallback(queryInput, solrQuery));
    }
 
-   private FilterQuery getFilterQueryAnnotation(Map<Class<? extends Annotation>, ? extends Annotation> annotations) {
-      FilterQuery filterQueryAnnotation = (FilterQuery) annotations.get(FilterQuery.class);
-      if (filterQueryAnnotation == null) {
-         filterQueryAnnotation = new DefaultFilterQueryAnnotation();
-      }
-      return filterQueryAnnotation;
-   }
-
    private String buildFilterQuery(FilterQuery filterQuery, Object queryInput, Field field) {
       Object fieldValue = getFieldValue(field, queryInput);
       if (fieldValue == null) {
@@ -49,14 +40,21 @@ public class FilterQueryProcessor implements QueryProcessor {
          return null;
       }
 
-      return buildFilterQueryForCriterias(field, queryCriterias);
+      return buildFilterQueryForCriterias(field, queryCriterias, filterQuery.mode());
    }
 
-   private String buildFilterQueryForCriterias(Field field, Collection<String> queryCriterias) {
-      final FacetFieldMode facetFieldMode = getFacetFieldMode(field);
+   private FilterQuery getFilterQueryAnnotation(Map<Class<? extends Annotation>, ? extends Annotation> annotations) {
+      FilterQuery filterQueryAnnotation = (FilterQuery) annotations.get(FilterQuery.class);
+      if (filterQueryAnnotation == null) {
+         filterQueryAnnotation = new DefaultFilterQueryAnnotation();
+      }
+      return filterQueryAnnotation;
+   }
 
+   private String buildFilterQueryForCriterias(
+         Field field, Collection<String> queryCriterias, FilterQueryMode filterQueryMode) {
       final StringBuilder criteria = new StringBuilder();
-      appendCriterias(criteria, queryCriterias, facetFieldMode);
+      appendCriterias(criteria, queryCriterias, filterQueryMode);
       addIndexFieldName(field, queryCriterias, criteria);
       return criteria.toString();
    }
@@ -72,10 +70,11 @@ public class FilterQueryProcessor implements QueryProcessor {
       }
    }
 
-   private void appendCriterias(StringBuilder criteria, Collection<String> queryCriterias, FacetFieldMode facetFieldMode) {
+   private void appendCriterias(
+         StringBuilder criteria, Collection<String> queryCriterias, FilterQueryMode filterQueryMode) {
       for (String queryCriteria : queryCriterias) {
          if (criteria.length() > 0) {
-            switch (facetFieldMode) {
+            switch (filterQueryMode) {
                case OR:
                   criteria.append(" OR ");
                   break;
@@ -132,6 +131,11 @@ public class FilterQueryProcessor implements QueryProcessor {
          //noinspection unchecked
          return (Class<? extends FilterQueryCriteriaBuilder<?>>)
                getDefaultValue(FilterQuery.class, "queryCriteriaBuilder");
+      }
+
+      @Override
+      public FilterQueryMode mode() {
+         return (FilterQueryMode) getDefaultValue(FilterQuery.class, "mode");
       }
 
       @Override
