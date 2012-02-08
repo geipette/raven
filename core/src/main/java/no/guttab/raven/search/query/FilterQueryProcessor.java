@@ -6,10 +6,10 @@ import java.util.Collection;
 import java.util.Map;
 
 import no.guttab.raven.annotations.AnnotationsWithCallback;
+import no.guttab.raven.annotations.CombineOperator;
 import no.guttab.raven.annotations.FacetField;
 import no.guttab.raven.annotations.FilterQuery;
 import no.guttab.raven.annotations.FilterQueryCriteriaBuilder;
-import no.guttab.raven.annotations.FilterQueryMode;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,7 +52,7 @@ public class FilterQueryProcessor implements QueryProcessor {
    }
 
    private String buildFilterQueryForCriterias(
-         Field field, Collection<String> queryCriterias, FilterQueryMode filterQueryMode) {
+         Field field, Collection<String> queryCriterias, CombineOperator filterQueryMode) {
       final StringBuilder criteria = new StringBuilder();
       appendCriterias(criteria, queryCriterias, filterQueryMode);
       addIndexFieldName(field, queryCriterias, criteria);
@@ -71,18 +71,10 @@ public class FilterQueryProcessor implements QueryProcessor {
    }
 
    private void appendCriterias(
-         StringBuilder criteria, Collection<String> queryCriterias, FilterQueryMode filterQueryMode) {
+         StringBuilder criteria, Collection<String> queryCriterias, CombineOperator filterQueryMode) {
       for (String queryCriteria : queryCriterias) {
          if (criteria.length() > 0) {
-            switch (filterQueryMode) {
-               case OR:
-                  criteria.append(" OR ");
-                  break;
-               case AND:
-               default:
-                  criteria.append(" AND ");
-                  break;
-            }
+            criteria.append(' ').append(filterQueryMode.getQueryCriteriaSeparator()).append(' ');
          }
          criteria.append(queryCriteria);
       }
@@ -134,8 +126,8 @@ public class FilterQueryProcessor implements QueryProcessor {
       }
 
       @Override
-      public FilterQueryMode mode() {
-         return (FilterQueryMode) getDefaultValue(FilterQuery.class, "mode");
+      public CombineOperator mode() {
+         return (CombineOperator) getDefaultValue(FilterQuery.class, "mode");
       }
 
       @Override

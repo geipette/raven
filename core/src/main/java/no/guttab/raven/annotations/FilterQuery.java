@@ -8,7 +8,7 @@ import java.lang.annotation.Target;
 
 import no.guttab.raven.search.query.StringValueFilterQueryCriteriaBuilder;
 
-import static no.guttab.raven.annotations.FilterQueryMode.AND;
+import static no.guttab.raven.annotations.CombineOperator.AND;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD})
@@ -16,5 +16,5 @@ import static no.guttab.raven.annotations.FilterQueryMode.AND;
 public @interface FilterQuery {
    Class<? extends FilterQueryCriteriaBuilder<?>> queryCriteriaBuilder() default StringValueFilterQueryCriteriaBuilder.class;
 
-   FilterQueryMode mode() default AND;
+   CombineOperator mode() default AND;
 }

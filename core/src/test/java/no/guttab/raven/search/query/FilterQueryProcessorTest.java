@@ -4,10 +4,10 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+import no.guttab.raven.annotations.CombineOperator;
 import no.guttab.raven.annotations.FacetField;
 import no.guttab.raven.annotations.FilterQuery;
 import no.guttab.raven.annotations.FilterQueryCriteriaBuilder;
-import no.guttab.raven.annotations.FilterQueryMode;
 import no.guttab.raven.annotations.IndexFieldName;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.joda.time.DateTime;
@@ -87,7 +87,7 @@ public class FilterQueryProcessorTest {
    @Test
    public void buildQuery_should_honor_FilterQuery_mode_when_filterQuery_is_multivalue() throws Exception {
       Object queryInput = new Object() {
-         @FilterQuery(mode = FilterQueryMode.OR)
+         @FilterQuery(mode = CombineOperator.OR)
          private List<String> areaIds = Arrays.asList("500", "600");
       };
 
