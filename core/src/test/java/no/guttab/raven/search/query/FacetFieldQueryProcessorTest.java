@@ -11,8 +11,8 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.IsNull.nullValue;
+import static org.mockito.Matchers.*;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -70,11 +70,10 @@ public class FacetFieldQueryProcessorTest {
          String category;
       }
 
-      SolrQuery sq = new SolrQuery();
-      facetQueryProcessor.buildQuery(new TestQuery(), sq);
+      facetQueryProcessor.buildQuery(new TestQuery(), solrQuery);
 
-      String actual = sq.get("f.category.facet.mincount");
-      assertThat(actual, nullValue());
+      verify(solrQuery, never()).set(eq("f.category.facet.mincount"), anyInt());
+      verify(solrQuery, never()).setParam(eq("f.category.facet.mincount"), any(String.class));
    }
 
    @Test
@@ -90,7 +89,7 @@ public class FacetFieldQueryProcessorTest {
    }
 
    @Test
-   public void buildQuery_set_minCount_when_FacetSettings_indicates_it() throws Exception {
+   public void buildQuery_should_set_minCount_when_FacetSettings_indicates_it() throws Exception {
       @FacetSettings(minCount = 1)
       class TestQuery {
          @FacetField
@@ -103,18 +102,16 @@ public class FacetFieldQueryProcessorTest {
    }
 
    @Test
-   public void buildQuery_not_set_minCount_when_FacetSettings_has_default_minCount() throws Exception {
+   public void buildQuery_should_not_set_minCount_when_FacetSettings_has_default_minCount() throws Exception {
       @FacetSettings
       class TestQuery {
          @FacetField
          String category;
       }
 
-      SolrQuery sq = new SolrQuery();
-      facetQueryProcessor.buildQuery(new TestQuery(), sq);
+      facetQueryProcessor.buildQuery(new TestQuery(), solrQuery);
 
-      String actual = sq.get("facet.mincount");
-      assertThat(actual, nullValue());
+      verify(solrQuery, never()).setFacetMinCount(anyInt());
    }
 
 }
