@@ -45,4 +45,7 @@ public class QueryBuilder {
       return solrQuery;
    }
 
+   public List<QueryProcessor> getQueryProcessors() {
+      return queryProcessors;
+   }
 }
