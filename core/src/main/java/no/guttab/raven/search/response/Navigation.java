@@ -4,11 +4,11 @@ import java.util.List;
 import java.util.Set;
 
 import no.guttab.raven.search.SearchRequestTypeInfo;
-import no.guttab.raven.search.solr.FilterQueries;
+import no.guttab.raven.search.filter.FilterQueries;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.QueryResponse;
 
-import static no.guttab.raven.search.solr.FilterQueries.filterQueriesFor;
+import static no.guttab.raven.search.filter.FilterQueries.filterQueriesFor;
 import static org.springframework.util.CollectionUtils.isEmpty;
 
 public class Navigation {

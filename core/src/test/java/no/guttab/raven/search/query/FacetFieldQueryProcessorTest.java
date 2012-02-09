@@ -2,8 +2,8 @@ package no.guttab.raven.search.query;
 
 
 import no.guttab.raven.annotations.FacetField;
-import no.guttab.raven.annotations.FacetSettings;
 import no.guttab.raven.annotations.IndexFieldName;
+import no.guttab.raven.annotations.SearchRequest;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.junit.Before;
 import org.junit.Test;
@@ -89,8 +89,8 @@ public class FacetFieldQueryProcessorTest {
    }
 
    @Test
-   public void buildQuery_should_set_minCount_when_FacetSettings_indicates_it() throws Exception {
-      @FacetSettings(minCount = 1)
+   public void buildQuery_should_set_facetMinCount_when_SearchRequest_indicates_it() throws Exception {
+      @SearchRequest(facetMinCount = 1)
       class TestQuery {
          @FacetField
          String category;
@@ -102,8 +102,8 @@ public class FacetFieldQueryProcessorTest {
    }
 
    @Test
-   public void buildQuery_should_not_set_minCount_when_FacetSettings_has_default_minCount() throws Exception {
-      @FacetSettings
+   public void buildQuery_should_not_set_minCount_when_SearchRequest_has_default_facetMinCount() throws Exception {
+      @SearchRequest
       class TestQuery {
          @FacetField
          String category;

@@ -5,7 +5,7 @@ import java.lang.reflect.Field;
 
 import no.guttab.raven.annotations.AnnotatedFieldCallback;
 import no.guttab.raven.annotations.FacetField;
-import no.guttab.raven.annotations.FacetSettings;
+import no.guttab.raven.annotations.SearchRequest;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.common.params.FacetParams;
 
@@ -20,9 +20,9 @@ public class FacetFieldQueryProcessor implements QueryProcessor {
    }
 
    private void handleFacetSettingsAnnotation(Object queryInput, SolrQuery solrQuery) {
-      FacetSettings facetSettings = queryInput.getClass().getAnnotation(FacetSettings.class);
+      SearchRequest facetSettings = queryInput.getClass().getAnnotation(SearchRequest.class);
       if (shouldSetFacetMinCount(facetSettings)) {
-         solrQuery.setFacetMinCount(facetSettings.minCount());
+         solrQuery.setFacetMinCount(facetSettings.facetMinCount());
       }
    }
 
@@ -48,8 +48,8 @@ public class FacetFieldQueryProcessor implements QueryProcessor {
       return "f." + indexFieldName + '.' + FacetParams.FACET_MINCOUNT;
    }
 
-   private boolean shouldSetFacetMinCount(FacetSettings facetSettings) {
-      return facetSettings != null && facetSettings.minCount() >= 0;
+   private boolean shouldSetFacetMinCount(SearchRequest facetSettings) {
+      return facetSettings != null && facetSettings.facetMinCount() >= 0;
    }
 
    private boolean shouldSetFacetMinCount(FacetField facetField) {

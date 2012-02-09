@@ -1,4 +1,4 @@
-package no.guttab.raven.search.solr;
+package no.guttab.raven.search.filter;
 
 import java.util.ArrayList;
 import java.util.Collection;

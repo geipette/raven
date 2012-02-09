@@ -9,6 +9,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE})
 @Documented
-public @interface FacetSettings {
-   int minCount() default -1;
+public @interface SearchRequest {
+   int facetMinCount() default -1;
 }

@@ -9,7 +9,7 @@ import no.guttab.raven.search.response.navigators.ImmutableNavigatorItems;
 import no.guttab.raven.search.response.navigators.NavigatorItems;
 import org.apache.solr.client.solrj.response.FacetField;
 
-import static no.guttab.raven.search.solr.FilterQueries.extractFqCriteria;
+import static no.guttab.raven.search.filter.FilterQueries.extractFqCriteria;
 
 class SelectNavigatorItemsBuilder {
    private Navigation navigation;
