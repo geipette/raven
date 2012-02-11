@@ -1,20 +1,19 @@
-package no.guttab.raven.search.response;
+package no.guttab.raven.common;
 
-public class DefaultConstructorSearchResponseFactory<T extends SearchResponse> implements SearchResponseFactory<T> {
-   private Class<T> responseType;
+public class DefaultConstructorInstantiator<T> {
+   private Class<T> type;
 
-   public DefaultConstructorSearchResponseFactory(Class<T> responseType) {
-      this.responseType = responseType;
+   public DefaultConstructorInstantiator(Class<T> type) {
+      this.type = type;
    }
 
-   @Override
    public T newInstance() {
       try {
-         return responseType.newInstance();
+         return type.newInstance();
       } catch (InstantiationException e) {
-         throw new CouldNotInstantiateResponseTypeException(responseType, e);
+         throw new CouldNotInstantiateResponseTypeException(type, e);
       } catch (IllegalAccessException e) {
-         throw new CouldNotInstantiateResponseTypeException(responseType, e);
+         throw new CouldNotInstantiateResponseTypeException(type, e);
       }
    }
 

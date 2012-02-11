@@ -1,14 +1,13 @@
 package no.guttab.raven.search;
 
 import no.guttab.raven.search.response.ResponseProcessors;
-import no.guttab.raven.search.response.SearchResponse;
-import no.guttab.raven.search.response.SearchResponseFactory;
+import no.guttab.raven.search.response.content.DocumentFactory;
 import org.apache.solr.client.solrj.SolrQuery;
 
-public interface Search<T extends SearchResponse> {
+public interface Search<T> {
    SolrQuery buildQuery();
 
-   SearchResponseFactory<T> getSearchResponseFactory();
+   DocumentFactory<T> getDocumentFactory();
 
    ResponseProcessors<T> getResponseProcessors();
 

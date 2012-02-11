@@ -9,6 +9,7 @@ import no.guttab.raven.search.DefaultSearch;
 import no.guttab.raven.search.RavenSearcher;
 import no.guttab.raven.search.SearchServer;
 import no.guttab.raven.search.UrlBasedSearchResource;
+import no.guttab.raven.search.response.SearchResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -16,14 +17,13 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class SearchController {
 
-   private SearchServer searchServer;
-   private RavenSearcher<DemoSearchResponse> searcher;
+   private RavenSearcher<DemoDocument> searcher;
 
    public SearchController() {
       String solrServerUrl = "http://localhost:8093";
       try {
-         searchServer = new SearchServer(new UrlBasedSearchResource(solrServerUrl));
-         searcher = new RavenSearcher<DemoSearchResponse>(searchServer);
+         SearchServer searchServer = new SearchServer(new UrlBasedSearchResource(solrServerUrl));
+         searcher = new RavenSearcher<DemoDocument>(searchServer);
       } catch (MalformedURLException e) {
          throw new CouldNotInitializeSolrServerException(solrServerUrl, e);
       }
@@ -31,9 +31,9 @@ public class SearchController {
 
    @RequestMapping(value = {"/search", "/"})
    public ModelAndView search(@Valid DemoSearchRequest searchRequest) {
-      final DefaultSearch<DemoSearchResponse> search =
-            new DefaultSearch<DemoSearchResponse>(searchRequest, DemoSearchResponse.class);
-      DemoSearchResponse searchResponse = searcher.search(search);
+      final DefaultSearch<DemoDocument> search =
+            new DefaultSearch<DemoDocument>(searchRequest, DemoDocument.class);
+      SearchResponse<DemoDocument> searchResponse = searcher.search(search);
 
       Map<String, Object> modelMap = new HashMap<String, Object>();
       modelMap.put("searchResponse", searchResponse);
@@ -41,7 +41,7 @@ public class SearchController {
       return new ModelAndView("search-result", modelMap);
    }
 
-   private class CouldNotInitializeSolrServerException extends RuntimeException {
+   public static class CouldNotInitializeSolrServerException extends RuntimeException {
       public CouldNotInitializeSolrServerException(String solrServerUrl, MalformedURLException e) {
          super("Could not initialize solr server at: " + solrServerUrl, e);
       }

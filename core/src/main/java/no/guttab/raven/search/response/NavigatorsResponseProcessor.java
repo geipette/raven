@@ -7,7 +7,7 @@ import no.guttab.raven.search.response.navigators.select.SelectNavigatorBuilder;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.QueryResponse;
 
-public class NavigatorsResponseProcessor<T extends SearchResponse> implements ResponseProcessor<T> {
+public class NavigatorsResponseProcessor<T> implements ResponseProcessor<T> {
    private SearchRequestTypeInfo searchRequestTypeInfo;
 
    public NavigatorsResponseProcessor(SearchRequestTypeInfo searchRequestTypeInfo) {
@@ -15,7 +15,7 @@ public class NavigatorsResponseProcessor<T extends SearchResponse> implements Re
    }
 
    @Override
-   public void processResponse(final QueryResponse queryResponse, final T response) {
+   public void processResponse(final QueryResponse queryResponse, final SearchResponse<T> response) {
       response.setNavigators(buildFor(queryResponse));
    }
 

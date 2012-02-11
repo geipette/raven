@@ -1,50 +1,49 @@
 package no.guttab.raven.search;
 
 import no.guttab.raven.search.query.QueryBuilder;
-import no.guttab.raven.search.response.DefaultConstructorSearchResponseFactory;
 import no.guttab.raven.search.response.ResponseProcessors;
-import no.guttab.raven.search.response.SearchResponse;
-import no.guttab.raven.search.response.SearchResponseFactory;
+import no.guttab.raven.search.response.content.DefaultDocumentFactory;
+import no.guttab.raven.search.response.content.DocumentFactory;
 import org.apache.solr.client.solrj.SolrQuery;
 
-public class DefaultSearch<T extends SearchResponse> implements Search<T> {
+public class DefaultSearch<T> implements Search<T> {
    private Object searchRequest;
-   private SearchResponseFactory<T> searchResponseFactory;
    private QueryBuilder queryBuilder;
    private ResponseProcessors<T> responseProcessors;
+   private DocumentFactory<T> documentFactory;
 
-   public DefaultSearch(Object searchRequest, Class<T> searchResponseType) {
-      this(searchRequest, new DefaultConstructorSearchResponseFactory<T>(searchResponseType));
+   public DefaultSearch(Object searchRequest, Class<T> responseDocumentType) {
+      this(searchRequest, new DefaultDocumentFactory<T>(responseDocumentType));
    }
 
-   public DefaultSearch(Object searchRequest, SearchResponseFactory<T> searchResponseFactory) {
+   public DefaultSearch(Object searchRequest, DocumentFactory<T> documentFactory) {
       this(searchRequest,
-            searchResponseFactory,
+            documentFactory,
             new QueryBuilder(),
-            ResponseProcessors.<T>defaultProcessors(searchRequest.getClass()));
+            ResponseProcessors.<T>defaultProcessors(searchRequest.getClass(), documentFactory));
    }
 
-   private DefaultSearch(
+   public DefaultSearch(
          Object searchRequest,
-         SearchResponseFactory<T> searchResponseFactory,
+         DocumentFactory<T> documentFactory,
          QueryBuilder queryBuilder,
          ResponseProcessors<T> responseProcessors) {
       this.searchRequest = searchRequest;
-      this.searchResponseFactory = searchResponseFactory;
+      this.documentFactory = documentFactory;
       this.queryBuilder = queryBuilder;
       this.responseProcessors = responseProcessors;
    }
 
-   public Search<T> withQueryBuilder(QueryBuilder queryBuilder) {
-      return new DefaultSearch<T>(searchRequest, searchResponseFactory, queryBuilder, responseProcessors);
+   public Search<T> withDocumentFactory(DocumentFactory<T> documentFactory) {
+      return new DefaultSearch<T>(searchRequest, documentFactory, queryBuilder, responseProcessors);
    }
 
-   public Search<T> withSearchResponseFactory(SearchResponseFactory<T> searchResponseFactory) {
-      return new DefaultSearch<T>(searchRequest, searchResponseFactory, queryBuilder, responseProcessors);
+   public Search<T> withQueryBuilder(QueryBuilder queryBuilder) {
+      return new DefaultSearch<T>(searchRequest, documentFactory, queryBuilder, responseProcessors);
    }
 
    public Search<T> withResponseProcessors(ResponseProcessors<T> responseProcessors) {
-      return new DefaultSearch<T>(searchRequest, searchResponseFactory, queryBuilder, responseProcessors);
+      return new DefaultSearch<T>(searchRequest, documentFactory, queryBuilder, responseProcessors);
    }
 
    @Override
@@ -58,8 +57,8 @@ public class DefaultSearch<T extends SearchResponse> implements Search<T> {
    }
 
    @Override
-   public SearchResponseFactory<T> getSearchResponseFactory() {
-      return searchResponseFactory;
+   public DocumentFactory<T> getDocumentFactory() {
+      return documentFactory;
    }
 
    @Override
