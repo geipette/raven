@@ -1,6 +1,5 @@
 package no.guttab.raven.search.query;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
 import no.guttab.raven.annotations.AnnotatedFieldCallback;
@@ -27,13 +26,13 @@ public class FacetFieldQueryProcessor implements QueryProcessor {
    }
 
    private void handleFacetFieldAnnotations(Object queryInput, final SolrQuery solrQuery) {
-      doForEachAnnotatedFieldOn(queryInput, FacetField.class, new AnnotatedFieldCallback() {
+      doForEachAnnotatedFieldOn(queryInput, FacetField.class, new AnnotatedFieldCallback<FacetField>() {
          @Override
-         public void doFor(Field field, Annotation annotation) {
+         public void doFor(Field field, FacetField annotation) {
             solrQuery.setFacet(true);
             String indexFieldName = getIndexFieldName(field);
             solrQuery.addFacetField(indexFieldName);
-            setFacetMinCountIfNecessary((FacetField) annotation, indexFieldName, solrQuery);
+            setFacetMinCountIfNecessary(annotation, indexFieldName, solrQuery);
          }
       });
    }

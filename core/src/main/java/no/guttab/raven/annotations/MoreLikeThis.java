@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE})
 @Documented
-public @interface MoreLikeThisSearchRequest {
+public @interface MoreLikeThis {
    InterestingTerms interestingTerms() default InterestingTerms.NONE;
 
    String[] fields();
