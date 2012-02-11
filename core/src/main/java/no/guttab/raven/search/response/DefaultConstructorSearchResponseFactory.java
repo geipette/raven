@@ -18,7 +18,7 @@ public class DefaultConstructorSearchResponseFactory<T extends SearchResponse> i
       }
    }
 
-   private static class CouldNotInstantiateResponseTypeException extends RuntimeException {
+   public static class CouldNotInstantiateResponseTypeException extends RuntimeException {
       public CouldNotInstantiateResponseTypeException(Class<?> responseType, InstantiationException e) {
          super("ResponseType: " + responseType.getName() +
                " can not be instantiated. Does it have a default constructor?", e);
