@@ -18,6 +18,10 @@ public final class FieldUtils {
       setField(field, target, value);
    }
 
+   public static Field findField(Object target, FieldFilter fieldFilter) {
+      return findField(target.getClass(), fieldFilter);
+   }
+
    public static Field findField(Class<?> type, FieldFilter fieldFilter) {
       for (Field field : type.getDeclaredFields()) {
          if (fieldFilter.matches(field)) {
@@ -43,8 +47,6 @@ public final class FieldUtils {
          }
       }
    }
-
-
 
 
 }

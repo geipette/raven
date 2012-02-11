@@ -10,9 +10,9 @@ import org.slf4j.LoggerFactory;
 
 public class DocumentContentResponseProcessor<T> implements ResponseProcessor<T> {
    private static final Logger log = LoggerFactory.getLogger(DocumentContentResponseProcessor.class);
-   private DocumentFactory<T> documentFactory;
+   private DocumentBuilder<T> documentFactory;
 
-   public DocumentContentResponseProcessor(DocumentFactory<T> documentFactory) {
+   public DocumentContentResponseProcessor(DocumentBuilder<T> documentFactory) {
       this.documentFactory = documentFactory;
    }
 
@@ -29,7 +29,7 @@ public class DocumentContentResponseProcessor<T> implements ResponseProcessor<T>
    }
 
    private void addDocumentTo(SearchResponse<T> response, SolrDocument document) {
-      response.addDocument(documentFactory.newDocument(document));
+      response.addDocument(documentFactory.buildDocument(document));
    }
 
 }

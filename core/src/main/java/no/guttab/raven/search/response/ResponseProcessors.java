@@ -5,15 +5,15 @@ import java.util.Iterator;
 import java.util.List;
 
 import no.guttab.raven.search.SearchRequestTypeInfo;
+import no.guttab.raven.search.response.content.DocumentBuilder;
 import no.guttab.raven.search.response.content.DocumentContentResponseProcessor;
-import no.guttab.raven.search.response.content.DocumentFactory;
 
 public class ResponseProcessors<T> implements Iterable<ResponseProcessor<T>> {
    private final List<ResponseProcessor<T>> processors;
 
    @SuppressWarnings({"unchecked"})
    public static <T> ResponseProcessors<T> defaultProcessors(
-         Class<?> searchRequestType, DocumentFactory<T> documentFactory) {
+         Class<?> searchRequestType, DocumentBuilder<T> documentFactory) {
       final SearchRequestTypeInfo searchRequestTypeInfo = new SearchRequestTypeInfo(searchRequestType);
       return new ResponseProcessors<T>(
             new NavigatorsResponseProcessor<T>(searchRequestTypeInfo),

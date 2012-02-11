@@ -2,21 +2,21 @@ package no.guttab.raven.search;
 
 import no.guttab.raven.search.query.QueryBuilder;
 import no.guttab.raven.search.response.ResponseProcessors;
-import no.guttab.raven.search.response.content.DefaultDocumentFactory;
-import no.guttab.raven.search.response.content.DocumentFactory;
+import no.guttab.raven.search.response.content.DefaultDocumentBuilder;
+import no.guttab.raven.search.response.content.DocumentBuilder;
 import org.apache.solr.client.solrj.SolrQuery;
 
 public class DefaultSearch<T> implements Search<T> {
    private Object searchRequest;
    private QueryBuilder queryBuilder;
    private ResponseProcessors<T> responseProcessors;
-   private DocumentFactory<T> documentFactory;
+   private DocumentBuilder<T> documentFactory;
 
    public DefaultSearch(Object searchRequest, Class<T> responseDocumentType) {
-      this(searchRequest, new DefaultDocumentFactory<T>(responseDocumentType));
+      this(searchRequest, new DefaultDocumentBuilder<T>(responseDocumentType));
    }
 
-   public DefaultSearch(Object searchRequest, DocumentFactory<T> documentFactory) {
+   public DefaultSearch(Object searchRequest, DocumentBuilder<T> documentFactory) {
       this(searchRequest,
             documentFactory,
             new QueryBuilder(),
@@ -25,7 +25,7 @@ public class DefaultSearch<T> implements Search<T> {
 
    public DefaultSearch(
          Object searchRequest,
-         DocumentFactory<T> documentFactory,
+         DocumentBuilder<T> documentFactory,
          QueryBuilder queryBuilder,
          ResponseProcessors<T> responseProcessors) {
       this.searchRequest = searchRequest;
@@ -34,7 +34,7 @@ public class DefaultSearch<T> implements Search<T> {
       this.responseProcessors = responseProcessors;
    }
 
-   public Search<T> withDocumentFactory(DocumentFactory<T> documentFactory) {
+   public Search<T> withDocumentFactory(DocumentBuilder<T> documentFactory) {
       return new DefaultSearch<T>(searchRequest, documentFactory, queryBuilder, responseProcessors);
    }
 
@@ -57,7 +57,7 @@ public class DefaultSearch<T> implements Search<T> {
    }
 
    @Override
-   public DocumentFactory<T> getDocumentFactory() {
+   public DocumentBuilder<T> getDocumentFactory() {
       return documentFactory;
    }
 
