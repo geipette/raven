@@ -34,7 +34,7 @@ public class DefaultDocumentBuilderTest {
    @Test
    public void buildDocument_should_create_document_object()
          throws Exception {
-      when(solrDocument.iterator()).thenReturn(entryIterator());
+      when_SolrDocument_Iterator_ThenReturn_Entries();
 
       DefaultDocumentBuilder<TestDocument> defaultDocumentFactory =
             new DefaultDocumentBuilder<TestDocument>(TestDocument.class);
@@ -46,11 +46,7 @@ public class DefaultDocumentBuilderTest {
          throws Exception {
       DefaultDocumentBuilder<TestDocument> defaultDocumentFactory =
             new DefaultDocumentBuilder<TestDocument>(TestDocument.class);
-      when(solrDocument.iterator()).thenReturn(
-            entryIterator(
-                  entry("field1", "value1")
-            )
-      );
+      when_SolrDocument_Iterator_ThenReturn_Entries(entry("field1", "value1"));
 
       TestDocument actual = defaultDocumentFactory.buildDocument(solrDocument);
       assertThat(actual.field1, equalTo("value1"));
@@ -61,11 +57,7 @@ public class DefaultDocumentBuilderTest {
          throws Exception {
       DefaultDocumentBuilder<TestDocument> defaultDocumentFactory =
             new DefaultDocumentBuilder<TestDocument>(TestDocument.class);
-      when(solrDocument.iterator()).thenReturn(
-            entryIterator(
-                  entry("field1", "value1")
-            )
-      );
+      when_SolrDocument_Iterator_ThenReturn_Entries(entry("field1", "value1"));
 
       TestDocument actual = defaultDocumentFactory.buildDocument(solrDocument);
       assertThat(actual.field1, equalTo("value1"));
@@ -76,11 +68,7 @@ public class DefaultDocumentBuilderTest {
          throws Exception {
       DefaultDocumentBuilder<TestDocument> defaultDocumentFactory =
             new DefaultDocumentBuilder<TestDocument>(TestDocument.class);
-      when(solrDocument.iterator()).thenReturn(
-            entryIterator(
-                  entry("cat", "value1")
-            )
-      );
+      when_SolrDocument_Iterator_ThenReturn_Entries(entry("cat", "value1"));
 
       TestDocument actual = defaultDocumentFactory.buildDocument(solrDocument);
       assertThat(actual.category, equalTo("value1"));
@@ -91,11 +79,7 @@ public class DefaultDocumentBuilderTest {
          throws Exception {
       DefaultDocumentBuilder<TestDocument> defaultDocumentFactory =
             new DefaultDocumentBuilder<TestDocument>(TestDocument.class);
-      when(solrDocument.iterator()).thenReturn(
-            entryIterator(
-                  entry("inStock", true)
-            )
-      );
+      when_SolrDocument_Iterator_ThenReturn_Entries(entry("inStock", true));
 
       TestDocument actual = defaultDocumentFactory.buildDocument(solrDocument);
       assertThat(actual.inStock, equalTo(true));
@@ -107,11 +91,7 @@ public class DefaultDocumentBuilderTest {
       DefaultDocumentBuilder<TestDocument> defaultDocumentFactory =
             new DefaultDocumentBuilder<TestDocument>(TestDocument.class);
       List<String> expected = Arrays.asList("red", "green", "blue");
-      when(solrDocument.iterator()).thenReturn(
-            entryIterator(
-                  entry("colors", expected)
-            )
-      );
+      when_SolrDocument_Iterator_ThenReturn_Entries(entry("colors", expected));
 
       TestDocument actual = defaultDocumentFactory.buildDocument(solrDocument);
 
@@ -127,11 +107,7 @@ public class DefaultDocumentBuilderTest {
       DefaultDocumentBuilder<TestDocument> defaultDocumentFactory =
             new DefaultDocumentBuilder<TestDocument>(TestDocument.class);
       List<String> expected = Arrays.asList("europe", "africa", "america");
-      when(solrDocument.iterator()).thenReturn(
-            entryIterator(
-                  entry("continents", expected)
-            )
-      );
+      when_SolrDocument_Iterator_ThenReturn_Entries(entry("continents", expected));
 
       TestDocument actual = defaultDocumentFactory.buildDocument(solrDocument);
 
@@ -144,11 +120,7 @@ public class DefaultDocumentBuilderTest {
       DefaultDocumentBuilder<TestDocument> defaultDocumentFactory =
             new DefaultDocumentBuilder<TestDocument>(TestDocument.class);
       DateTime expected = new DateTime();
-      when(solrDocument.iterator()).thenReturn(
-            entryIterator(
-                  entry("date", expected.toDate())
-            )
-      );
+      when_SolrDocument_Iterator_ThenReturn_Entries(entry("date", expected.toDate()));
 
       TestDocument actual = defaultDocumentFactory.buildDocument(solrDocument);
 
@@ -161,11 +133,7 @@ public class DefaultDocumentBuilderTest {
       DefaultDocumentBuilder<TestDocument> defaultDocumentFactory =
             new DefaultDocumentBuilder<TestDocument>(TestDocument.class);
       LocalDate expected = new LocalDate();
-      when(solrDocument.iterator()).thenReturn(
-            entryIterator(
-                  entry("localDate", expected.toDate())
-            )
-      );
+      when_SolrDocument_Iterator_ThenReturn_Entries(entry("localDate", expected.toDate()));
 
       TestDocument actual = defaultDocumentFactory.buildDocument(solrDocument);
 
@@ -179,15 +147,15 @@ public class DefaultDocumentBuilderTest {
             new DefaultDocumentBuilder<TestDocument>(TestDocument.class);
       Date date = new Date();
       LocalTime expected = LocalTime.fromDateFields(date);
-      when(solrDocument.iterator()).thenReturn(
-            entryIterator(
-                  entry("time", date)
-            )
-      );
+      when_SolrDocument_Iterator_ThenReturn_Entries(entry("time", date));
 
       TestDocument actual = defaultDocumentFactory.buildDocument(solrDocument);
 
       assertThat(actual.time, equalTo(expected));
+   }
+
+   private void when_SolrDocument_Iterator_ThenReturn_Entries(Map.Entry<String, Object>... entries) {
+      when(solrDocument.iterator()).thenReturn(entryIterator(entries));
    }
 
 
