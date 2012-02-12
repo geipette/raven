@@ -63,8 +63,6 @@ public class JodaTimeDocumentFieldHandler implements DocumentFieldHandler {
       public CouldNotCreateJodaTimeException(Throwable cause) {
          super(cause);
       }
-
    }
-
 
 }

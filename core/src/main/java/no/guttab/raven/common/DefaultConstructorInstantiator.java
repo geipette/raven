@@ -1,9 +1,9 @@
 package no.guttab.raven.common;
 
 public class DefaultConstructorInstantiator<T> {
-   private Class<T> type;
+   private Class<? extends T> type;
 
-   public DefaultConstructorInstantiator(Class<T> type) {
+   public DefaultConstructorInstantiator(Class<? extends T> type) {
       this.type = type;
    }
 

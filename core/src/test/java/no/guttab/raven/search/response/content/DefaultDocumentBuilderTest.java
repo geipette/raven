@@ -1,11 +1,13 @@
 package no.guttab.raven.search.response.content;
 
+import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import no.guttab.raven.annotations.DocumentFieldHandlerType;
 import no.guttab.raven.annotations.IndexFieldName;
 import org.apache.solr.common.SolrDocument;
 import org.joda.time.DateTime;
@@ -154,6 +156,20 @@ public class DefaultDocumentBuilderTest {
       assertThat(actual.time, equalTo(expected));
    }
 
+   @Test
+   public void buildDocument_should_use_custom_documentFieldHandler_when_matching_field_is_annotated_with_DocumentFieldHandler()
+         throws Exception {
+      DefaultDocumentBuilder<TestDocument> defaultDocumentFactory =
+            new DefaultDocumentBuilder<TestDocument>(TestDocument.class);
+      Date date = new Date();
+      when_SolrDocument_Iterator_ThenReturn_Entries(entry("dateAsString", date));
+
+      TestDocument actual = defaultDocumentFactory.buildDocument(solrDocument);
+
+      assertThat(actual.dateAsString, equalTo(date.toString()));
+   }
+
+
    private void when_SolrDocument_Iterator_ThenReturn_Entries(Map.Entry<String, Object>... entries) {
       when(solrDocument.iterator()).thenReturn(entryIterator(entries));
    }
@@ -182,6 +198,18 @@ public class DefaultDocumentBuilderTest {
       return Arrays.asList(entries).iterator();
    }
 
+   public static class DateAsStringDocumentFieldHandler implements DocumentFieldHandler {
+
+      @Override
+      public boolean accepts(Class<?> typeForDocumentField, Class<?> typeForSolrEntry) {
+         return true;
+      }
+
+      @Override
+      public Object resolveDocumentFieldValueFor(Field field, Object solrEntryValue) {
+         return solrEntryValue.toString();
+      }
+   }
 
    public static class TestDocument {
       String field1;
@@ -200,6 +228,9 @@ public class DefaultDocumentBuilderTest {
       LocalDate localDate;
 
       LocalTime time;
+
+      @DocumentFieldHandlerType(DateAsStringDocumentFieldHandler.class)
+      String dateAsString;
 
    }
 

@@ -15,7 +15,7 @@ public class NavigatorsResponseProcessor<T> implements ResponseProcessor<T> {
    }
 
    @Override
-   public void processResponse(final QueryResponse queryResponse, final SearchResponse<T> response) {
+   public void processResponse(final QueryResponse queryResponse, final MutableSearchResponse<T> response) {
       response.setNavigators(buildFor(queryResponse));
    }
 

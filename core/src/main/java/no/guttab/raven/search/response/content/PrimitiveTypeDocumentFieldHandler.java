@@ -4,7 +4,7 @@ import java.lang.reflect.Field;
 
 import no.guttab.raven.reflection.ClassUtils;
 
-public class PrimitiveTypeDocumentDocumentFieldHandler implements DocumentFieldHandler {
+public class PrimitiveTypeDocumentFieldHandler implements DocumentFieldHandler {
    @Override
    public boolean accepts(Class<?> typeForDocumentField, Class<?> typeForSolrEntry) {
       if (typeForDocumentField.isPrimitive() || typeForSolrEntry.isPrimitive()) {
