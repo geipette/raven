@@ -1,6 +1,7 @@
 package no.guttab.raven.search.response.content;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -8,6 +9,8 @@ import java.util.Map;
 import no.guttab.raven.annotations.IndexFieldName;
 import org.apache.solr.common.SolrDocument;
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -152,6 +155,41 @@ public class DefaultDocumentBuilderTest {
       assertThat(actual.date, equalTo(expected));
    }
 
+   @Test
+   public void buildDocument_should_add_localDate_data_when_field_name_matches_solr_document_field()
+         throws Exception {
+      DefaultDocumentBuilder<TestDocument> defaultDocumentFactory =
+            new DefaultDocumentBuilder<TestDocument>(TestDocument.class);
+      LocalDate expected = new LocalDate();
+      when(solrDocument.iterator()).thenReturn(
+            entryIterator(
+                  entry("localDate", expected.toDate())
+            )
+      );
+
+      TestDocument actual = defaultDocumentFactory.buildDocument(solrDocument);
+
+      assertThat(actual.localDate, equalTo(expected));
+   }
+
+   @Test
+   public void buildDocument_should_add_localTime_data_when_field_name_matches_solr_document_field()
+         throws Exception {
+      DefaultDocumentBuilder<TestDocument> defaultDocumentFactory =
+            new DefaultDocumentBuilder<TestDocument>(TestDocument.class);
+      Date date = new Date();
+      LocalTime expected = LocalTime.fromDateFields(date);
+      when(solrDocument.iterator()).thenReturn(
+            entryIterator(
+                  entry("time", date)
+            )
+      );
+
+      TestDocument actual = defaultDocumentFactory.buildDocument(solrDocument);
+
+      assertThat(actual.time, equalTo(expected));
+   }
+
 
    private Map.Entry<String, Object> entry(final String key, final Object value) {
       return new Map.Entry<String, Object>() {
@@ -190,6 +228,11 @@ public class DefaultDocumentBuilderTest {
       List<String> continents;
 
       DateTime date;
+
+      LocalDate localDate;
+
+      LocalTime time;
+
    }
 
 }
