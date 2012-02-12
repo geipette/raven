@@ -7,7 +7,7 @@ import org.apache.solr.client.solrj.SolrQuery;
 public interface Search<T> {
    SolrQuery buildQuery();
 
-   DocumentBuilder<T> getDocumentFactory();
+   DocumentBuilder<T> getDocumentBuilder();
 
    ResponseProcessors<T> getResponseProcessors();
 

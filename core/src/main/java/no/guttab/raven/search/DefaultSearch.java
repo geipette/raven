@@ -10,40 +10,40 @@ public class DefaultSearch<T> implements Search<T> {
    private Object searchRequest;
    private QueryBuilder queryBuilder;
    private ResponseProcessors<T> responseProcessors;
-   private DocumentBuilder<T> documentFactory;
+   private DocumentBuilder<T> documentBuilder;
 
    public DefaultSearch(Object searchRequest, Class<T> responseDocumentType) {
       this(searchRequest, new DefaultDocumentBuilder<T>(responseDocumentType));
    }
 
-   public DefaultSearch(Object searchRequest, DocumentBuilder<T> documentFactory) {
+   public DefaultSearch(Object searchRequest, DocumentBuilder<T> documentBuilder) {
       this(searchRequest,
-            documentFactory,
+            documentBuilder,
             new QueryBuilder(),
-            ResponseProcessors.<T>defaultProcessors(searchRequest.getClass(), documentFactory));
+            ResponseProcessors.<T>defaultProcessors(searchRequest.getClass(), documentBuilder));
    }
 
    public DefaultSearch(
          Object searchRequest,
-         DocumentBuilder<T> documentFactory,
+         DocumentBuilder<T> documentBuilder,
          QueryBuilder queryBuilder,
          ResponseProcessors<T> responseProcessors) {
       this.searchRequest = searchRequest;
-      this.documentFactory = documentFactory;
+      this.documentBuilder = documentBuilder;
       this.queryBuilder = queryBuilder;
       this.responseProcessors = responseProcessors;
    }
 
-   public Search<T> withDocumentFactory(DocumentBuilder<T> documentFactory) {
+   public Search<T> withDocumentBuilder(DocumentBuilder<T> documentFactory) {
       return new DefaultSearch<T>(searchRequest, documentFactory, queryBuilder, responseProcessors);
    }
 
    public Search<T> withQueryBuilder(QueryBuilder queryBuilder) {
-      return new DefaultSearch<T>(searchRequest, documentFactory, queryBuilder, responseProcessors);
+      return new DefaultSearch<T>(searchRequest, documentBuilder, queryBuilder, responseProcessors);
    }
 
    public Search<T> withResponseProcessors(ResponseProcessors<T> responseProcessors) {
-      return new DefaultSearch<T>(searchRequest, documentFactory, queryBuilder, responseProcessors);
+      return new DefaultSearch<T>(searchRequest, documentBuilder, queryBuilder, responseProcessors);
    }
 
    @Override
@@ -57,8 +57,8 @@ public class DefaultSearch<T> implements Search<T> {
    }
 
    @Override
-   public DocumentBuilder<T> getDocumentFactory() {
-      return documentFactory;
+   public DocumentBuilder<T> getDocumentBuilder() {
+      return documentBuilder;
    }
 
    @Override
