@@ -7,6 +7,7 @@ import java.util.Map;
 
 import no.guttab.raven.annotations.IndexFieldName;
 import org.apache.solr.common.SolrDocument;
+import org.joda.time.DateTime;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -15,6 +16,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.collection.IsArrayContaining.hasItemInArray;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.nullValue;
 import static org.powermock.api.mockito.PowerMockito.when;
@@ -101,7 +103,7 @@ public class DefaultDocumentBuilderTest {
          throws Exception {
       DefaultDocumentBuilder<TestDocument> defaultDocumentFactory =
             new DefaultDocumentBuilder<TestDocument>(TestDocument.class);
-      String[] expected = {"red", "green", "blue"};
+      List<String> expected = Arrays.asList("red", "green", "blue");
       when(solrDocument.iterator()).thenReturn(
             entryIterator(
                   entry("colors", expected)
@@ -110,7 +112,10 @@ public class DefaultDocumentBuilderTest {
 
       TestDocument actual = defaultDocumentFactory.buildDocument(solrDocument);
 
-      assertThat(actual.colors, equalTo(expected));
+      assertThat(actual.colors, hasItemInArray("red"));
+      assertThat(actual.colors, hasItemInArray("green"));
+      assertThat(actual.colors, hasItemInArray("blue"));
+      assertThat(actual.colors.length, is(3));
    }
 
    @Test
@@ -128,6 +133,23 @@ public class DefaultDocumentBuilderTest {
       TestDocument actual = defaultDocumentFactory.buildDocument(solrDocument);
 
       assertThat(actual.continents, equalTo(expected));
+   }
+
+   @Test
+   public void buildDocument_should_add_dateTime_data_when_field_name_matches_solr_document_field()
+         throws Exception {
+      DefaultDocumentBuilder<TestDocument> defaultDocumentFactory =
+            new DefaultDocumentBuilder<TestDocument>(TestDocument.class);
+      DateTime expected = new DateTime();
+      when(solrDocument.iterator()).thenReturn(
+            entryIterator(
+                  entry("date", expected.toDate())
+            )
+      );
+
+      TestDocument actual = defaultDocumentFactory.buildDocument(solrDocument);
+
+      assertThat(actual.date, equalTo(expected));
    }
 
 
@@ -165,7 +187,9 @@ public class DefaultDocumentBuilderTest {
 
       String[] colors;
 
-      public List<String> continents;
+      List<String> continents;
+
+      DateTime date;
    }
 
 }

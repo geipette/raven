@@ -12,6 +12,8 @@ public class SearchResponse<T> {
 
    private Navigators navigators;
 
+   private int resultCount;
+
    public void addDocument(T document) {
       documents.add(document);
    }
@@ -32,4 +34,7 @@ public class SearchResponse<T> {
       return navigators.getNavigators();
    }
 
+   public int getResultCount() {
+      return resultCount;
+   }
 }

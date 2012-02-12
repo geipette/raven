@@ -1,9 +1,11 @@
 package no.guttab.raven.reflection;
 
+import java.lang.reflect.Field;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PrimitiveClassUtils {
+public class ClassUtils {
    private static Map<Class, Class> primitiveClassMap = new HashMap<Class, Class>() {{
       put(Integer.TYPE, Integer.class);
       put(Long.TYPE, Long.class);
@@ -16,10 +18,19 @@ public class PrimitiveClassUtils {
       put(Short.TYPE, Short.class);
    }};
 
-   private PrimitiveClassUtils() {
+   private ClassUtils() {
    }
 
    public static Class typeForPrimitive(Class primitive) {
       return primitiveClassMap.get(primitive);
    }
+
+   public static boolean isCollectionType(Class type) {
+      return Collection.class.isAssignableFrom(type) || type.isArray();
+   }
+
+   public static boolean isCollectionType(Field field) {
+      return isCollectionType(field.getType());
+   }
+
 }

@@ -2,7 +2,6 @@ package no.guttab.raven.search;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.util.Collection;
 import java.util.Map;
 
 import no.guttab.raven.annotations.AnnotationsWithCallback;
@@ -12,6 +11,7 @@ import no.guttab.raven.common.ReverseLookupMap;
 
 import static no.guttab.raven.annotations.AnnotationUtils.doForEachAnnotatedFieldOn;
 import static no.guttab.raven.annotations.SearchAnnotationUtils.getIndexFieldName;
+import static no.guttab.raven.reflection.ClassUtils.isCollectionType;
 import static org.apache.commons.lang3.reflect.FieldUtils.getDeclaredField;
 
 public class SearchRequestTypeInfo {
@@ -44,10 +44,5 @@ public class SearchRequestTypeInfo {
       final Field field = getDeclaredField(requestType, requestFieldName, true);
       return isCollectionType(field);
    }
-
-   private boolean isCollectionType(Field field) {
-      return Collection.class.isAssignableFrom(field.getType()) || field.getType().isArray();
-   }
-
 
 }

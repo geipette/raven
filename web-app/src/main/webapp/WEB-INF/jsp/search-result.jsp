@@ -1,6 +1,6 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%--@elvariable id="queryResponse" type="org.apache.solr.client.solrj.response.QueryResponse"--%>
-<%--@elvariable id="searchResponse" type="no.guttab.raven.webapp.controller.DemoSearchResponse"--%>
+<%--@elvariable id="searchResponse" type="no.guttab.raven.search.response.SearchResponse"--%>
 <html>
 
 <body>
@@ -20,16 +20,31 @@
    </c:forEach>
 </c:forEach>
 
+<h2>Results</h2>
 
-<%--<hr/>--%>
-<%--<h1>Facets</h1>--%>
-<%--<c:forEach var="facetField" items="${queryResponse.facetFields}">--%>
-<%--&lt;%&ndash;@elvariable id="facetField" type="org.apache.solr.client.solrj.response.FacetField"&ndash;%&gt;--%>
-<%--<h2>${facetField.name}</h2>--%>
-<%--<c:forEach var="count" items="${facetField.values}">--%>
-<%--&lt;%&ndash;@elvariable id="count" type="org.apache.solr.client.solrj.response.FacetField.Count"&ndash;%&gt;--%>
-<%--<p>${count.name} (${count.count}) -- ${count.asFilterQuery}</p>--%>
-<%--</c:forEach>--%>
-<%--</c:forEach>--%>
+<p>result count: ${searchResponse.resultCount}</p>
+<c:forEach var="document" items="${searchResponse.documents}">
+   <%--@elvariable id="document" type="no.guttab.raven.webapp.controller.DemoDocument"--%>
+   <hr/>
+   <p>${document.name}</p>
+
+   <p>${document.manufacturer}</p>
+
+   <p>${document.manufacturedDate}</p>
+   <h6>Categories</h6>
+   <ul>
+      <c:forEach var="cat" items="${document.categories}">
+         <li>${cat}</li>
+      </c:forEach>
+   </ul>
+   <h6>Features</h6>
+   <ul>
+      <c:forEach var="feature" items="${document.features}">
+         <li>${feature}</li>
+      </c:forEach>
+   </ul>
+
+</c:forEach>
+
 </body>
 </html>
