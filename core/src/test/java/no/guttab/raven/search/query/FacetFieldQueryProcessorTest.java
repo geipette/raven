@@ -103,7 +103,6 @@ public class FacetFieldQueryProcessorTest {
 
    @Test
    public void buildQuery_should_not_set_minCount_when_SearchRequest_has_default_facetMinCount() throws Exception {
-      @SearchRequest
       class TestQuery {
          @FacetField
          String category;

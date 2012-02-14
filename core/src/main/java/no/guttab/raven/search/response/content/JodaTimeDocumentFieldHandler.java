@@ -5,11 +5,10 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
 
-import no.guttab.raven.reflection.ReflectionUtils;
+import no.guttab.raven.reflection.NoSuchConstructorException;
 import org.joda.time.ReadableInstant;
 import org.joda.time.ReadablePartial;
 
-import static no.guttab.raven.reflection.ReflectionUtils.NoSuchConstructorException;
 import static no.guttab.raven.reflection.ReflectionUtils.findConstructorForType;
 
 public class JodaTimeDocumentFieldHandler implements DocumentFieldHandler {
@@ -42,7 +41,7 @@ public class JodaTimeDocumentFieldHandler implements DocumentFieldHandler {
    private Constructor<?> findConstructorForDate(Class<?> targetType) throws NoSuchConstructorException {
       try {
          return findConstructorForType(targetType, Date.class);
-      } catch (ReflectionUtils.NoSuchConstructorException e) {
+      } catch (NoSuchConstructorException e) {
          return findConstructorForType(targetType, Object.class);
       }
    }

@@ -9,7 +9,7 @@ public class ImmutableNavigatorItemsTest {
 
    @Test(expected = UnsupportedOperationException.class)
    public void getItems_should_return_an_unmodifiable_list() throws Exception {
-      NavigatorItem navigatorItem = Mockito.mock(NavigatorItem.class);
+      NavigatorItem navigatorItem = Mockito.mock(FacetNavigatorItem.class);
 
       ImmutableNavigatorItems<NavigatorItem> navigatorItems = new ImmutableNavigatorItems<NavigatorItem>(
             new ArrayList<NavigatorItem>(), new ArrayList<NavigatorItem>()
@@ -19,7 +19,7 @@ public class ImmutableNavigatorItemsTest {
 
    @Test(expected = UnsupportedOperationException.class)
    public void getSelectedItems_should_return_an_unmodifiable_list() throws Exception {
-      NavigatorItem navigatorItem = Mockito.mock(NavigatorItem.class);
+      NavigatorItem navigatorItem = Mockito.mock(FacetNavigatorItem.class);
 
       ImmutableNavigatorItems<NavigatorItem> navigatorItems = new ImmutableNavigatorItems<NavigatorItem>(
             new ArrayList<NavigatorItem>(), new ArrayList<NavigatorItem>()

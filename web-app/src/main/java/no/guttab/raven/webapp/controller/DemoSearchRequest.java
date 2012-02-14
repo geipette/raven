@@ -6,9 +6,11 @@ import javax.validation.constraints.NotNull;
 import no.guttab.raven.annotations.FacetField;
 import no.guttab.raven.annotations.IndexFieldName;
 import no.guttab.raven.annotations.Query;
+import no.guttab.raven.annotations.SearchRequest;
 
 
 @SuppressWarnings({"FieldCanBeLocal"})
+@SearchRequest
 public class DemoSearchRequest {
    @IndexFieldName("cat")
    @FacetField

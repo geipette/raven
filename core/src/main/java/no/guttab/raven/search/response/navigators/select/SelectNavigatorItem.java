@@ -1,9 +1,9 @@
 package no.guttab.raven.search.response.navigators.select;
 
-import no.guttab.raven.search.response.navigators.NavigatorItem;
+import no.guttab.raven.search.response.navigators.FacetNavigatorItem;
 import org.apache.solr.client.solrj.response.FacetField;
 
-public class SelectNavigatorItem implements NavigatorItem {
+public class SelectNavigatorItem implements FacetNavigatorItem {
    private String deselectUrl;
    private FacetField.Count count;
    private String url;
