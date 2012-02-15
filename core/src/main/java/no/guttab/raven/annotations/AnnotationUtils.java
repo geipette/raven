@@ -20,25 +20,25 @@ public final class AnnotationUtils {
       }
    }
 
-   public static void doForEachAnnotatedFieldOn(
-         Object target, Class<? extends Annotation> annotationType, AnnotatedFieldCallback callback) {
+   public static <T extends Annotation> void doForEachAnnotatedFieldOn(
+         Object target, Class<T> annotationType, AnnotatedFieldCallback<T> callback) {
       doForEachAnnotatedFieldOn(target.getClass(), annotationType, callback);
    }
 
-   public static void doForEachAnnotatedFieldOn(
-         Class<?> type, Class<? extends Annotation> annotationType, AnnotatedFieldCallback callback) {
+   public static <T extends Annotation> void doForEachAnnotatedFieldOn(
+         Class<?> type, Class<T> annotationType, AnnotatedFieldCallback<T> callback) {
       for (Field field : type.getDeclaredFields()) {
          callbackIfFieldAnnotated(field, field.getAnnotation(annotationType), callback);
       }
    }
 
-   public static void doForFirstAnnotatedFieldOn(
-         Object target, Class<? extends Annotation> annotationType, AnnotatedFieldCallback callback) {
+   public static <T extends Annotation> void doForFirstAnnotatedFieldOn(
+         Object target, Class<T> annotationType, AnnotatedFieldCallback<T> callback) {
       doForFirstAnnotatedFieldOn(target.getClass(), annotationType, callback);
    }
 
-   public static void doForFirstAnnotatedFieldOn(
-         Class<?> type, Class<? extends Annotation> annotationType, AnnotatedFieldCallback callback) {
+   public static <T extends Annotation> void doForFirstAnnotatedFieldOn(
+         Class<?> type, Class<T> annotationType, AnnotatedFieldCallback<T> callback) {
       for (Field field : type.getDeclaredFields()) {
          if (callbackIfFieldAnnotated(field, field.getAnnotation(annotationType), callback)) {
             return;
@@ -46,7 +46,7 @@ public final class AnnotationUtils {
       }
    }
 
-   private static boolean callbackIfFieldAnnotated(Field field, Annotation annotation, AnnotatedFieldCallback callback) {
+   private static <T extends Annotation> boolean callbackIfFieldAnnotated(Field field, T annotation, AnnotatedFieldCallback<T> callback) {
       if (annotation != null) {
          callback.doFor(field, annotation);
          return true;

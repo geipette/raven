@@ -20,7 +20,7 @@ import static org.apache.commons.lang3.reflect.FieldUtils.getDeclaredField;
 public class SearchRequestTypeInfo {
    private ReverseLookupMap<String, String> indexFieldNameMap = new ReverseLookupMap<String, String>();
    private Class<?> requestType;
-   private String sortField;
+   private String sortFieldName;
 
    public SearchRequestTypeInfo(Class<?> requestType) {
       this.requestType = requestType;
@@ -32,7 +32,7 @@ public class SearchRequestTypeInfo {
       doForFirstAnnotatedFieldOn(requestType, Sort.class, new AnnotatedFieldCallback<Sort>() {
          @Override
          public void doFor(Field field, Sort annotation) {
-            sortField = field.getName();
+            sortFieldName = field.getName();
          }
       });
    }
@@ -46,8 +46,8 @@ public class SearchRequestTypeInfo {
       });
    }
 
-   public String getSortField() {
-      return sortField;
+   public String getSortFieldName() {
+      return sortFieldName;
    }
 
    public String indexFieldNameFor(String requestFieldName) {

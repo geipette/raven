@@ -23,8 +23,8 @@ public class Navigation {
       buildNavigatorUrls(queryResponse.getFacetFields(), filterQueries);
    }
 
-   public String getSortField() {
-      return searchRequestTypeInfo.getSortField();
+   public String getSortFieldName() {
+      return searchRequestTypeInfo.getSortFieldName();
    }
 
    public Set<String> fqsFor(FacetField facetField) {

@@ -12,7 +12,9 @@ import static no.guttab.raven.annotations.SortDirection.ASCENDING;
 @Target({ElementType.FIELD})
 @Documented
 public @interface SortVariant {
-   String name() default "";
+   SortDirection value() default ASCENDING;
 
-   SortDirection direction() default ASCENDING;
+   String displayName() default "";
+
+   String name() default "";
 }

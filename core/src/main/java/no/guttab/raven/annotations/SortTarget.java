@@ -14,5 +14,5 @@ import static no.guttab.raven.annotations.SortDirection.ASCENDING;
 public @interface SortTarget {
    String displayName() default "";
 
-   SortVariant[] variants() default @SortVariant(direction = ASCENDING);
+   SortVariant[] variants() default @SortVariant(ASCENDING);
 }
