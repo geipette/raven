@@ -3,8 +3,15 @@ package no.guttab.raven.search.response.navigators.sort;
 import java.util.List;
 
 import no.guttab.raven.search.response.navigators.Navigator;
+import no.guttab.raven.search.response.navigators.NavigatorItems;
 
 public class SortNavigator implements Navigator<SortNavigatorItem> {
+   private NavigatorItems<SortNavigatorItem> navigatorItems;
+
+   public SortNavigator(NavigatorItems<SortNavigatorItem> navigatorItems) {
+      this.navigatorItems = navigatorItems;
+   }
+
    @Override
    public String getDisplayName() {
       return null;
@@ -17,16 +24,16 @@ public class SortNavigator implements Navigator<SortNavigatorItem> {
 
    @Override
    public SortNavigatorItem getFirstSelectedItem() {
-      return null;
+      return navigatorItems.getSelectedItems().isEmpty() ? null : navigatorItems.getSelectedItems().get(0);
    }
 
    @Override
    public List<SortNavigatorItem> getItems() {
-      return null;
+      return navigatorItems.getItems();
    }
 
    @Override
    public List<SortNavigatorItem> getSelectedItems() {
-      return null;
+      return navigatorItems.getSelectedItems();
    }
 }

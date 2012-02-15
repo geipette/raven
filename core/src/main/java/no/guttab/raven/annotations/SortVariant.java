@@ -11,8 +11,8 @@ import static no.guttab.raven.annotations.SortDirection.ASCENDING;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD})
 @Documented
-public @interface SortTarget {
-   String displayName() default "";
+public @interface SortVariant {
+   String name() default "";
 
-   SortVariant[] variants() default @SortVariant(direction = ASCENDING);
+   SortDirection direction() default ASCENDING;
 }
