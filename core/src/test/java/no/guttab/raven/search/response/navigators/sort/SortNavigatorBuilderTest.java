@@ -118,7 +118,7 @@ public class SortNavigatorBuilderTest {
    }
 
 
-   @Test(expected = SortNavigatorBuilder.NoSortFieldDefinedException.class)
+   @Test(expected = SortNavigatorBuilder.NoSortFieldException.class)
    public void build_should_throw_exception_if_SortTarget_defined_but_no_sortField_exists_in_request() throws Exception {
       class TestSearchResponse {
          @SortTarget(displayName = "Pris")

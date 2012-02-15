@@ -39,11 +39,11 @@ public class JodaTimeDocumentFieldHandler implements DocumentFieldHandler {
    }
 
    private Constructor<?> findConstructorForDate(Class<?> targetType) throws NoSuchConstructorException {
-      try {
-         return findConstructorForType(targetType, Date.class);
-      } catch (NoSuchConstructorException e) {
-         return findConstructorForType(targetType, Object.class);
+      Constructor<?> constructor = findConstructorForType(targetType, Date.class);
+      if (constructor == null) {
+         constructor = findConstructorForType(targetType, Object.class);
       }
+      return constructor;
    }
 
    private boolean isJodaTimeType(Class<?> type) {

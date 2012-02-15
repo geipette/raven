@@ -1,7 +1,6 @@
 package no.guttab.raven.reflection;
 
 import java.lang.reflect.Constructor;
-import java.util.Arrays;
 
 class ByArgTypesConstructorFinder {
    private Class<?>[] argTypes;
@@ -12,14 +11,13 @@ class ByArgTypesConstructorFinder {
       this.argTypes = argTypes;
    }
 
-   public Constructor<?> find() throws NoSuchConstructorException {
+   public Constructor<?> find() {
       for (Constructor<?> constructor : targetType.getConstructors()) {
          if (constructorHasCorrectArgTypes(constructor)) {
             return constructor;
          }
       }
-      throw new NoSuchConstructorException(
-            "No constructor for " + targetType + " with argTypes: " + Arrays.toString(argTypes) + " exists");
+      return null;
    }
 
    private boolean constructorHasCorrectArgTypes(Constructor<?> constructor) {

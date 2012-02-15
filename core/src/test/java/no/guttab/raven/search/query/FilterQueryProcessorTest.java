@@ -140,7 +140,7 @@ public class FilterQueryProcessorTest {
       DateTime toDate = new DateTime(2011, 12, 2, 0, 0, 0, 0, DateTimeZone.forID("UTC"));
    }
 
-   static class DateRangeBuilder implements FilterQueryCriteriaBuilder<DateRange> {
+   public static class DateRangeBuilder implements FilterQueryCriteriaBuilder<DateRange> {
       @Override
       public Collection<String> buildQueryCriterias(DateRange fieldValue) {
          DateTimeFormatter dateTimeFormatter = ISODateTimeFormat.dateTimeNoMillis();

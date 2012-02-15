@@ -5,8 +5,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import no.guttab.raven.annotations.DocumentFieldHandlerType;
-import no.guttab.raven.common.DefaultConstructorInstantiator;
 
+import static no.guttab.raven.reflection.ClassUtils.newInstance;
 import static no.guttab.raven.reflection.FieldUtils.setFieldValue;
 
 public class DocumentFieldHandlers<T> {
@@ -38,9 +38,7 @@ public class DocumentFieldHandlers<T> {
    }
 
    private DocumentFieldHandler createCustomDocumentFieldHandler(DocumentFieldHandlerType annotation) {
-      final DefaultConstructorInstantiator<DocumentFieldHandler> instantiator =
-            new DefaultConstructorInstantiator<DocumentFieldHandler>(annotation.value());
-      return instantiator.newInstance();
+      return newInstance(annotation.value());
    }
 
    private void executeDefaultFieldHandlers(Field field, Object solrEntryValue) {

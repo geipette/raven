@@ -10,6 +10,7 @@ import no.guttab.raven.annotations.CombineOperator;
 import no.guttab.raven.annotations.FacetField;
 import no.guttab.raven.annotations.FilterQuery;
 import no.guttab.raven.annotations.FilterQueryCriteriaBuilder;
+import no.guttab.raven.reflection.ClassUtils;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -82,15 +83,8 @@ public class FilterQueryProcessor implements QueryProcessor {
 
    @SuppressWarnings({"unchecked"})
    private Collection<String> buildQueryCriterias(FilterQuery filterQuery, Object fieldValue) {
-      try {
-         FilterQueryCriteriaBuilder criteriaBuilder = filterQuery.queryCriteriaBuilder().newInstance();
-         return criteriaBuilder.buildQueryCriterias(fieldValue);
-      } catch (InstantiationException e) {
-         log.error("Could not instantiate class. FilterQuery skipped.", e);
-      } catch (IllegalAccessException e) {
-         log.error("Could not instantiate class. FilterQuery skipped.", e);
-      }
-      return null;
+      final FilterQueryCriteriaBuilder criteriaBuilder = ClassUtils.newInstance(filterQuery.queryCriteriaBuilder());
+      return criteriaBuilder.buildQueryCriterias(fieldValue);
    }
 
    private class FilterQueryAnnotationsWithCallback extends AnnotationsWithCallback {

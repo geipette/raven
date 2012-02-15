@@ -21,6 +21,10 @@ public class ClassUtils {
    private ClassUtils() {
    }
 
+   public static <T> T newInstance(Class<T> type) {
+      return new DefaultConstructorInstantiator<T>(type).newInstance();
+   }
+
    public static Class typeForPrimitive(Class primitive) {
       return primitiveClassMap.get(primitive);
    }

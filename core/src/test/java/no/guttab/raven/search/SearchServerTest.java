@@ -37,7 +37,7 @@ public class SearchServerTest {
       verify(solrServer).query(solrQuery);
    }
 
-   @Test(expected = SearchServer.SearchServerRuntimeException.class)
+   @Test(expected = SearchServer.SearchServerException.class)
    public void search_should_throw_exception_when_solrServer_query_throws_exception() throws Exception {
       when(solrServer.query(solrQuery)).thenThrow(new SolrServerException(""));
       SearchServer searchServer = new SearchServer(searchResource);

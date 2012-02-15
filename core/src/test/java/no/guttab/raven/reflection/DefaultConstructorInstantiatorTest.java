@@ -1,4 +1,4 @@
-package no.guttab.raven.common;
+package no.guttab.raven.reflection;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,7 +27,7 @@ public class DefaultConstructorInstantiatorTest {
       assertThat(actual, sameInstance(expectedResponse));
    }
 
-   @Test(expected = DefaultConstructorInstantiator.CouldNotInstantiateResponseTypeException.class)
+   @Test(expected = DefaultConstructorInstantiator.CouldNotInstantiateTypeException.class)
    public void newInstance_should_throw_expected_exception_when_newInstance_throws_InstantiationException() throws Exception {
       whenNewInstanceOnSearchResponse().thenThrow(new InstantiationException());
 
@@ -36,7 +36,7 @@ public class DefaultConstructorInstantiatorTest {
       responseFactory.newInstance();
    }
 
-   @Test(expected = DefaultConstructorInstantiator.CouldNotInstantiateResponseTypeException.class)
+   @Test(expected = DefaultConstructorInstantiator.CouldNotInstantiateTypeException.class)
    public void newInstance_should_throw_expected_exception_when_newInstance_throws_IllegalAccessException() throws Exception {
       whenNewInstanceOnSearchResponse().thenThrow(new IllegalAccessException());
 

@@ -68,7 +68,7 @@ public class SortNavigatorBuilder {
          if (navigationHasSortField()) {
             addNavigatorItemsFor(field, annotation);
          } else {
-            throw new NoSortFieldDefinedException();
+            throw new NoSortFieldException();
          }
       }
 
@@ -107,8 +107,8 @@ public class SortNavigatorBuilder {
 
    }
 
-   public static class NoSortFieldDefinedException extends RuntimeException {
-      public NoSortFieldDefinedException() {
+   public static class NoSortFieldException extends RuntimeException {
+      public NoSortFieldException() {
          super("No @Sort annotation found on request object. Please specify one when using @SortTarget or @SortOrder");
       }
    }

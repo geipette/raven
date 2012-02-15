@@ -15,12 +15,12 @@ public class SearchServer {
       try {
          return searchResource.getServer().query(solrQuery);
       } catch (SolrServerException e) {
-         throw new SearchServerRuntimeException(e);
+         throw new SearchServerException(e);
       }
    }
 
-   public static class SearchServerRuntimeException extends RuntimeException {
-      public SearchServerRuntimeException(SolrServerException e) {
+   public static class SearchServerException extends RuntimeException {
+      public SearchServerException(SolrServerException e) {
          super(e);
       }
    }

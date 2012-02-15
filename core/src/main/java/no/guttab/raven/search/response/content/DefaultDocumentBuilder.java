@@ -3,23 +3,24 @@ package no.guttab.raven.search.response.content;
 import java.lang.reflect.Field;
 import java.util.Map;
 
-import no.guttab.raven.common.DefaultConstructorInstantiator;
 import no.guttab.raven.reflection.FieldFilter;
 import org.apache.solr.common.SolrDocument;
 
 import static no.guttab.raven.annotations.SearchAnnotationUtils.getIndexFieldName;
+import static no.guttab.raven.reflection.ClassUtils.newInstance;
 import static no.guttab.raven.reflection.FieldUtils.findField;
 
 public class DefaultDocumentBuilder<T> implements DocumentBuilder<T> {
-   private DefaultConstructorInstantiator<T> instantiator;
+
+   private Class<T> documentType;
 
    public DefaultDocumentBuilder(Class<T> documentType) {
-      this.instantiator = new DefaultConstructorInstantiator<T>(documentType);
+      this.documentType = documentType;
    }
 
    @Override
    public T buildDocument(SolrDocument solrDocument) {
-      T responseDocument = instantiator.newInstance();
+      T responseDocument = newInstance(documentType);
       processDocument(solrDocument, responseDocument);
       return responseDocument;
    }
