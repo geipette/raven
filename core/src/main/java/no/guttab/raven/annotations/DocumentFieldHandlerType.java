@@ -6,8 +6,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import no.guttab.raven.search.response.content.DocumentFieldHandler;
-
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD})
 @Documented

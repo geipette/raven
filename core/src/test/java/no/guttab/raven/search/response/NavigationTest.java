@@ -19,9 +19,9 @@ import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class NavigationTest {
-
    @Mock
    private SearchRequestTypeInfo searchRequestTypeInfo;
+
    @Mock
    private QueryResponse queryResponse;
 

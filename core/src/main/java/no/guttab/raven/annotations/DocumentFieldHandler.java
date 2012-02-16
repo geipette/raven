@@ -1,4 +1,4 @@
-package no.guttab.raven.search.response.content;
+package no.guttab.raven.annotations;
 
 import java.lang.reflect.Field;
 

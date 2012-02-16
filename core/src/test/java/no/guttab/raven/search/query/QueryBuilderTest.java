@@ -3,6 +3,7 @@ package no.guttab.raven.search.query;
 import java.util.Arrays;
 import java.util.List;
 
+import no.guttab.raven.search.QueryBuilder;
 import no.guttab.raven.search.Search;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.hamcrest.BaseMatcher;

@@ -1,9 +1,12 @@
-package no.guttab.raven.search.query;
+package no.guttab.raven.search;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import no.guttab.raven.search.Search;
+import no.guttab.raven.search.query.FacetFieldQueryProcessor;
+import no.guttab.raven.search.query.FilterQueryProcessor;
+import no.guttab.raven.search.query.QueryProcessor;
+import no.guttab.raven.search.query.QueryStringQueryProcessor;
 import org.apache.solr.client.solrj.SolrQuery;
 
 import static java.util.Arrays.asList;

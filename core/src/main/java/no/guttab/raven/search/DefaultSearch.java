@@ -1,6 +1,5 @@
 package no.guttab.raven.search;
 
-import no.guttab.raven.search.query.QueryBuilder;
 import no.guttab.raven.search.response.ResponseProcessors;
 import no.guttab.raven.search.response.content.DefaultDocumentBuilder;
 import no.guttab.raven.search.response.content.DocumentBuilder;

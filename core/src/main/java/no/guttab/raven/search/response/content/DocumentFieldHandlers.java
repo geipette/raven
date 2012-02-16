@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
 
+import no.guttab.raven.annotations.DocumentFieldHandler;
 import no.guttab.raven.annotations.DocumentFieldHandlerType;
 
 import static no.guttab.raven.reflection.ClassUtils.newInstance;

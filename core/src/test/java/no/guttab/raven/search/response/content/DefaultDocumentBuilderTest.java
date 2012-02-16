@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import no.guttab.raven.annotations.DocumentFieldHandler;
 import no.guttab.raven.annotations.DocumentFieldHandlerType;
 import no.guttab.raven.annotations.IndexFieldName;
 import org.apache.solr.common.SolrDocument;

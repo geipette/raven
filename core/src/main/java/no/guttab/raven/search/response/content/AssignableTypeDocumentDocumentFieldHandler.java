@@ -2,6 +2,8 @@ package no.guttab.raven.search.response.content;
 
 import java.lang.reflect.Field;
 
+import no.guttab.raven.annotations.DocumentFieldHandler;
+
 public class AssignableTypeDocumentDocumentFieldHandler implements DocumentFieldHandler {
 
    @Override

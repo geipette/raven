@@ -2,6 +2,7 @@ package no.guttab.raven.search.response.content;
 
 import java.lang.reflect.Field;
 
+import no.guttab.raven.annotations.DocumentFieldHandler;
 import no.guttab.raven.reflection.ClassUtils;
 
 public class PrimitiveTypeDocumentFieldHandler implements DocumentFieldHandler {

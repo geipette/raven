@@ -1,15 +1,10 @@
 package no.guttab.raven.search.query;
 
-import java.lang.reflect.Field;
-
-import no.guttab.raven.annotations.AnnotatedFieldCallback;
 import no.guttab.raven.annotations.FacetField;
 import no.guttab.raven.annotations.SearchRequest;
 import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.common.params.FacetParams;
 
 import static no.guttab.raven.annotations.AnnotationUtils.doForEachAnnotatedFieldOn;
-import static no.guttab.raven.annotations.SearchAnnotationUtils.getIndexFieldName;
 
 public class FacetFieldQueryProcessor implements QueryProcessor {
    @Override
@@ -26,33 +21,12 @@ public class FacetFieldQueryProcessor implements QueryProcessor {
    }
 
    private void handleFacetFieldAnnotations(Object queryInput, final SolrQuery solrQuery) {
-      doForEachAnnotatedFieldOn(queryInput, FacetField.class, new AnnotatedFieldCallback<FacetField>() {
-         @Override
-         public void doFor(Field field, FacetField annotation) {
-            solrQuery.setFacet(true);
-            String indexFieldName = getIndexFieldName(field);
-            solrQuery.addFacetField(indexFieldName);
-            setFacetMinCountIfNecessary(annotation, indexFieldName, solrQuery);
-         }
-      });
-   }
-
-   private void setFacetMinCountIfNecessary(FacetField facetField, String indexFieldName, SolrQuery solrQuery) {
-      if (shouldSetFacetMinCount(facetField)) {
-         solrQuery.set(resolveFacetMinCountParameterKey(indexFieldName), facetField.minCount());
-      }
-   }
-
-   private String resolveFacetMinCountParameterKey(String indexFieldName) {
-      return "f." + indexFieldName + '.' + FacetParams.FACET_MINCOUNT;
+      doForEachAnnotatedFieldOn(queryInput, FacetField.class, new FacetFieldAnnotatedFieldCallback(solrQuery));
    }
 
    private boolean shouldSetFacetMinCount(SearchRequest facetSettings) {
       return facetSettings != null && facetSettings.facetMinCount() >= 0;
    }
 
-   private boolean shouldSetFacetMinCount(FacetField facetField) {
-      return facetField.minCount() >= 0;
-   }
 
 }

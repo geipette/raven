@@ -36,11 +36,15 @@ class SortTargetAnnotatedFieldCallback implements AnnotatedFieldCallback<SortTar
 
    private void addNavigatorItemsFor(Field field, SortTarget sortTarget) {
       for (SortVariant sortVariant : sortTarget.variants()) {
-         String displayName = resolveSortVariantDisplayName(field, sortTarget, sortVariant);
-         String url = resolveUrl(field, sortVariant, navigation.getSortFieldName());
-         SortNavigatorItem item = new SortNavigatorItem(displayName, url, resolveSortCriteria(field, sortVariant));
-         result.add(item);
+         addNavigatorItemFor(sortVariant, field, sortTarget);
       }
+   }
+
+   private void addNavigatorItemFor(SortVariant sortVariant, Field field, SortTarget sortTarget) {
+      String displayName = resolveSortVariantDisplayName(field, sortTarget, sortVariant);
+      String url = resolveUrl(field, sortVariant, navigation.getSortFieldName());
+      SortNavigatorItem item = new SortNavigatorItem(displayName, url, resolveSortCriteria(field, sortVariant));
+      result.add(item);
    }
 
    private String resolveSortCriteria(Field field, SortVariant sortVariant) {

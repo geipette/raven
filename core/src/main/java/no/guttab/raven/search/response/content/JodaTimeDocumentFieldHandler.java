@@ -1,15 +1,11 @@
 package no.guttab.raven.search.response.content;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
 
-import no.guttab.raven.reflection.NoSuchConstructorException;
+import no.guttab.raven.annotations.DocumentFieldHandler;
 import org.joda.time.ReadableInstant;
 import org.joda.time.ReadablePartial;
-
-import static no.guttab.raven.reflection.ReflectionUtils.findConstructorForType;
 
 public class JodaTimeDocumentFieldHandler implements DocumentFieldHandler {
    @Override
@@ -19,31 +15,12 @@ public class JodaTimeDocumentFieldHandler implements DocumentFieldHandler {
 
    @Override
    public Object resolveDocumentFieldValueFor(Field field, Object solrEntryValue) {
-      Date solrValue = (Date) solrEntryValue;
+      final Date solrValue = (Date) solrEntryValue;
       return createJodaTime(field.getType(), solrValue);
    }
 
    private Object createJodaTime(Class<?> type, Date date) {
-      try {
-         Constructor<?> constructorForDate = findConstructorForDate(type);
-         return constructorForDate.newInstance(date);
-      } catch (InvocationTargetException e) {
-         throw new CouldNotCreateJodaTimeException(e);
-      } catch (InstantiationException e) {
-         throw new CouldNotCreateJodaTimeException(e);
-      } catch (IllegalAccessException e) {
-         throw new CouldNotCreateJodaTimeException(e);
-      } catch (NoSuchConstructorException e) {
-         throw new CouldNotCreateJodaTimeException(e);
-      }
-   }
-
-   private Constructor<?> findConstructorForDate(Class<?> targetType) throws NoSuchConstructorException {
-      Constructor<?> constructor = findConstructorForType(targetType, Date.class);
-      if (constructor == null) {
-         constructor = findConstructorForType(targetType, Object.class);
-      }
-      return constructor;
+      return new JodaTimeInstantiator(type, date).newInstance();
    }
 
    private boolean isJodaTimeType(Class<?> type) {
@@ -56,12 +33,6 @@ public class JodaTimeDocumentFieldHandler implements DocumentFieldHandler {
 
    private boolean isPartial(Class<?> type) {
       return ReadablePartial.class.isAssignableFrom(type);
-   }
-
-   public static class CouldNotCreateJodaTimeException extends RuntimeException {
-      public CouldNotCreateJodaTimeException(Throwable cause) {
-         super(cause);
-      }
    }
 
 }

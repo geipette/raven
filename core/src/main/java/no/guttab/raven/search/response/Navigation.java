@@ -27,14 +27,13 @@ public class Navigation {
 
       headerParams = new QueryResponseHeaderParams(queryResponse.getResponseHeader());
       filterQueries = filterQueriesFor(headerParams);
-      navigatorUrls = buildNavigatorUrls();
+      buildNavigatorUrls();
    }
 
-   private NavigatorUrls buildNavigatorUrls() {
-      NavigatorUrls navigatorUrls = new NavigatorUrls(searchRequestTypeInfo);
+   private void buildNavigatorUrls() {
+      navigatorUrls = new NavigatorUrls(searchRequestTypeInfo);
       new FacetNavigatorUrlsProcessor(filterQueries, queryResponse.getFacetFields()).process(navigatorUrls);
       new SortNavigatorUrlsProcessor(headerParams).process(navigatorUrls);
-      return navigatorUrls;
    }
 
    public String getSortFieldName() {
