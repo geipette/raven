@@ -25,6 +25,11 @@ public class DefaultDocumentBuilder<T> implements DocumentBuilder<T> {
       return responseDocument;
    }
 
+   @Override
+   public Class<T> getDocumentType() {
+      return documentType;
+   }
+
    private void processDocument(SolrDocument solrDocument, T responseDocument) {
       final DocumentFieldHandlers<T> documentFieldHandlers = new DocumentFieldHandlers<T>(responseDocument);
       for (Map.Entry<String, Object> entry : solrDocument) {

@@ -95,6 +95,7 @@ public class SortNavigatorBuilderTest {
          String price;
       }
       when(navigation.getSortFieldName()).thenReturn("sort");
+      when(navigation.urlFor("sort", "price")).thenReturn("?sort=price");
 
       SortNavigatorBuilder sortNavigatorBuilder = new SortNavigatorBuilder(TestSearchResponse.class, navigation);
       SortNavigator sortNavigator = sortNavigatorBuilder.build();
@@ -166,6 +167,7 @@ public class SortNavigatorBuilderTest {
          String price;
       }
       when(navigation.getSortFieldName()).thenReturn("sort");
+      when(navigation.urlFor("sort", "1")).thenReturn("?sort=1");
 
       SortNavigatorBuilder sortNavigatorBuilder = new SortNavigatorBuilder(TestSearchResponse.class, navigation);
       SortNavigator sortNavigator = sortNavigatorBuilder.build();
@@ -184,7 +186,6 @@ public class SortNavigatorBuilderTest {
 
       new SortNavigatorBuilder(TestSearchResponse.class, navigation);
    }
-
 
    private SortNavigatorItem getFirstItem(SortNavigator sortNavigator) {
       List<SortNavigatorItem> navigatorItems = sortNavigator.getItems();

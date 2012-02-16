@@ -14,12 +14,12 @@ public class SortNavigator implements Navigator<SortNavigatorItem> {
 
    @Override
    public String getDisplayName() {
-      return null;
+      return "sort";
    }
 
    @Override
    public boolean isSelected() {
-      return false;
+      return !navigatorItems.getSelectedItems().isEmpty();
    }
 
    @Override

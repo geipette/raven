@@ -1,15 +1,16 @@
-package no.guttab.raven.search.filter;
+package no.guttab.raven.search;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import no.guttab.raven.search.filter.FilterQueries;
 import org.apache.solr.common.util.NamedList;
 import org.apache.solr.common.util.SimpleOrderedMap;
 
 import static org.springframework.util.Assert.notNull;
 
-class QueryResponseHeaderParams {
+public class QueryResponseHeaderParams {
 
    private final SimpleOrderedMap<?> map;
    private FilterQueries filterQueries;
@@ -24,6 +25,10 @@ class QueryResponseHeaderParams {
          filterQueries = new FilterQueries(getFqList());
       }
       return filterQueries;
+   }
+
+   public String getSort() {
+      return (String) map.get("sort");
    }
 
    @SuppressWarnings({"unchecked"})

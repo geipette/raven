@@ -13,11 +13,11 @@ public class ResponseProcessors<T> implements Iterable<ResponseProcessor<T>> {
 
    @SuppressWarnings({"unchecked"})
    public static <T> ResponseProcessors<T> defaultProcessors(
-         Class<?> searchRequestType, DocumentBuilder<T> documentFactory) {
+         Class<?> searchRequestType, DocumentBuilder<T> documentBuilder) {
       final SearchRequestTypeInfo searchRequestTypeInfo = new SearchRequestTypeInfo(searchRequestType);
       return new ResponseProcessors<T>(
-            new NavigatorsResponseProcessor<T>(searchRequestTypeInfo),
-            new DocumentContentResponseProcessor<T>(documentFactory)
+            new NavigatorsResponseProcessor<T>(searchRequestTypeInfo, documentBuilder.getDocumentType()),
+            new DocumentContentResponseProcessor<T>(documentBuilder)
       );
    }
 

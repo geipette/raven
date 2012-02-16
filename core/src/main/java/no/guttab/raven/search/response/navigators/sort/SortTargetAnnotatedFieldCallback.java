@@ -9,6 +9,7 @@ import no.guttab.raven.annotations.SortVariant;
 import no.guttab.raven.search.response.Navigation;
 import org.apache.commons.lang3.StringUtils;
 
+import static no.guttab.raven.annotations.SearchAnnotationUtils.getIndexFieldName;
 import static no.guttab.raven.annotations.SortDirection.ASCENDING;
 
 class SortTargetAnnotatedFieldCallback implements AnnotatedFieldCallback<SortTarget> {
@@ -37,9 +38,13 @@ class SortTargetAnnotatedFieldCallback implements AnnotatedFieldCallback<SortTar
       for (SortVariant sortVariant : sortTarget.variants()) {
          String displayName = resolveSortVariantDisplayName(field, sortTarget, sortVariant);
          String url = resolveUrl(field, sortVariant, navigation.getSortFieldName());
-         SortNavigatorItem item = new SortNavigatorItem(displayName, url);
+         SortNavigatorItem item = new SortNavigatorItem(displayName, url, resolveSortCriteria(field, sortVariant));
          result.add(item);
       }
+   }
+
+   private String resolveSortCriteria(Field field, SortVariant sortVariant) {
+      return getIndexFieldName(field) + " " + sortVariant.value().parameterValue();
    }
 
    private String resolveSortVariantDisplayName(Field field, SortTarget sortTarget, SortVariant sortVariant) {
@@ -75,7 +80,7 @@ class SortTargetAnnotatedFieldCallback implements AnnotatedFieldCallback<SortTar
    }
 
    private String resolveUrl(Field field, SortVariant annotation, String sortField) {
-      return "?" + sortField + "=" + resolveName(field, annotation);
+      return navigation.urlFor(sortField, resolveName(field, annotation));
    }
 
    private String resolveName(Field field, SortVariant annotation) {

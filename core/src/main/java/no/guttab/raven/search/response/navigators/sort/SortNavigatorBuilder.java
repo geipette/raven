@@ -27,10 +27,16 @@ public class SortNavigatorBuilder {
    }
 
    private void buildAndAddSortNavigatorItems() {
-      List<SortNavigatorItem> allItems = buildSortNavigatorItems();
+      final List<SortNavigatorItem> allItems = buildSortNavigatorItems();
       for (SortNavigatorItem item : allItems) {
          addSortNavigatorItem(item);
       }
+   }
+
+   private List<SortNavigatorItem> buildSortNavigatorItems() {
+      final List<SortNavigatorItem> result = new ArrayList<SortNavigatorItem>();
+      doForEachAnnotatedFieldOn(responseType, SortTarget.class, new SortTargetAnnotatedFieldCallback(navigation, result));
+      return result;
    }
 
    private void addSortNavigatorItem(SortNavigatorItem item) {
@@ -42,13 +48,7 @@ public class SortNavigatorBuilder {
    }
 
    private boolean isSelectedItem(SortNavigatorItem item) {
-      return false;
-   }
-
-   private List<SortNavigatorItem> buildSortNavigatorItems() {
-      final List<SortNavigatorItem> result = new ArrayList<SortNavigatorItem>();
-      doForEachAnnotatedFieldOn(responseType, SortTarget.class, new SortTargetAnnotatedFieldCallback(navigation, result));
-      return result;
+      return item.getSortCriteria().equals(navigation.getSortValue());
    }
 
    public static class NoSortFieldException extends RuntimeException {

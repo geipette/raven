@@ -9,19 +9,19 @@ import org.springframework.util.Assert;
 public class UrlFragment {
    private static final String ENCODING = Charset.forName("ISO_8859-1").name();
 
-   private String requestFieldName;
-   private String fqCriteria;
+   private String key;
+   private String value;
 
-   public UrlFragment(String requestFieldName, String fqCriteria) {
-      Assert.notNull(requestFieldName, "requestFieldName can not be null");
-      Assert.notNull(fqCriteria, "fqCriteria can not be null");
-      this.requestFieldName = requestFieldName;
-      this.fqCriteria = fqCriteria;
+   public UrlFragment(String key, String value) {
+      Assert.notNull(key, "key can not be null");
+      Assert.notNull(value, "value can not be null");
+      this.key = key;
+      this.value = value;
    }
 
    @Override
    public String toString() {
-      return encode(requestFieldName) + '=' + encode(fqCriteria);
+      return encode(key) + '=' + encode(value);
    }
 
    private String encode(String unEncoded) {
@@ -39,16 +39,16 @@ public class UrlFragment {
 
       UrlFragment that = (UrlFragment) o;
 
-      if (requestFieldName != null ? !requestFieldName.equals(that.requestFieldName) : that.requestFieldName != null) return false;
-      if (fqCriteria != null ? !fqCriteria.equals(that.fqCriteria) : that.fqCriteria != null) return false;
+      if (key != null ? !key.equals(that.key) : that.key != null) return false;
+      if (value != null ? !value.equals(that.value) : that.value != null) return false;
 
       return true;
    }
 
    @Override
    public int hashCode() {
-      int result = requestFieldName != null ? requestFieldName.hashCode() : 0;
-      result = 31 * result + (fqCriteria != null ? fqCriteria.hashCode() : 0);
+      int result = key != null ? key.hashCode() : 0;
+      result = 31 * result + (value != null ? value.hashCode() : 0);
       return result;
    }
 
