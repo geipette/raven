@@ -3,12 +3,16 @@ package no.guttab.raven.webapp.controller;
 import java.util.List;
 
 import no.guttab.raven.annotations.IndexFieldName;
+import no.guttab.raven.annotations.SortDirection;
+import no.guttab.raven.annotations.SortTarget;
+import no.guttab.raven.annotations.SortVariant;
 import org.joda.time.DateTime;
 
 public class DemoDocument {
    @IndexFieldName("cat")
    private List<String> categories;
    private String[] features;
+   @SortTarget
    private String id;
    private boolean inStock;
    @IndexFieldName("manu")
@@ -16,6 +20,7 @@ public class DemoDocument {
    @IndexFieldName("manufacturedate_dt")
    private DateTime manufacturedDate;
    private String name;
+   @SortTarget(variants = @SortVariant(SortDirection.DESCENDING))
    private Integer popularity;
    private Float price;
    private String store;

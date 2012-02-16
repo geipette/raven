@@ -5,6 +5,7 @@ import java.util.List;
 import no.guttab.raven.annotations.FacetField;
 import no.guttab.raven.annotations.FilterQuery;
 import no.guttab.raven.annotations.IndexFieldName;
+import no.guttab.raven.annotations.Sort;
 import org.junit.Test;
 
 import static org.hamcrest.core.Is.is;
@@ -64,6 +65,21 @@ public class SearchRequestTypeInfoTest {
       String actual = searchRequestConfig.requestFieldNameFor("req");
 
       assertThat(actual, is("aRequestFieldName"));
+   }
+
+   @Test
+   public void requestFieldNameFor_should_return_annotated_sort_field_when_called_with_sort_field_name() throws Exception {
+      class TestRequest {
+         @Sort
+         String sortField;
+      }
+
+      SearchRequestTypeInfo searchRequestConfig = new SearchRequestTypeInfo(TestRequest.class);
+
+      String actual = searchRequestConfig.requestFieldNameFor("sortField");
+
+      assertThat(actual, is("sortField"));
+
    }
 
    @Test

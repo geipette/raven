@@ -7,6 +7,7 @@ import no.guttab.raven.search.query.FacetFieldQueryProcessor;
 import no.guttab.raven.search.query.FilterQueryProcessor;
 import no.guttab.raven.search.query.QueryProcessor;
 import no.guttab.raven.search.query.QueryStringQueryProcessor;
+import no.guttab.raven.search.query.SortQueryProcessor;
 import org.apache.solr.client.solrj.SolrQuery;
 
 import static java.util.Arrays.asList;
@@ -18,7 +19,8 @@ public class QueryBuilder {
       this(asList(
             new FacetFieldQueryProcessor(),
             new FilterQueryProcessor(),
-            new QueryStringQueryProcessor()
+            new QueryStringQueryProcessor(),
+            new SortQueryProcessor()
       ));
    }
 

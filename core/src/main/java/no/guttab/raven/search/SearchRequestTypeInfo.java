@@ -33,6 +33,7 @@ public class SearchRequestTypeInfo {
          @Override
          public void doFor(Field field, Sort annotation) {
             sortFieldName = field.getName();
+            indexFieldNameMap.put(sortFieldName, sortFieldName);
          }
       });
    }

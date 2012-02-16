@@ -7,6 +7,7 @@ import no.guttab.raven.annotations.FacetField;
 import no.guttab.raven.annotations.IndexFieldName;
 import no.guttab.raven.annotations.Query;
 import no.guttab.raven.annotations.SearchRequest;
+import no.guttab.raven.annotations.Sort;
 
 
 @SuppressWarnings({"FieldCanBeLocal"})
@@ -18,6 +19,9 @@ public class DemoSearchRequest {
 
    @FacetField
    private String inStock;
+
+   @Sort
+   private String sort;
 
    @Query
    @NotNull

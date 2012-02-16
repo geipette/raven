@@ -7,17 +7,28 @@
 <h2>Selected</h2>
 <c:forEach var="navigator" items="${searchResponse.selectedNavigators}">
    <c:forEach var="item" items="${navigator.selectedItems}">
-      <p><a href="${item.url}">${item.name} (${item.count})</a> <a href="${item.deselectUrl}">(x) - deselect</a></p>
+      <%--@elvariable id="item" type="no.guttab.raven.search.response.navigators.NavigatorItem"--%>
+      <p><a href="${item.url}">${item.name}</a> <a href="${item.deselectUrl}">(x) - deselect</a></p>
    </c:forEach>
 </c:forEach>
 
 <h2>Unselected</h2>
 <c:forEach var="navigator" items="${searchResponse.navigators}">
    <h3>${navigator.displayName}</h3>
-   <c:forEach var="item" items="${navigator.items}">
-      <%--@elvariable id="item" type="no.guttab.raven.search.response.navigators.select.SelectNavigatorItem"--%>
-      <p><a href="${item.url}">${item.name} (${item.count})</a></p>
-   </c:forEach>
+   <c:choose>
+      <c:when test="${navigator.displayName eq 'sort'}">
+         <c:forEach var="item" items="${navigator.items}">
+            <%--@elvariable id="item" type="no.guttab.raven.search.response.navigators.NavigatorItem"--%>
+            <p><a href="${item.url}">${item.name}</a></p>
+         </c:forEach>
+      </c:when>
+      <c:otherwise>
+         <c:forEach var="item" items="${navigator.items}">
+            <%--@elvariable id="item" type="no.guttab.raven.search.response.navigators.select.SelectNavigatorItem"--%>
+            <p><a href="${item.url}">${item.name} (${item.count})</a></p>
+         </c:forEach>
+      </c:otherwise>
+   </c:choose>
 </c:forEach>
 
 <h2>Results</h2>
@@ -26,11 +37,14 @@
 <c:forEach var="document" items="${searchResponse.documents}">
    <%--@elvariable id="document" type="no.guttab.raven.webapp.controller.DemoDocument"--%>
    <hr/>
-   <p>${document.name}</p>
+   <p>Name: ${document.name}</p>
 
-   <p>${document.manufacturer}</p>
+   <p>Manufacturer: ${document.manufacturer}</p>
 
-   <p>${document.manufacturedDate}</p>
+   <p>Maufactured date: ${document.manufacturedDate}</p>
+
+   <p>Popularity: ${document.popularity}</p>
+
    <h6>Categories</h6>
    <ul>
       <c:forEach var="cat" items="${document.categories}">
