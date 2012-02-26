@@ -1,4 +1,9 @@
 package no.guttab.raven.search;
 
-public class SearchContext {
+import no.guttab.raven.search.response.ResponseBuilder;
+
+public interface SearchContext<T> {
+    QueryBuilder queryBuilder();
+
+    ResponseBuilder<T> responseBuilder();
 }
