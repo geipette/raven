@@ -1,7 +1,6 @@
 package no.guttab.raven.search.response.navigators.sort;
 
 import no.guttab.raven.search.response.navigators.NavigatorUrls;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -17,7 +16,6 @@ public class SortNavigatorUrlsProcessorTest {
     private NavigatorUrls navigatorUrls;
 
 
-    @Ignore("not implemented")
     @Test
     public void when_sortValue_ends_with_asc__the_generated_url_fragment_should_not_end_with_asc() {
         SortNavigatorUrlsProcessor sortNavigatorUrlsProcessor =
@@ -27,7 +25,6 @@ public class SortNavigatorUrlsProcessorTest {
         verify(navigatorUrls).addUrlFragment("sort", "popularity");
     }
 
-    @Ignore("not implemented")
     @Test
     public void when_sortValue_ends_with_desc__the_generated_url_fragment_should_be_prefixed_with_minus_and_not_end_with_desc() {
         SortNavigatorUrlsProcessor sortNavigatorUrlsProcessor =
