@@ -1,12 +1,12 @@
 package no.guttab.raven.search;
 
 import no.guttab.raven.search.query.*;
-import no.guttab.raven.search.response.NavigatorsResponseProcessor;
 import no.guttab.raven.search.response.ResponseBuilder;
 import no.guttab.raven.search.response.ResponseProcessor;
 import no.guttab.raven.search.response.content.DefaultDocumentBuilder;
 import no.guttab.raven.search.response.content.DocumentBuilder;
 import no.guttab.raven.search.response.content.DocumentContentResponseProcessor;
+import no.guttab.raven.search.response.navigators.NavigatorsResponseProcessor;
 
 import java.util.List;
 
@@ -26,7 +26,7 @@ public class DefaultSearchContext<T> implements SearchContext<T> {
         return new QueryBuilder(queryProcessors());
     }
 
-    private List<QueryProcessor> queryProcessors() {
+    protected List<QueryProcessor> queryProcessors() {
         return asList(
                 new FacetFieldQueryProcessor(),
                 new FilterQueryProcessor(),

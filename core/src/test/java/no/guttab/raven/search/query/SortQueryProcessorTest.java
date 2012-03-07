@@ -45,6 +45,20 @@ public class SortQueryProcessorTest {
         Mockito.verifyNoMoreInteractions(solrQuery);
     }
 
+    @Test
+    public void when_sort_field_is_prefixed_with_minus_sort_should_be_descending() throws Exception {
+        class TestQuery {
+            @Sort
+            String sortField = "-popularity";
+        }
+
+        SortQueryProcessor queryProcessor = new SortQueryProcessor();
+        TestQuery input = new TestQuery();
+        queryProcessor.buildQuery(input, solrQuery);
+
+        Mockito.verify(solrQuery).setSortField("popularity", SolrQuery.ORDER.desc);
+    }
+
 
     @Test
     @Ignore
