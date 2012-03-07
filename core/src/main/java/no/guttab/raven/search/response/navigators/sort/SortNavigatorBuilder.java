@@ -1,5 +1,7 @@
 package no.guttab.raven.search.response.navigators.sort;
 
+import no.guttab.raven.annotations.SortOrder;
+import no.guttab.raven.annotations.SortOrders;
 import no.guttab.raven.annotations.SortTarget;
 import no.guttab.raven.search.response.navigators.ImmutableNavigatorItems;
 
@@ -35,6 +37,12 @@ class SortNavigatorBuilder {
     private List<SortNavigatorItem> buildSortNavigatorItems() {
         final List<SortNavigatorItem> result = new ArrayList<SortNavigatorItem>();
         doForEachAnnotatedFieldOn(responseType, SortTarget.class, new SortTargetAnnotatedFieldCallback(navigation, result));
+        SortOrders sortOrders = responseType.getAnnotation(SortOrders.class);
+        if (sortOrders != null && sortOrders.value() != null) {
+            for (SortOrder sortOrder : sortOrders.value()) {
+                result.add(new SortNavigatorItem(sortOrder.value(), navigation.urlFor(navigation.getSortFieldName(), sortOrder.sortOrdering()), sortOrder.sortOrdering()));
+            }
+        }
         return result;
     }
 

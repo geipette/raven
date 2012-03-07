@@ -5,8 +5,6 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE})
 @Documented
-public @interface SortOrder {
-    String value();
-
-    String sortOrdering();
+public @interface SortOrders {
+    SortOrder[] value() default {};
 }

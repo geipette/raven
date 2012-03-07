@@ -2,14 +2,11 @@ package no.guttab.raven.search.query;
 
 import no.guttab.raven.annotations.Sort;
 import org.apache.solr.client.solrj.SolrQuery;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
-
-import static org.junit.Assert.fail;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SortQueryProcessorTest {
@@ -58,14 +55,4 @@ public class SortQueryProcessorTest {
 
         Mockito.verify(solrQuery).setSortField("popularity", SolrQuery.ORDER.desc);
     }
-
-
-    @Test
-    @Ignore
-    public void fail_this_test() throws Exception {
-        // TODO: Implement @SortOrder, @SortTarget and @SortVariant
-        fail("Not implemented");
-    }
-
-
 }

@@ -1,7 +1,10 @@
 package no.guttab.raven.search.response.navigators.sort;
 
+import no.guttab.raven.annotations.SortOrder;
+import no.guttab.raven.annotations.SortOrders;
 import no.guttab.raven.annotations.SortTarget;
 import no.guttab.raven.annotations.SortVariant;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -22,6 +25,10 @@ public class SortNavigatorBuilderTest {
     @Mock
     private SortNavigation navigation;
 
+    @Before
+    public void setUp() throws Exception {
+        when(navigation.getSortFieldName()).thenReturn("sort");
+    }
 
     @Test
     public void when_a_field_is_annotated_with_SortTarget_build_should_create_sort_navigator_item() throws Exception {
@@ -29,7 +36,6 @@ public class SortNavigatorBuilderTest {
             @SortTarget
             String price;
         }
-        when(navigation.getSortFieldName()).thenReturn("sort");
 
         SortNavigatorBuilder sortNavigatorBuilder = new SortNavigatorBuilder(TestSearchResponse.class, navigation);
         SortNavigator actual = sortNavigatorBuilder.build();
@@ -43,7 +49,6 @@ public class SortNavigatorBuilderTest {
             @SortTarget
             String price;
         }
-        when(navigation.getSortFieldName()).thenReturn("sort");
 
         SortNavigatorBuilder sortNavigatorBuilder = new SortNavigatorBuilder(TestSearchResponse.class, navigation);
         SortNavigator sortNavigator = sortNavigatorBuilder.build();
@@ -61,7 +66,6 @@ public class SortNavigatorBuilderTest {
             })
             String price;
         }
-        when(navigation.getSortFieldName()).thenReturn("sort");
 
         SortNavigatorBuilder sortNavigatorBuilder = new SortNavigatorBuilder(TestSearchResponse.class, navigation);
         SortNavigator sortNavigator = sortNavigatorBuilder.build();
@@ -78,7 +82,6 @@ public class SortNavigatorBuilderTest {
             @SortTarget(displayName = "Pris")
             String price;
         }
-        when(navigation.getSortFieldName()).thenReturn("sort");
 
         SortNavigatorBuilder sortNavigatorBuilder = new SortNavigatorBuilder(TestSearchResponse.class, navigation);
         SortNavigator sortNavigator = sortNavigatorBuilder.build();
@@ -93,7 +96,6 @@ public class SortNavigatorBuilderTest {
             @SortTarget(displayName = "Pris")
             String price;
         }
-        when(navigation.getSortFieldName()).thenReturn("sort");
         when(navigation.urlFor("sort", "price")).thenReturn("?sort=price");
 
         SortNavigatorBuilder sortNavigatorBuilder = new SortNavigatorBuilder(TestSearchResponse.class, navigation);
@@ -109,7 +111,6 @@ public class SortNavigatorBuilderTest {
             @SortTarget(displayName = "Pris synkende", variants = @SortVariant(DESCENDING))
             String price;
         }
-        when(navigation.getSortFieldName()).thenReturn("sort");
 
         SortNavigatorBuilder sortNavigatorBuilder = new SortNavigatorBuilder(TestSearchResponse.class, navigation);
         SortNavigator sortNavigator = sortNavigatorBuilder.build();
@@ -124,7 +125,6 @@ public class SortNavigatorBuilderTest {
             @SortTarget(displayName = "Pris", variants = {@SortVariant(ASCENDING), @SortVariant(DESCENDING)})
             String price;
         }
-        when(navigation.getSortFieldName()).thenReturn("sort");
 
         SortNavigatorBuilder sortNavigatorBuilder = new SortNavigatorBuilder(TestSearchResponse.class, navigation);
         SortNavigator sortNavigator = sortNavigatorBuilder.build();
@@ -146,7 +146,6 @@ public class SortNavigatorBuilderTest {
                     })
             String price;
         }
-        when(navigation.getSortFieldName()).thenReturn("sort");
 
         SortNavigatorBuilder sortNavigatorBuilder = new SortNavigatorBuilder(TestSearchResponse.class, navigation);
         SortNavigator sortNavigator = sortNavigatorBuilder.build();
@@ -157,7 +156,6 @@ public class SortNavigatorBuilderTest {
         assertThat(actual.get(0).getName(), is("Pris lav/høy"));
         assertThat(actual.get(1).getName(), is("Pris høy/lav"));
     }
-
 
     @Test
     public void sortNavigatorItem_url_should_use_name_corresponding_to_SearchRequest_Sort_annotation() throws Exception {
@@ -173,6 +171,21 @@ public class SortNavigatorBuilderTest {
         SortNavigatorItem actualItem = getFirstItem(sortNavigator);
 
         assertThat(actualItem.getUrl(), is("?sort=1"));
+    }
+
+
+    @Test
+    public void when_SortOrder_set_a_corresponding_SortNavigator_should_be_added() throws Exception {
+        @SortOrders(
+                @SortOrder(value = "Pris økende", sortOrdering = "price asc, score desc")
+        )
+        class TestSearchResponse {
+        }
+        SortNavigatorBuilder sortNavigatorBuilder = new SortNavigatorBuilder(TestSearchResponse.class, navigation);
+        SortNavigator sortNavigator = sortNavigatorBuilder.build();
+        SortNavigatorItem actualItem = getFirstItem(sortNavigator);
+
+        assertThat(actualItem.getSortCriteria(), is("price asc, score desc"));
     }
 
 
