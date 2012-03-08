@@ -41,9 +41,21 @@ class SortTargetAnnotatedFieldCallback implements AnnotatedFieldCallback<SortTar
 
     private void addNavigatorItemFor(SortVariant sortVariant, Field field, SortTarget sortTarget) {
         String displayName = resolveSortVariantDisplayName(field, sortTarget, sortVariant);
+        String sortCriteria = resolveSortCriteria(field, sortVariant);
         String url = resolveUrl(field, sortVariant, navigation.getSortFieldName());
-        SortNavigatorItem item = new SortNavigatorItem(displayName, url, resolveSortCriteria(field, sortVariant));
-        result.add(item);
+        if (isSelected(sortCriteria)) {
+            result.add(new SortNavigatorItem(
+                    displayName,
+                    sortCriteria,
+                    url,
+                    resolveResetUrl(field, sortVariant, navigation.getSortFieldName())));
+        } else {
+            result.add(new SortNavigatorItem(displayName, sortCriteria, url));
+        }
+    }
+
+    private boolean isSelected(String sortCriteria) {
+        return sortCriteria != null && sortCriteria.equals(navigation.getSortValue());
     }
 
     private String resolveSortCriteria(Field field, SortVariant sortVariant) {
@@ -80,6 +92,10 @@ class SortTargetAnnotatedFieldCallback implements AnnotatedFieldCallback<SortTar
 
     private String sortVariantDirectionPrefixed(String value, SortVariant sortVariant) {
         return sortVariant.value() == ASCENDING ? value : "-" + value;
+    }
+
+    private String resolveResetUrl(Field field, SortVariant sortVariant, String sortFieldName) {
+        return navigation.resetUrlFor(sortFieldName, resolveName(field, sortVariant));
     }
 
     private String resolveUrl(Field field, SortVariant annotation, String sortField) {

@@ -8,5 +8,5 @@ import java.lang.annotation.*;
 public @interface SortOrder {
     String value();
 
-    String sortOrdering();
+    String sortCriteria();
 }

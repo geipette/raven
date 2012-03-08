@@ -36,26 +36,58 @@ class SortNavigatorBuilder {
 
     private List<SortNavigatorItem> buildSortNavigatorItems() {
         final List<SortNavigatorItem> result = new ArrayList<SortNavigatorItem>();
-        doForEachAnnotatedFieldOn(responseType, SortTarget.class, new SortTargetAnnotatedFieldCallback(navigation, result));
-        SortOrders sortOrders = responseType.getAnnotation(SortOrders.class);
-        if (sortOrders != null && sortOrders.value() != null) {
-            for (SortOrder sortOrder : sortOrders.value()) {
-                result.add(new SortNavigatorItem(sortOrder.value(), navigation.urlFor(navigation.getSortFieldName(), sortOrder.sortOrdering()), sortOrder.sortOrdering()));
-            }
-        }
+        buildNavigatorItemsForSortTargets(result);
+        buildNavigatorItemsForSortOrders(result);
         return result;
     }
 
+    private void buildNavigatorItemsForSortTargets(List<SortNavigatorItem> result) {
+        doForEachAnnotatedFieldOn(responseType, SortTarget.class, new SortTargetAnnotatedFieldCallback(navigation, result));
+    }
+
+    private void buildNavigatorItemsForSortOrders(List<SortNavigatorItem> result) {
+        SortOrders sortOrders = responseType.getAnnotation(SortOrders.class);
+        if (sortOrders != null && sortOrders.value() != null) {
+            for (SortOrder sortOrder : sortOrders.value()) {
+                result.add(createNavigatorItemFor(sortOrder));
+            }
+        }
+    }
+
+    private SortNavigatorItem createNavigatorItemFor(SortOrder sortOrder) {
+        if (isSelected(sortOrder)) {
+            return new SortNavigatorItem(sortOrder.value(), sortOrder.sortCriteria(), urlFor(sortOrder), resetUrlFor(sortOrder));
+        } else {
+            return new SortNavigatorItem(sortOrder.value(), sortOrder.sortCriteria(), urlFor(sortOrder));
+        }
+    }
+
+    private String resetUrlFor(SortOrder sortOrder) {
+        return navigation.resetUrlFor(navigation.getSortFieldName(), sortOrder.sortCriteria());
+    }
+
+    private String urlFor(SortOrder sortOrder) {
+        return navigation.urlFor(navigation.getSortFieldName(), sortOrder.sortCriteria());
+    }
+
     private void addSortNavigatorItem(SortNavigatorItem item) {
-        if (isSelectedItem(item)) {
+        if (isSelected(item)) {
             selectedItems.add(item);
         } else {
             items.add(item);
         }
     }
 
-    private boolean isSelectedItem(SortNavigatorItem item) {
-        return item.getSortCriteria().equals(navigation.getSortValue());
+    private boolean isSelected(SortOrder sortOrder) {
+        return isSelected(sortOrder.sortCriteria());
+    }
+
+    private boolean isSelected(SortNavigatorItem item) {
+        return isSelected(item.getSortCriteria());
+    }
+
+    private boolean isSelected(String sortCriteria) {
+        return sortCriteria != null && sortCriteria.equals(navigation.getSortValue());
     }
 
     public static class NoSortFieldException extends RuntimeException {
