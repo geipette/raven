@@ -127,5 +127,80 @@ public class NavigatorUrlsTest {
         ));
     }
 
+    @Test
+    public void buildUrlFor_should_remove_volatile_fragments_when_building_a_url_for_a_normal_fragment()
+            throws Exception {
+        NavigatorUrls navigatorUrls = new NavigatorUrls(searchRequestConfig);
+        when(searchRequestConfig.requestFieldNameFor("sort")).thenReturn("sortorder");
+        when(searchRequestConfig.requestFieldNameFor("cat")).thenReturn("category");
+
+        navigatorUrls.addUrlFragment("cat", "electronics");
+        navigatorUrls.addVolatileUrlFragment("sort", "2");
+
+        String actual = navigatorUrls.buildUrlFor("cat", "motors");
+
+        assertThat(actual, equalTo("?category=motors"));
+    }
+
+    @Test
+    public void buildUrlFor_should_remove_volatile_fragments_when_resetting_a_url_for_a_normal_fragment()
+            throws Exception {
+        NavigatorUrls navigatorUrls = new NavigatorUrls(searchRequestConfig);
+        when(searchRequestConfig.requestFieldNameFor("sort")).thenReturn("sortorder");
+        when(searchRequestConfig.requestFieldNameFor("cat")).thenReturn("category");
+
+        navigatorUrls.addUrlFragment("cat", "electronics");
+        navigatorUrls.addVolatileUrlFragment("sort", "2");
+
+        String actual = navigatorUrls.resetUrlFor("cat");
+
+        assertThat(actual, equalTo("?"));
+    }
+
+    @Test
+    public void buildUrlFor_keep_volatile_fragments_when_resetting_a_url_for_a_volatile_fragment()
+            throws Exception {
+        NavigatorUrls navigatorUrls = new NavigatorUrls(searchRequestConfig);
+        when(searchRequestConfig.requestFieldNameFor("sort")).thenReturn("sortorder");
+        when(searchRequestConfig.requestFieldNameFor("cat")).thenReturn("category");
+        when(searchRequestConfig.requestFieldNameFor("page")).thenReturn("page");
+
+        navigatorUrls.addUrlFragment("cat", "electronics");
+        navigatorUrls.addVolatileUrlFragment("sort", "2");
+        navigatorUrls.addVolatileUrlFragment("page", "2");
+
+        String actual = navigatorUrls.resetUrlFor("page");
+
+        assertThat(actual, anyOf(
+                equalTo("?category=electronics&sortorder=2"),
+                equalTo("?sortorder=2&category=electronics")
+        ));
+    }
+
+    @Test
+    public void buildUrlFor_should_keep_volatile_fragments_when_building_a_url_for_a_volatile_fragment()
+            throws Exception {
+        NavigatorUrls navigatorUrls = new NavigatorUrls(searchRequestConfig);
+        when(searchRequestConfig.requestFieldNameFor("sort")).thenReturn("sortorder");
+        when(searchRequestConfig.requestFieldNameFor("cat")).thenReturn("category");
+        when(searchRequestConfig.requestFieldNameFor("page")).thenReturn("page");
+
+        navigatorUrls.addUrlFragment("cat", "electronics");
+        navigatorUrls.addVolatileUrlFragment("sort", "2");
+        navigatorUrls.addVolatileUrlFragment("page", "2");
+
+        String actual = navigatorUrls.buildUrlFor("page", "5");
+
+        assertThat(actual, anyOf(
+                equalTo("?category=electronics&sortorder=2&page=5"),
+                equalTo("?category=electronics&page=5&sortorder=2"),
+                equalTo("?sortorder=2&category=electronics&page=5"),
+                equalTo("?sortorder=2&page=5&category=electronics"),
+                equalTo("?page=5&category=electronics&sortorder=2"),
+                equalTo("?page=5&sortorder=2&category=electronics")
+        ));
+
+    }
+
 
 }

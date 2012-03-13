@@ -16,249 +16,249 @@ import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class UrlFragmentsTest {
-   @Mock
-   private SearchRequestTypeInfo searchRequestConfig;
+    @Mock
+    private SearchRequestTypeInfo searchRequestConfig;
 
-   private UrlFragments urlFragments;
+    private UrlFragments urlFragments;
 
-   @Before
-   public void setUp() throws Exception {
-      urlFragments = new UrlFragments(searchRequestConfig);
-   }
+    @Before
+    public void setUp() throws Exception {
+        urlFragments = new UrlFragments(searchRequestConfig);
+    }
 
-   @Test
-   public void iterator_should_include_added_urlFragment() throws Exception {
-      urlFragments.addFragment("aIndexFieldName", new UrlFragment("urlKey", "urlValue"));
+    @Test
+    public void iterator_should_include_added_urlFragment() throws Exception {
+        urlFragments.addFragment("aIndexFieldName", new UrlFragment("urlKey", "urlValue"));
 
-      assertThat(urlFragments, hasElementCount(1));
-      UrlFragments.UrlFragmentEntry expectedUrlFragmentEntry = entry("aIndexFieldName", "urlKey", "urlValue");
-      assertThat(urlFragments, containsEntry(expectedUrlFragmentEntry));
-   }
+        assertThat(urlFragments, hasElementCount(1));
+        UrlFragmentEntry expectedUrlFragmentEntry = entry("aIndexFieldName", "urlKey", "urlValue");
+        assertThat(urlFragments, containsEntry(expectedUrlFragmentEntry));
+    }
 
-   @Test
-   public void iterator_should_include_only_the_last_added_urlFragment_with_same_key_when_indexField_is_singleSelect() throws Exception {
-      when(searchRequestConfig.isIndexFieldMultiSelect("aIndexFieldName")).thenReturn(false);
-      urlFragments.addFragment("aIndexFieldName", new UrlFragment("urlKey1", "urlValue1"));
-      urlFragments.addFragment("aIndexFieldName", new UrlFragment("urlKey1", "urlValue2"));
+    @Test
+    public void iterator_should_include_only_the_last_added_urlFragment_with_same_key_when_indexField_is_singleSelect() throws Exception {
+        when(searchRequestConfig.isIndexFieldMultiSelect("aIndexFieldName")).thenReturn(false);
+        urlFragments.addFragment("aIndexFieldName", new UrlFragment("urlKey1", "urlValue1"));
+        urlFragments.addFragment("aIndexFieldName", new UrlFragment("urlKey1", "urlValue2"));
 
-      assertThat(urlFragments, hasElementCount(1));
+        assertThat(urlFragments, hasElementCount(1));
 
-      UrlFragments.UrlFragmentEntry expectedUrlFragmentEntry = entry("aIndexFieldName", "urlKey1", "urlValue2");
-      assertThat(urlFragments, containsEntry(expectedUrlFragmentEntry));
-   }
+        UrlFragmentEntry expectedUrlFragmentEntry = entry("aIndexFieldName", "urlKey1", "urlValue2");
+        assertThat(urlFragments, containsEntry(expectedUrlFragmentEntry));
+    }
 
-   @Test
-   public void iterator_should_include_added_urlFragments_with_same_key_when_indexField_is_multiSelect() throws Exception {
-      when(searchRequestConfig.isIndexFieldMultiSelect("aIndexFieldName")).thenReturn(true);
-      urlFragments.addFragment("aIndexFieldName", new UrlFragment("urlKey1", "urlValue1"));
-      urlFragments.addFragment("aIndexFieldName", new UrlFragment("urlKey1", "urlValue2"));
+    @Test
+    public void iterator_should_include_added_urlFragments_with_same_key_when_indexField_is_multiSelect() throws Exception {
+        when(searchRequestConfig.isIndexFieldMultiSelect("aIndexFieldName")).thenReturn(true);
+        urlFragments.addFragment("aIndexFieldName", new UrlFragment("urlKey1", "urlValue1"));
+        urlFragments.addFragment("aIndexFieldName", new UrlFragment("urlKey1", "urlValue2"));
 
-      assertThat(urlFragments, hasElementCount(2));
+        assertThat(urlFragments, hasElementCount(2));
 
-      UrlFragments.UrlFragmentEntry expectedUrlFragmentEntry1 = entry("aIndexFieldName", "urlKey1", "urlValue1");
-      assertThat(urlFragments, containsEntry(expectedUrlFragmentEntry1));
+        UrlFragmentEntry expectedUrlFragmentEntry1 = entry("aIndexFieldName", "urlKey1", "urlValue1");
+        assertThat(urlFragments, containsEntry(expectedUrlFragmentEntry1));
 
-      UrlFragments.UrlFragmentEntry expectedUrlFragmentEntry2 = entry("aIndexFieldName", "urlKey1", "urlValue2");
-      assertThat(urlFragments, containsEntry(expectedUrlFragmentEntry2));
-   }
+        UrlFragmentEntry expectedUrlFragmentEntry2 = entry("aIndexFieldName", "urlKey1", "urlValue2");
+        assertThat(urlFragments, containsEntry(expectedUrlFragmentEntry2));
+    }
 
-   @Test
-   public void withoutFragment_should_work_when_empty() throws Exception {
-      assertThat(urlFragments, hasElementCount(0));
-   }
+    @Test
+    public void withoutFragment_should_work_when_empty() throws Exception {
+        assertThat(urlFragments, hasElementCount(0));
+    }
 
-   @Test
-   public void withoutFragment_should_remove_remove_supplied_fragment_when_the_fragment_has_been_added() throws Exception {
-      urlFragments.addFragment("indexFieldName1", new UrlFragment("urlKey1", "urlValue"));
+    @Test
+    public void withoutFragment_should_remove_remove_supplied_fragment_when_the_fragment_has_been_added() throws Exception {
+        urlFragments.addFragment("indexFieldName1", new UrlFragment("urlKey1", "urlValue"));
 
-      UrlFragments actualFragments = urlFragments.withoutFragment(new UrlFragment("urlKey1", "urlValue"));
+        UrlFragments actualFragments = urlFragments.withoutFragment(new UrlFragment("urlKey1", "urlValue"));
 
-      assertThat(actualFragments, hasElementCount(0));
-   }
+        assertThat(actualFragments, hasElementCount(0));
+    }
 
-   @Test
-   public void withoutFragment_should_keep_other_fragment_when_a_fragment_has_been_removed() throws Exception {
-      urlFragments.addFragment("indexFieldName1", new UrlFragment("urlKey1", "urlValue"));
-      urlFragments.addFragment("indexFieldName2", new UrlFragment("urlKey2", "urlValue"));
+    @Test
+    public void withoutFragment_should_keep_other_fragment_when_a_fragment_has_been_removed() throws Exception {
+        urlFragments.addFragment("indexFieldName1", new UrlFragment("urlKey1", "urlValue"));
+        urlFragments.addFragment("indexFieldName2", new UrlFragment("urlKey2", "urlValue"));
 
-      UrlFragments actualFragments = urlFragments.withoutFragment(new UrlFragment("urlKey1", "urlValue"));
-      assertThat(actualFragments, hasElementCount(1));
+        UrlFragments actualFragments = urlFragments.withoutFragment(new UrlFragment("urlKey1", "urlValue"));
+        assertThat(actualFragments, hasElementCount(1));
 
-      UrlFragments.UrlFragmentEntry expectedUrlFragmentEntry = entry("indexFieldName2", "urlKey2", "urlValue");
-      assertThat(urlFragments, containsEntry(expectedUrlFragmentEntry));
-   }
+        UrlFragmentEntry expectedUrlFragmentEntry = entry("indexFieldName2", "urlKey2", "urlValue");
+        assertThat(urlFragments, containsEntry(expectedUrlFragmentEntry));
+    }
 
-   @Test
-   public void withoutFragment_should_keep_other_fragment_when_a_indexField_is_multiselect_and_fragment_with_same_indexField_has_been_removed() throws Exception {
-      when(searchRequestConfig.isIndexFieldMultiSelect("indexFieldName1")).thenReturn(true);
-      urlFragments.addFragment("indexFieldName1", new UrlFragment("urlKey1", "urlValue1"));
-      urlFragments.addFragment("indexFieldName1", new UrlFragment("urlKey1", "urlValue2"));
+    @Test
+    public void withoutFragment_should_keep_other_fragment_when_a_indexField_is_multiselect_and_fragment_with_same_indexField_has_been_removed() throws Exception {
+        when(searchRequestConfig.isIndexFieldMultiSelect("indexFieldName1")).thenReturn(true);
+        urlFragments.addFragment("indexFieldName1", new UrlFragment("urlKey1", "urlValue1"));
+        urlFragments.addFragment("indexFieldName1", new UrlFragment("urlKey1", "urlValue2"));
 
-      UrlFragments actualFragments = urlFragments.withoutFragment(new UrlFragment("urlKey1", "urlValue1"));
-      assertThat(actualFragments, hasElementCount(1));
+        UrlFragments actualFragments = urlFragments.withoutFragment(new UrlFragment("urlKey1", "urlValue1"));
+        assertThat(actualFragments, hasElementCount(1));
 
-      UrlFragments.UrlFragmentEntry expectedUrlFragmentEntry = entry("indexFieldName1", "urlKey1", "urlValue2");
-      assertThat(actualFragments, containsEntry(expectedUrlFragmentEntry));
-   }
+        UrlFragmentEntry expectedUrlFragmentEntry = entry("indexFieldName1", "urlKey1", "urlValue2");
+        assertThat(actualFragments, containsEntry(expectedUrlFragmentEntry));
+    }
 
-   @Test
-   public void withoutIndexField_should_remove_all_fragments_when_a_indexField_is_multiselect_and_has_been_removed() throws Exception {
-      when(searchRequestConfig.isIndexFieldMultiSelect("indexFieldName1")).thenReturn(true);
-      urlFragments.addFragment("indexFieldName1", new UrlFragment("urlKey1", "urlValue1"));
-      urlFragments.addFragment("indexFieldName1", new UrlFragment("urlKey1", "urlValue2"));
+    @Test
+    public void withoutIndexField_should_remove_all_fragments_when_a_indexField_is_multiselect_and_has_been_removed() throws Exception {
+        when(searchRequestConfig.isIndexFieldMultiSelect("indexFieldName1")).thenReturn(true);
+        urlFragments.addFragment("indexFieldName1", new UrlFragment("urlKey1", "urlValue1"));
+        urlFragments.addFragment("indexFieldName1", new UrlFragment("urlKey1", "urlValue2"));
 
-      UrlFragments actualFragments = urlFragments.withoutIndexField("indexFieldName1");
-      assertThat(actualFragments, hasElementCount(0));
-   }
+        UrlFragments actualFragments = urlFragments.withoutIndexField("indexFieldName1");
+        assertThat(actualFragments, hasElementCount(0));
+    }
 
-   @Test
-   public void withoutIndexField_should_keep_other_fragments_when_there_are_fragments_under_another_indexField_key() throws Exception {
-      when(searchRequestConfig.isIndexFieldMultiSelect("indexFieldName1")).thenReturn(true);
-      urlFragments.addFragment("indexFieldName1", new UrlFragment("urlKey1", "urlValue1"));
-      urlFragments.addFragment("indexFieldName1", new UrlFragment("urlKey1", "urlValue2"));
-      urlFragments.addFragment("indexFieldName2", new UrlFragment("urlKey2", "urlValue3"));
-      urlFragments.addFragment("indexFieldName3", new UrlFragment("urlKey3", "urlValue4"));
+    @Test
+    public void withoutIndexField_should_keep_other_fragments_when_there_are_fragments_under_another_indexField_key() throws Exception {
+        when(searchRequestConfig.isIndexFieldMultiSelect("indexFieldName1")).thenReturn(true);
+        urlFragments.addFragment("indexFieldName1", new UrlFragment("urlKey1", "urlValue1"));
+        urlFragments.addFragment("indexFieldName1", new UrlFragment("urlKey1", "urlValue2"));
+        urlFragments.addFragment("indexFieldName2", new UrlFragment("urlKey2", "urlValue3"));
+        urlFragments.addFragment("indexFieldName3", new UrlFragment("urlKey3", "urlValue4"));
 
-      UrlFragments actualFragments = urlFragments.withoutIndexField("indexFieldName1");
-      assertThat(actualFragments, hasElementCount(2));
+        UrlFragments actualFragments = urlFragments.withoutIndexField("indexFieldName1");
+        assertThat(actualFragments, hasElementCount(2));
 
-      UrlFragments.UrlFragmentEntry expectedUrlFragmentEntry1 = entry("indexFieldName2", "urlKey2", "urlValue3");
-      assertThat(actualFragments, containsEntry(expectedUrlFragmentEntry1));
+        UrlFragmentEntry expectedUrlFragmentEntry1 = entry("indexFieldName2", "urlKey2", "urlValue3");
+        assertThat(actualFragments, containsEntry(expectedUrlFragmentEntry1));
 
-      UrlFragments.UrlFragmentEntry expectedUrlFragmentEntry2 = entry("indexFieldName3", "urlKey3", "urlValue4");
+        UrlFragmentEntry expectedUrlFragmentEntry2 = entry("indexFieldName3", "urlKey3", "urlValue4");
 
-      assertThat(urlFragments, containsEntry(expectedUrlFragmentEntry2));
-   }
+        assertThat(urlFragments, containsEntry(expectedUrlFragmentEntry2));
+    }
 
-   @Test
-   public void withAddedFragment_should_replace_fragment_for_indexField_when_singleSelect() throws Exception {
-      when(searchRequestConfig.isIndexFieldMultiSelect("indexFieldName1")).thenReturn(false);
-      when(searchRequestConfig.requestFieldNameFor("indexFieldName1")).thenReturn("urlKey1");
-      urlFragments.addFragment("indexFieldName1", new UrlFragment("urlKey1", "urlValue1"));
+    @Test
+    public void withAddedFragment_should_replace_fragment_for_indexField_when_singleSelect() throws Exception {
+        when(searchRequestConfig.isIndexFieldMultiSelect("indexFieldName1")).thenReturn(false);
+        when(searchRequestConfig.requestFieldNameFor("indexFieldName1")).thenReturn("urlKey1");
+        urlFragments.addFragment("indexFieldName1", new UrlFragment("urlKey1", "urlValue1"));
 
-      UrlFragments actualFragments = urlFragments.withAddedFragment("indexFieldName1", "urlValue2");
-      assertThat(actualFragments, hasElementCount(1));
+        UrlFragments actualFragments = urlFragments.withAddedFragment("indexFieldName1", "urlValue2");
+        assertThat(actualFragments, hasElementCount(1));
 
-      UrlFragments.UrlFragmentEntry expectedUrlFragmentEntry = entry("indexFieldName1", "urlKey1", "urlValue2");
-      assertThat(actualFragments, containsEntry(expectedUrlFragmentEntry));
-   }
-
-
-   @Test
-   public void withAddedFragment_should_add_fragment_for_indexField_when_multiSelect() throws Exception {
-      when(searchRequestConfig.isIndexFieldMultiSelect("indexFieldName1")).thenReturn(true);
-      when(searchRequestConfig.requestFieldNameFor("indexFieldName1")).thenReturn("urlKey1");
-      when(searchRequestConfig.requestFieldNameFor("indexFieldName2")).thenReturn("urlKey2");
-      urlFragments.addFragment("indexFieldName1", new UrlFragment("urlKey1", "urlValue1"));
-      urlFragments.addFragment("indexFieldName2", new UrlFragment("urlKey2", "urlValue3"));
-
-      UrlFragments actualFragments = urlFragments.withAddedFragment("indexFieldName1", "urlValue2");
-      assertThat(actualFragments, hasElementCount(3));
-
-      UrlFragments.UrlFragmentEntry expectedUrlFragmentEntry1 = entry("indexFieldName1", "urlKey1", "urlValue1");
-      assertThat(actualFragments, containsEntry(expectedUrlFragmentEntry1));
-
-      UrlFragments.UrlFragmentEntry expectedUrlFragmentEntry2 = entry("indexFieldName1", "urlKey1", "urlValue2");
-      assertThat(actualFragments, containsEntry(expectedUrlFragmentEntry2));
-
-      UrlFragments.UrlFragmentEntry expectedUrlFragmentEntry3 = entry("indexFieldName2", "urlKey2", "urlValue3");
-      assertThat(actualFragments, containsEntry(expectedUrlFragmentEntry3));
-   }
-
-   @Test
-   public void withAddedFragment_should_not_add_fragment_when_it_already_exists() throws Exception {
-      when(searchRequestConfig.isIndexFieldMultiSelect("indexFieldName1")).thenReturn(true);
-      when(searchRequestConfig.requestFieldNameFor("indexFieldName1")).thenReturn("urlKey1");
-      when(searchRequestConfig.requestFieldNameFor("indexFieldName2")).thenReturn("urlKey2");
-
-      urlFragments.addFragment("indexFieldName1", new UrlFragment("urlKey1", "urlValue1"));
-      urlFragments.addFragment("indexFieldName2", new UrlFragment("urlKey2", "urlValue2"));
-
-      UrlFragments actualFragments = urlFragments.withAddedFragment("indexFieldName1", "urlValue1");
-      assertThat(actualFragments, hasElementCount(2));
-
-      UrlFragments.UrlFragmentEntry expectedUrlFragmentEntry1 = entry("indexFieldName1", "urlKey1", "urlValue1");
-      assertThat(actualFragments, containsEntry(expectedUrlFragmentEntry1));
-
-      UrlFragments.UrlFragmentEntry expectedUrlFragmentEntry3 = entry("indexFieldName2", "urlKey2", "urlValue2");
-      assertThat(actualFragments, containsEntry(expectedUrlFragmentEntry3));
-
-   }
-
-   private UrlFragments.UrlFragmentEntry entry(String indexFieldName, String requestFieldName, String fqCriteria) {
-      return new UrlFragments.UrlFragmentEntry(indexFieldName, new UrlFragment(requestFieldName, fqCriteria));
-   }
+        UrlFragmentEntry expectedUrlFragmentEntry = entry("indexFieldName1", "urlKey1", "urlValue2");
+        assertThat(actualFragments, containsEntry(expectedUrlFragmentEntry));
+    }
 
 
-   static class FragmentCount extends BaseMatcher<UrlFragments> {
+    @Test
+    public void withAddedFragment_should_add_fragment_for_indexField_when_multiSelect() throws Exception {
+        when(searchRequestConfig.isIndexFieldMultiSelect("indexFieldName1")).thenReturn(true);
+        when(searchRequestConfig.requestFieldNameFor("indexFieldName1")).thenReturn("urlKey1");
+        when(searchRequestConfig.requestFieldNameFor("indexFieldName2")).thenReturn("urlKey2");
+        urlFragments.addFragment("indexFieldName1", new UrlFragment("urlKey1", "urlValue1"));
+        urlFragments.addFragment("indexFieldName2", new UrlFragment("urlKey2", "urlValue3"));
 
-      private int expectedCount;
+        UrlFragments actualFragments = urlFragments.withAddedFragment("indexFieldName1", "urlValue2");
+        assertThat(actualFragments, hasElementCount(3));
 
-      FragmentCount(int expectedCount) {
-         this.expectedCount = expectedCount;
-      }
+        UrlFragmentEntry expectedUrlFragmentEntry1 = entry("indexFieldName1", "urlKey1", "urlValue1");
+        assertThat(actualFragments, containsEntry(expectedUrlFragmentEntry1));
 
-      public static FragmentCount hasElementCount(int expectedCount) {
-         return new FragmentCount(expectedCount);
-      }
+        UrlFragmentEntry expectedUrlFragmentEntry2 = entry("indexFieldName1", "urlKey1", "urlValue2");
+        assertThat(actualFragments, containsEntry(expectedUrlFragmentEntry2));
 
-      @Override
-      public boolean matches(Object o) {
-         if (o instanceof UrlFragments) {
-            UrlFragments urlFragments = (UrlFragments) o;
-            return elementCount(urlFragments) == expectedCount;
-         }
-         return false;
-      }
+        UrlFragmentEntry expectedUrlFragmentEntry3 = entry("indexFieldName2", "urlKey2", "urlValue3");
+        assertThat(actualFragments, containsEntry(expectedUrlFragmentEntry3));
+    }
 
-      private int elementCount(Iterable<?> iterable) {
-         int count = 0;
-         for (Object o : iterable) {
-            count++;
-         }
-         return count;
-      }
+    @Test
+    public void withAddedFragment_should_not_add_fragment_when_it_already_exists() throws Exception {
+        when(searchRequestConfig.isIndexFieldMultiSelect("indexFieldName1")).thenReturn(true);
+        when(searchRequestConfig.requestFieldNameFor("indexFieldName1")).thenReturn("urlKey1");
+        when(searchRequestConfig.requestFieldNameFor("indexFieldName2")).thenReturn("urlKey2");
 
-      @Override
-      public void describeTo(Description description) {
-         description.appendText("UrlFragments should contain exactly ").appendValue(expectedCount).appendText(" elements");
-      }
-   }
+        urlFragments.addFragment("indexFieldName1", new UrlFragment("urlKey1", "urlValue1"));
+        urlFragments.addFragment("indexFieldName2", new UrlFragment("urlKey2", "urlValue2"));
 
-   static class FragmentsContainsEntry extends BaseMatcher<UrlFragments> {
-      private UrlFragments.UrlFragmentEntry urlFragmentEntry;
+        UrlFragments actualFragments = urlFragments.withAddedFragment("indexFieldName1", "urlValue1");
+        assertThat(actualFragments, hasElementCount(2));
 
-      FragmentsContainsEntry(UrlFragments.UrlFragmentEntry urlFragmentEntry) {
-         this.urlFragmentEntry = urlFragmentEntry;
-      }
+        UrlFragmentEntry expectedUrlFragmentEntry1 = entry("indexFieldName1", "urlKey1", "urlValue1");
+        assertThat(actualFragments, containsEntry(expectedUrlFragmentEntry1));
 
-      public static FragmentsContainsEntry containsEntry(UrlFragments.UrlFragmentEntry urlFragmentEntry) {
-         return new FragmentsContainsEntry(urlFragmentEntry);
-      }
+        UrlFragmentEntry expectedUrlFragmentEntry3 = entry("indexFieldName2", "urlKey2", "urlValue2");
+        assertThat(actualFragments, containsEntry(expectedUrlFragmentEntry3));
 
-      @Override
-      public boolean matches(Object o) {
-         if (o instanceof UrlFragments) {
-            UrlFragments urlFragments = (UrlFragments) o;
-            return fragmentsContainsEntry(urlFragments, urlFragmentEntry);
-         }
-         return false;
-      }
+    }
 
-      private boolean fragmentsContainsEntry(UrlFragments urlFragments, UrlFragments.UrlFragmentEntry urlFragmentEntry) {
-         for (UrlFragments.UrlFragmentEntry fragment : urlFragments) {
-            if (urlFragmentEntry.getIndexFieldName().equals(fragment.getIndexFieldName()) && urlFragmentEntry.getFragment().equals(fragment.getFragment())) {
-               return true;
+    private UrlFragmentEntry entry(String indexFieldName, String requestFieldName, String fqCriteria) {
+        return new UrlFragmentEntry(indexFieldName, new UrlFragment(requestFieldName, fqCriteria));
+    }
+
+
+    static class FragmentCount extends BaseMatcher<UrlFragments> {
+
+        private int expectedCount;
+
+        FragmentCount(int expectedCount) {
+            this.expectedCount = expectedCount;
+        }
+
+        public static FragmentCount hasElementCount(int expectedCount) {
+            return new FragmentCount(expectedCount);
+        }
+
+        @Override
+        public boolean matches(Object o) {
+            if (o instanceof UrlFragments) {
+                UrlFragments urlFragments = (UrlFragments) o;
+                return elementCount(urlFragments) == expectedCount;
             }
-         }
-         return false;
-      }
+            return false;
+        }
 
-      @Override
-      public void describeTo(Description description) {
-         description.appendText("UrlFragments should contain: ").appendValue(urlFragmentEntry);
-      }
-   }
+        private int elementCount(Iterable<?> iterable) {
+            int count = 0;
+            for (Object o : iterable) {
+                count++;
+            }
+            return count;
+        }
+
+        @Override
+        public void describeTo(Description description) {
+            description.appendText("UrlFragments should contain exactly ").appendValue(expectedCount).appendText(" elements");
+        }
+    }
+
+    static class FragmentsContainsEntry extends BaseMatcher<UrlFragments> {
+        private UrlFragmentEntry urlFragmentEntry;
+
+        FragmentsContainsEntry(UrlFragmentEntry urlFragmentEntry) {
+            this.urlFragmentEntry = urlFragmentEntry;
+        }
+
+        public static FragmentsContainsEntry containsEntry(UrlFragmentEntry urlFragmentEntry) {
+            return new FragmentsContainsEntry(urlFragmentEntry);
+        }
+
+        @Override
+        public boolean matches(Object o) {
+            if (o instanceof UrlFragments) {
+                UrlFragments urlFragments = (UrlFragments) o;
+                return fragmentsContainsEntry(urlFragments, urlFragmentEntry);
+            }
+            return false;
+        }
+
+        private boolean fragmentsContainsEntry(UrlFragments urlFragments, UrlFragmentEntry urlFragmentEntry) {
+            for (UrlFragmentEntry fragment : urlFragments) {
+                if (urlFragmentEntry.getIndexFieldName().equals(fragment.getIndexFieldName()) && urlFragmentEntry.getFragment().equals(fragment.getFragment())) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        @Override
+        public void describeTo(Description description) {
+            description.appendText("UrlFragments should contain: ").appendValue(urlFragmentEntry);
+        }
+    }
 
 
 }
