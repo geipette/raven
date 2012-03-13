@@ -17,21 +17,21 @@ public class SortNavigatorUrlsProcessorTest {
 
 
     @Test
-    public void when_sortValue_ends_with_asc__the_generated_url_fragment_should_not_end_with_asc() {
+    public void when_sortValue_ends_with_asc__the_generated_url_fragment_should_end_with_asc() {
         SortNavigatorUrlsProcessor sortNavigatorUrlsProcessor =
                 new SortNavigatorUrlsProcessor("sort", "popularity asc");
         sortNavigatorUrlsProcessor.process(navigatorUrls);
 
-        verify(navigatorUrls).addUrlFragment("sort", "popularity");
+        verify(navigatorUrls).addVolatileUrlFragment("sort", "popularity asc");
     }
 
     @Test
-    public void when_sortValue_ends_with_desc__the_generated_url_fragment_should_be_prefixed_with_minus_and_not_end_with_desc() {
+    public void when_sortValue_ends_with_desc__the_generated_url_fragment_should_end_with_desc() {
         SortNavigatorUrlsProcessor sortNavigatorUrlsProcessor =
                 new SortNavigatorUrlsProcessor("sortField", "popularity desc");
         sortNavigatorUrlsProcessor.process(navigatorUrls);
 
-        verify(navigatorUrls).addUrlFragment("sortField", "-popularity");
+        verify(navigatorUrls).addVolatileUrlFragment("sortField", "popularity desc");
     }
 
     @Test
