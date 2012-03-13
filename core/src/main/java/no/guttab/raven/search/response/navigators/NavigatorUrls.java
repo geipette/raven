@@ -38,6 +38,7 @@ public class NavigatorUrls {
         return buildUrlFor(significantFragments, indexFieldName);
     }
 
+
     public String buildUrlFor(String indexFieldName, String fqCriteria) {
         final UrlFragments significantFragments = urlFragments.withAddedFragment(indexFieldName, fqCriteria);
         return buildUrlFor(significantFragments, indexFieldName);
