@@ -9,7 +9,6 @@ import java.lang.reflect.Field;
 import java.util.List;
 
 import static no.guttab.raven.annotations.SearchAnnotationUtils.getIndexFieldName;
-import static no.guttab.raven.annotations.SortDirection.ASCENDING;
 
 class SortTargetAnnotatedFieldCallback implements AnnotatedFieldCallback<SortTarget> {
     private SortNavigation navigation;
@@ -77,7 +76,7 @@ class SortTargetAnnotatedFieldCallback implements AnnotatedFieldCallback<SortTar
     private String resolveSortTargetDisplayName(Field field, SortTarget sortTarget, SortVariant sortVariant) {
         String displayName = hasDisplayName(sortTarget) ? sortTarget.displayName() : field.getName();
         if (hasMultipleSortVariants(sortTarget)) {
-            return sortVariantDirectionPrefixed(displayName, sortVariant);
+            return sortVariantDirectionPostfixed(displayName, sortVariant);
         }
         return displayName;
     }
@@ -90,8 +89,8 @@ class SortTargetAnnotatedFieldCallback implements AnnotatedFieldCallback<SortTar
         return sortTarget.variants().length > 1;
     }
 
-    private String sortVariantDirectionPrefixed(String value, SortVariant sortVariant) {
-        return sortVariant.value() == ASCENDING ? value : "-" + value;
+    private String sortVariantDirectionPostfixed(String value, SortVariant sortVariant) {
+        return value + " " + sortVariant.value().parameterValue();
     }
 
     private String resolveResetUrl(Field field, SortVariant sortVariant, String sortFieldName) {
@@ -111,7 +110,7 @@ class SortTargetAnnotatedFieldCallback implements AnnotatedFieldCallback<SortTar
     }
 
     private String defaultSortVariantName(Field field, SortVariant sortVariant) {
-        return sortVariantDirectionPrefixed(field.getName(), sortVariant);
+        return sortVariantDirectionPostfixed(field.getName(), sortVariant);
     }
 
 }

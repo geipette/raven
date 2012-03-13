@@ -123,8 +123,8 @@ public class SortNavigatorBuilderTest {
         List<SortNavigatorItem> actual = sortNavigator.getItems();
 
         assertThat(actual.size(), is(2));
-        assertThat(actual.get(0).getName(), is("price"));
-        assertThat(actual.get(1).getName(), is("-price"));
+        assertThat(actual.get(0).getName(), is("price asc"));
+        assertThat(actual.get(1).getName(), is("price desc"));
     }
 
     @Test
@@ -170,7 +170,7 @@ public class SortNavigatorBuilderTest {
             String price;
         }
         when(navigation.getSortFieldName()).thenReturn("sort");
-        when(navigation.urlFor("sort", "price")).thenReturn("?sort=price");
+        when(navigation.urlFor("sort", "price asc")).thenReturn("?sort=price");
 
         SortNavigatorBuilder sortNavigatorBuilder = new SortNavigatorBuilder(TestSearchResponse.class, navigation);
         SortNavigator sortNavigator = sortNavigatorBuilder.build();
@@ -208,8 +208,8 @@ public class SortNavigatorBuilderTest {
         List<SortNavigatorItem> actual = sortNavigator.getItems();
 
         assertThat(actual.size(), is(2));
-        assertThat(actual.get(0).getName(), is("Pris"));
-        assertThat(actual.get(1).getName(), is("-Pris"));
+        assertThat(actual.get(0).getName(), is("Pris asc"));
+        assertThat(actual.get(1).getName(), is("Pris desc"));
     }
 
     @Test
