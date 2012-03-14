@@ -3,6 +3,7 @@ package no.guttab.raven.search.query;
 import no.guttab.raven.annotations.AnnotatedFieldCallback;
 import no.guttab.raven.annotations.Sort;
 import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.common.params.CommonParams;
 
 import java.lang.reflect.Field;
 
@@ -22,24 +23,8 @@ class SortAnnotatedFieldCallback implements AnnotatedFieldCallback<Sort> {
     public void doFor(Field field, Sort annotation) {
         String value = (String) getFieldValue(field, queryInput);
         if (!isEmpty(value)) {
-            solrQuery.setSortField(solrIndexFieldFor(value), sortDirectionFor(value));
+            solrQuery.set(CommonParams.SORT, value);
         }
-    }
-
-    private String solrIndexFieldFor(String value) {
-        return prefixedByMinus(value) ? stripPrefix(value) : value;
-    }
-
-    private String stripPrefix(String value) {
-        return value.substring(1);
-    }
-
-    private boolean prefixedByMinus(String value) {
-        return value.charAt(0) == '-';
-    }
-
-    private SolrQuery.ORDER sortDirectionFor(String value) {
-        return prefixedByMinus(value) ? SolrQuery.ORDER.desc : SolrQuery.ORDER.asc;
     }
 
 }

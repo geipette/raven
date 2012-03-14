@@ -2,6 +2,7 @@ package no.guttab.raven.search.query;
 
 import no.guttab.raven.annotations.Sort;
 import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.common.params.CommonParams;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -18,14 +19,14 @@ public class SortQueryProcessorTest {
     public void when_sort_annotation_defined_and_it_contains_a_value_sort_should_be_set_on_query() throws Exception {
         class TestQuery {
             @Sort
-            String sortField = "popularity";
+            String sortField = "popularity asc";
         }
 
         SortQueryProcessor queryProcessor = new SortQueryProcessor();
         TestQuery input = new TestQuery();
         queryProcessor.buildQuery(input, solrQuery);
 
-        Mockito.verify(solrQuery).setSortField("popularity", SolrQuery.ORDER.asc);
+        Mockito.verify(solrQuery).set(CommonParams.SORT, "popularity asc");
     }
 
     @Test
@@ -42,17 +43,4 @@ public class SortQueryProcessorTest {
         Mockito.verifyNoMoreInteractions(solrQuery);
     }
 
-    @Test
-    public void when_sort_field_is_prefixed_with_minus_sort_should_be_descending() throws Exception {
-        class TestQuery {
-            @Sort
-            String sortField = "-popularity";
-        }
-
-        SortQueryProcessor queryProcessor = new SortQueryProcessor();
-        TestQuery input = new TestQuery();
-        queryProcessor.buildQuery(input, solrQuery);
-
-        Mockito.verify(solrQuery).setSortField("popularity", SolrQuery.ORDER.desc);
-    }
 }
