@@ -3,9 +3,12 @@ package no.guttab.raven.search;
 import no.guttab.raven.search.query.*;
 import no.guttab.raven.search.response.ResponseBuilder;
 import no.guttab.raven.search.response.ResponseProcessor;
+import no.guttab.raven.search.response.SearchRequestTypeInfo;
 import no.guttab.raven.search.response.content.DefaultDocumentBuilder;
 import no.guttab.raven.search.response.content.DocumentBuilder;
 import no.guttab.raven.search.response.content.DocumentContentResponseProcessor;
+import no.guttab.raven.search.response.navigators.DefaultNavigatorStrategyProvider;
+import no.guttab.raven.search.response.navigators.NavigatorStrategyProvider;
 import no.guttab.raven.search.response.navigators.NavigatorsResponseProcessor;
 
 import java.util.List;
@@ -26,6 +29,11 @@ public class DefaultSearchContext<T> implements SearchContext<T> {
         return new QueryBuilder(queryProcessors());
     }
 
+    @Override
+    public ResponseBuilder<T> responseBuilder() {
+        return new ResponseBuilder<T>(responseProcessors());
+    }
+
     protected List<QueryProcessor> queryProcessors() {
         return asList(
                 new FacetFieldQueryProcessor(),
@@ -34,21 +42,20 @@ public class DefaultSearchContext<T> implements SearchContext<T> {
                 new SortQueryProcessor());
     }
 
-    @Override
-    public ResponseBuilder<T> responseBuilder() {
-        return new ResponseBuilder<T>(responseProcessors());
-    }
-
     @SuppressWarnings({"unchecked"})
     protected List<ResponseProcessor<T>> responseProcessors() {
         return asList(
-                new NavigatorsResponseProcessor<T>(searchRequestTypeInfo(searchRequest), responseDocumentType),
+                new NavigatorsResponseProcessor<T>(searchRequestTypeInfo(searchRequest), navigatorStrategyProvider()),
                 new DocumentContentResponseProcessor<T>(documentBuilder(responseDocumentType))
         );
     }
 
     protected <T> DocumentBuilder<T> documentBuilder(Class<T> responseDocumentType) {
         return new DefaultDocumentBuilder<T>(responseDocumentType);
+    }
+
+    protected NavigatorStrategyProvider navigatorStrategyProvider() {
+        return new DefaultNavigatorStrategyProvider(searchRequestTypeInfo(searchRequest), responseDocumentType);
     }
 
     private SearchRequestTypeInfo searchRequestTypeInfo(Object searchRequest) {

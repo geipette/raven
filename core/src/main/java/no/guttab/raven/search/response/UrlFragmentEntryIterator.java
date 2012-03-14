@@ -8,7 +8,7 @@ class UrlFragmentEntryIterator implements Iterator<UrlFragmentEntry> {
     private Map.Entry<String, List<UrlFragment>> currentFragmentEntry;
 
     public UrlFragmentEntryIterator(UrlFragments urlFragments) {
-        entryIterator = urlFragments.urlFragmentMap.entrySet().iterator();
+        entryIterator = urlFragments.getEntrySetIterator();
     }
 
     @Override

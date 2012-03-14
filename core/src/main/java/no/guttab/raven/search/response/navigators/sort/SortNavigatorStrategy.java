@@ -1,13 +1,12 @@
 package no.guttab.raven.search.response.navigators.sort;
 
-import no.guttab.raven.search.QueryResponseHeaderParams;
-import no.guttab.raven.search.SearchRequestTypeInfo;
 import no.guttab.raven.search.filter.FilterQueries;
+import no.guttab.raven.search.response.Navigators;
+import no.guttab.raven.search.response.SearchRequestTypeInfo;
 import no.guttab.raven.search.response.navigators.NavigatorStrategy;
 import no.guttab.raven.search.response.navigators.NavigatorUrls;
-import no.guttab.raven.search.response.navigators.Navigators;
+import no.guttab.raven.search.response.navigators.QueryResponseHeaderParams;
 
-import static no.guttab.raven.search.filter.FilterQueries.filterQueriesFor;
 
 public class SortNavigatorStrategy implements NavigatorStrategy {
 
@@ -31,7 +30,7 @@ public class SortNavigatorStrategy implements NavigatorStrategy {
 
     @Override
     public void addNavigators(NavigatorUrls navigatorUrls, Navigators navigators) {
-        FilterQueries filterQueries = filterQueriesFor(headerParams);
+        FilterQueries filterQueries = headerParams.getFilterQueries();
         SortNavigation navigation = new SortNavigation(
                 searchRequestTypeInfo.getSortFieldName(), headerParams.getSort(), navigatorUrls, filterQueries);
         navigators.addNavigator(new SortNavigatorBuilder(responseType, navigation).build());

@@ -1,10 +1,10 @@
 package no.guttab.raven.search.response.navigators.select;
 
 import no.guttab.raven.search.filter.FilterQueries;
+import no.guttab.raven.search.response.Navigators;
 import no.guttab.raven.search.response.navigators.Navigation;
 import no.guttab.raven.search.response.navigators.NavigatorStrategy;
 import no.guttab.raven.search.response.navigators.NavigatorUrls;
-import no.guttab.raven.search.response.navigators.Navigators;
 import org.apache.solr.client.solrj.response.FacetField;
 
 import java.util.List;

@@ -1,6 +1,6 @@
 package no.guttab.raven.search.response.navigators;
 
-import no.guttab.raven.search.SearchRequestTypeInfo;
+import no.guttab.raven.search.response.SearchRequestTypeInfo;
 import no.guttab.raven.search.response.UrlFragmentEntry;
 import no.guttab.raven.search.response.UrlFragments;
 

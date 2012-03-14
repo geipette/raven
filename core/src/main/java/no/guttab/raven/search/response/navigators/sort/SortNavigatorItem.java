@@ -1,6 +1,6 @@
 package no.guttab.raven.search.response.navigators.sort;
 
-import no.guttab.raven.search.response.navigators.NavigatorItem;
+import no.guttab.raven.search.response.NavigatorItem;
 
 public class SortNavigatorItem implements NavigatorItem {
     private String name;

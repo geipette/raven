@@ -1,8 +1,8 @@
 package no.guttab.raven.search.response.navigators.select;
 
+import no.guttab.raven.search.response.NavigatorItems;
 import no.guttab.raven.search.response.navigators.ImmutableNavigatorItems;
 import no.guttab.raven.search.response.navigators.Navigation;
-import no.guttab.raven.search.response.navigators.NavigatorItems;
 import org.apache.solr.client.solrj.response.FacetField;
 
 import java.util.ArrayList;

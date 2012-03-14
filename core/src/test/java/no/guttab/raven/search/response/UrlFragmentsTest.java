@@ -1,6 +1,5 @@
 package no.guttab.raven.search.response;
 
-import no.guttab.raven.search.SearchRequestTypeInfo;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 import org.junit.Before;

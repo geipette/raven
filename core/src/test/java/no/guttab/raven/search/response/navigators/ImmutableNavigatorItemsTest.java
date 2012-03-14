@@ -1,5 +1,6 @@
 package no.guttab.raven.search.response.navigators;
 
+import no.guttab.raven.search.response.NavigatorItem;
 import org.junit.Test;
 import org.mockito.Mockito;
 

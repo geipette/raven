@@ -1,16 +1,12 @@
 package no.guttab.raven.search.response;
 
-import no.guttab.raven.search.SearchRequestTypeInfo;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class UrlFragments implements Iterable<UrlFragmentEntry> {
-    final MultiValueMap<String, UrlFragment> urlFragmentMap = new LinkedMultiValueMap<String, UrlFragment>();
+    private final MultiValueMap<String, UrlFragment> urlFragmentMap = new LinkedMultiValueMap<String, UrlFragment>();
     private SearchRequestTypeInfo searchRequestTypeInfo;
 
 
@@ -78,6 +74,10 @@ public class UrlFragments implements Iterable<UrlFragmentEntry> {
         return urlFragments;
     }
 
+    Iterator<Map.Entry<String, List<UrlFragment>>> getEntrySetIterator() {
+        return urlFragmentMap.entrySet().iterator();
+    }
+
     private void addFragment(String indexFieldName, UrlFragment fragment, UrlFragments urlFragments) {
         urlFragments.addFragment(indexFieldName, fragment);
     }
@@ -104,4 +104,6 @@ public class UrlFragments implements Iterable<UrlFragmentEntry> {
                 "urlFragmentMap=" + urlFragmentMap +
                 '}';
     }
+
+
 }

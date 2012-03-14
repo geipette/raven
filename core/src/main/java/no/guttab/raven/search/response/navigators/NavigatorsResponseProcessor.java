@@ -1,46 +1,33 @@
 package no.guttab.raven.search.response.navigators;
 
-import no.guttab.raven.search.QueryResponseHeaderParams;
-import no.guttab.raven.search.SearchRequestTypeInfo;
-import no.guttab.raven.search.filter.FilterQueries;
 import no.guttab.raven.search.response.MutableSearchResponse;
+import no.guttab.raven.search.response.Navigators;
 import no.guttab.raven.search.response.ResponseProcessor;
-import no.guttab.raven.search.response.navigators.select.SelectNavigatorStrategy;
-import no.guttab.raven.search.response.navigators.sort.SortNavigatorStrategy;
+import no.guttab.raven.search.response.SearchRequestTypeInfo;
 import org.apache.solr.client.solrj.response.QueryResponse;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import static no.guttab.raven.search.filter.FilterQueries.filterQueriesFor;
 
 public class NavigatorsResponseProcessor<T> implements ResponseProcessor<T> {
     private SearchRequestTypeInfo searchRequestTypeInfo;
-    private Class<T> responseType;
+    private NavigatorStrategyProvider navigatorStrategyProvider;
 
-    public NavigatorsResponseProcessor(SearchRequestTypeInfo searchRequestTypeInfo, Class<T> responseType) {
+    public NavigatorsResponseProcessor(
+            SearchRequestTypeInfo searchRequestTypeInfo,
+            NavigatorStrategyProvider navigatorStrategyProvider) {
         this.searchRequestTypeInfo = searchRequestTypeInfo;
-        this.responseType = responseType;
+        this.navigatorStrategyProvider = navigatorStrategyProvider;
     }
 
     @Override
     public void processResponse(final QueryResponse queryResponse, final MutableSearchResponse<T> response) {
-        response.setNavigators(buildFor(queryResponse));
+        response.setNavigators(buildNavigatorsFor(queryResponse));
     }
 
-    private Navigators buildFor(QueryResponse queryResponse) {
-        final List<NavigatorStrategy> navigatorStrategies = initDefaultStrategies(queryResponse);
+    private Navigators buildNavigatorsFor(QueryResponse queryResponse) {
+        final List<NavigatorStrategy> navigatorStrategies = navigatorStrategyProvider.initStrategies(queryResponse);
         final NavigatorUrls navigatorUrls = buildNavigatorUrls(navigatorStrategies);
         return buildNavigators(navigatorStrategies, navigatorUrls);
-    }
-
-    private List<NavigatorStrategy> initDefaultStrategies(QueryResponse queryResponse) {
-        QueryResponseHeaderParams headerParams = new QueryResponseHeaderParams(queryResponse.getResponseHeader());
-        FilterQueries filterQueries = filterQueriesFor(headerParams);
-        List<NavigatorStrategy> navigatorStrategies = new ArrayList<NavigatorStrategy>();
-        navigatorStrategies.add(new SelectNavigatorStrategy(filterQueries, queryResponse.getFacetFields()));
-        navigatorStrategies.add(new SortNavigatorStrategy(searchRequestTypeInfo, responseType, headerParams));
-        return navigatorStrategies;
     }
 
     private NavigatorUrls buildNavigatorUrls(List<NavigatorStrategy> navigatorStrategies) {
