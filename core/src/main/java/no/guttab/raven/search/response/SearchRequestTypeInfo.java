@@ -17,11 +17,25 @@ public class SearchRequestTypeInfo {
     private ReverseLookupMap<String, String> indexFieldNameMap = new ReverseLookupMap<String, String>();
     private Class<?> requestType;
     private String sortFieldName;
+    private String pageFieldName;
+    private Integer resultsPerPage;
 
     public SearchRequestTypeInfo(Class<?> requestType) {
         this.requestType = requestType;
         initializeIndexFieldMap(requestType);
         initializeSortField(requestType);
+        initializeResultsPerPage(requestType);
+    }
+
+    private void initializeResultsPerPage(Class<?> requestType) {
+        doForFirstAnnotatedFieldOn(requestType, Page.class, new AnnotatedFieldCallback<Page>() {
+            @Override
+            public void doFor(Field field, Page annotation) {
+                resultsPerPage = annotation.resultsPerPage();
+                pageFieldName = field.getName();
+                indexFieldNameMap.put(pageFieldName, pageFieldName);
+            }
+        });
     }
 
     private void initializeSortField(Class<?> requestType) {
@@ -47,6 +61,14 @@ public class SearchRequestTypeInfo {
         return sortFieldName;
     }
 
+    public String getPageFieldName() {
+        return pageFieldName;
+    }
+
+    public Integer getResultsPerPage() {
+        return resultsPerPage;
+    }
+
     public String indexFieldNameFor(String requestFieldName) {
         return indexFieldNameMap.get(requestFieldName);
     }
@@ -63,5 +85,4 @@ public class SearchRequestTypeInfo {
         final Field field = getDeclaredField(requestType, requestFieldName, true);
         return isCollectionType(field);
     }
-
 }

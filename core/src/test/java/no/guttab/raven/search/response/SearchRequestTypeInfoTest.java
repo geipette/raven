@@ -1,14 +1,12 @@
 package no.guttab.raven.search.response;
 
-import no.guttab.raven.annotations.FacetField;
-import no.guttab.raven.annotations.FilterQuery;
-import no.guttab.raven.annotations.IndexFieldName;
-import no.guttab.raven.annotations.Sort;
+import no.guttab.raven.annotations.*;
 import org.junit.Test;
 
 import java.util.List;
 
 import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.assertThat;
 
 public class SearchRequestTypeInfoTest {
@@ -19,9 +17,9 @@ public class SearchRequestTypeInfoTest {
             @FilterQuery
             String aRequestFieldName;
         }
-        SearchRequestTypeInfo searchRequestConfig = new SearchRequestTypeInfo(TestRequest.class);
+        SearchRequestTypeInfo searchRequestTypeInfo = new SearchRequestTypeInfo(TestRequest.class);
 
-        String actual = searchRequestConfig.indexFieldNameFor("aRequestFieldName");
+        String actual = searchRequestTypeInfo.indexFieldNameFor("aRequestFieldName");
 
         assertThat(actual, is("aRequestFieldName"));
     }
@@ -32,9 +30,9 @@ public class SearchRequestTypeInfoTest {
             @FilterQuery
             String aRequestFieldName;
         }
-        SearchRequestTypeInfo searchRequestConfig = new SearchRequestTypeInfo(TestRequest.class);
+        SearchRequestTypeInfo searchRequestTypeInfo = new SearchRequestTypeInfo(TestRequest.class);
 
-        String actual = searchRequestConfig.requestFieldNameFor("aRequestFieldName");
+        String actual = searchRequestTypeInfo.requestFieldNameFor("aRequestFieldName");
 
         assertThat(actual, is("aRequestFieldName"));
     }
@@ -46,9 +44,9 @@ public class SearchRequestTypeInfoTest {
             @FilterQuery
             String aRequestFieldName;
         }
-        SearchRequestTypeInfo searchRequestConfig = new SearchRequestTypeInfo(TestRequest.class);
+        SearchRequestTypeInfo searchRequestTypeInfo = new SearchRequestTypeInfo(TestRequest.class);
 
-        String actual = searchRequestConfig.indexFieldNameFor("aRequestFieldName");
+        String actual = searchRequestTypeInfo.indexFieldNameFor("aRequestFieldName");
 
         assertThat(actual, is("req"));
     }
@@ -60,9 +58,9 @@ public class SearchRequestTypeInfoTest {
             @FilterQuery
             String aRequestFieldName;
         }
-        SearchRequestTypeInfo searchRequestConfig = new SearchRequestTypeInfo(TestRequest.class);
+        SearchRequestTypeInfo searchRequestTypeInfo = new SearchRequestTypeInfo(TestRequest.class);
 
-        String actual = searchRequestConfig.requestFieldNameFor("req");
+        String actual = searchRequestTypeInfo.requestFieldNameFor("req");
 
         assertThat(actual, is("aRequestFieldName"));
     }
@@ -74,9 +72,9 @@ public class SearchRequestTypeInfoTest {
             String sortField;
         }
 
-        SearchRequestTypeInfo searchRequestConfig = new SearchRequestTypeInfo(TestRequest.class);
+        SearchRequestTypeInfo searchRequestTypeInfo = new SearchRequestTypeInfo(TestRequest.class);
 
-        String actual = searchRequestConfig.requestFieldNameFor("sortField");
+        String actual = searchRequestTypeInfo.requestFieldNameFor("sortField");
 
         assertThat(actual, is("sortField"));
 
@@ -89,9 +87,9 @@ public class SearchRequestTypeInfoTest {
             @FacetField
             String aRequestFieldName;
         }
-        SearchRequestTypeInfo searchRequestConfig = new SearchRequestTypeInfo(TestRequest.class);
+        SearchRequestTypeInfo searchRequestTypeInfo = new SearchRequestTypeInfo(TestRequest.class);
 
-        String actual = searchRequestConfig.indexFieldNameFor("aRequestFieldName");
+        String actual = searchRequestTypeInfo.indexFieldNameFor("aRequestFieldName");
 
         assertThat(actual, is("aRequestFieldName"));
     }
@@ -102,9 +100,9 @@ public class SearchRequestTypeInfoTest {
             @FilterQuery
             List<String> multiSelectField;
         }
-        SearchRequestTypeInfo searchRequestConfig = new SearchRequestTypeInfo(TestRequest.class);
+        SearchRequestTypeInfo searchRequestTypeInfo = new SearchRequestTypeInfo(TestRequest.class);
 
-        boolean actual = searchRequestConfig.isRequestFieldMultiSelect("multiSelectField");
+        boolean actual = searchRequestTypeInfo.isRequestFieldMultiSelect("multiSelectField");
 
         assertThat(actual, is(true));
     }
@@ -115,9 +113,9 @@ public class SearchRequestTypeInfoTest {
             @FilterQuery
             String[] multiSelectField;
         }
-        SearchRequestTypeInfo searchRequestConfig = new SearchRequestTypeInfo(TestRequest.class);
+        SearchRequestTypeInfo searchRequestTypeInfo = new SearchRequestTypeInfo(TestRequest.class);
 
-        boolean actual = searchRequestConfig.isRequestFieldMultiSelect("multiSelectField");
+        boolean actual = searchRequestTypeInfo.isRequestFieldMultiSelect("multiSelectField");
 
         assertThat(actual, is(true));
     }
@@ -128,9 +126,9 @@ public class SearchRequestTypeInfoTest {
             @FilterQuery
             String singleSelectField;
         }
-        SearchRequestTypeInfo searchRequestConfig = new SearchRequestTypeInfo(TestRequest.class);
+        SearchRequestTypeInfo searchRequestTypeInfo = new SearchRequestTypeInfo(TestRequest.class);
 
-        boolean actual = searchRequestConfig.isRequestFieldMultiSelect("singleSelectField");
+        boolean actual = searchRequestTypeInfo.isRequestFieldMultiSelect("singleSelectField");
 
         assertThat(actual, is(false));
     }
@@ -142,11 +140,37 @@ public class SearchRequestTypeInfoTest {
             @FilterQuery
             List<String> multiSelectField;
         }
-        SearchRequestTypeInfo searchRequestConfig = new SearchRequestTypeInfo(TestRequest.class);
+        SearchRequestTypeInfo searchRequestTypeInfo = new SearchRequestTypeInfo(TestRequest.class);
 
-        boolean actual = searchRequestConfig.isIndexFieldMultiSelect("multiSelectIndexFieldName");
+        boolean actual = searchRequestTypeInfo.isIndexFieldMultiSelect("multiSelectIndexFieldName");
 
         assertThat(actual, is(true));
+    }
+
+    @Test
+    public void when_request_is_annotated_with_Page_pageCount_should_reflect_annotated_value() {
+        class TestRequest {
+            @Page(resultsPerPage = 10)
+            int page;
+        }
+        SearchRequestTypeInfo searchRequestTypeInfo = new SearchRequestTypeInfo(TestRequest.class);
+
+        int actual = searchRequestTypeInfo.getResultsPerPage();
+
+        assertThat(actual, is(10));
+
+    }
+
+    @Test
+    public void when_request_is_not_annotated_with_Page_pageCount_should_be_null() {
+        class TestRequest {
+        }
+        SearchRequestTypeInfo searchRequestTypeInfo = new SearchRequestTypeInfo(TestRequest.class);
+
+        Integer actual = searchRequestTypeInfo.getResultsPerPage();
+
+        assertThat(actual, is(nullValue()));
+
     }
 
 
