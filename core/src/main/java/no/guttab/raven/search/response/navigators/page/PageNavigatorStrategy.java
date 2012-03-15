@@ -17,16 +17,24 @@ public class PageNavigatorStrategy implements NavigatorStrategy {
 
     @Override
     public void addUrlFragments(NavigatorUrls navigatorUrls) {
-//        if (!onFirstPage()) {
-//            if (requestHasPagination()) {
-//
-//            }
-//        }
+        if (!onFirstPage()) {
+            if (requestHasPagination()) {
+                navigatorUrls.addVolatileUrlFragment(pageConfig.getPageRequestFieldName(), getPage());
+            }
+        }
     }
 
     @Override
     public void addNavigators(NavigatorUrls navigatorUrls, Navigators navigators) {
 
+    }
+
+    private String getPage() {
+        if (pageConfig.getResultsPerPage() == 0) {
+            return String.valueOf(1);
+        } else {
+            return String.valueOf(queryResponse.getResults().getStart() % pageConfig.getResultsPerPage());
+        }
     }
 
     private boolean requestHasPagination() {

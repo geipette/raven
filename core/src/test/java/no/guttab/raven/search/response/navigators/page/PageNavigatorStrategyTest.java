@@ -28,13 +28,36 @@ public class PageNavigatorStrategyTest {
     }
 
     @Test
-    public void addUrlFragments_should_do_nothing_when_response_is_on_first_page() throws Exception {
+    public void addUrlFragments_should_do_nothing_when_response_starts_on_zero_index() throws Exception {
         when(solrDocumentList.getStart()).thenReturn(0L);
 
         PageNavigatorStrategy pageNavigatorStrategy = new PageNavigatorStrategy(pageConfig, queryResponse);
         pageNavigatorStrategy.addUrlFragments(navigatorUrls);
 
         verifyNoMoreInteractions(navigatorUrls);
+    }
+
+    @Test
+    public void addUrlFragments_should_add_page_url_fragment_when_response_starts_in_index_greater_than_zero_and_page_annotation_is_defined() throws Exception {
+        when(solrDocumentList.getStart()).thenReturn(1L);
+        when(pageConfig.getResultsPerPage()).thenReturn(2);
+        when(pageConfig.getPageRequestFieldName()).thenReturn("page");
+
+        PageNavigatorStrategy pageNavigatorStrategy = new PageNavigatorStrategy(pageConfig, queryResponse);
+        pageNavigatorStrategy.addUrlFragments(navigatorUrls);
+
+        verify(navigatorUrls).addVolatileUrlFragment("page", "1");
+    }
+
+    @Test
+    public void addUrlFragments_should_add_start_url_fragment_when_response_starts_in_index_greater_than_zero_and_startIndex_annotation_is_defined() throws Exception {
+        when(solrDocumentList.getStart()).thenReturn(1L);
+        when(pageConfig.getStartRequestFieldName()).thenReturn("start");
+
+        PageNavigatorStrategy pageNavigatorStrategy = new PageNavigatorStrategy(pageConfig, queryResponse);
+        pageNavigatorStrategy.addUrlFragments(navigatorUrls);
+
+        verify(navigatorUrls).addVolatileUrlFragment("start", "1");
     }
 
     @Test
@@ -46,7 +69,8 @@ public class PageNavigatorStrategyTest {
         PageNavigatorStrategy pageNavigatorStrategy = new PageNavigatorStrategy(pageConfig, queryResponse);
         pageNavigatorStrategy.addUrlFragments(navigatorUrls);
 
-        verify(navigatorUrls).addUrlFragment("page", "1");
+        verify(navigatorUrls).addVolatileUrlFragment("page", "2");
     }
+
 
 }
