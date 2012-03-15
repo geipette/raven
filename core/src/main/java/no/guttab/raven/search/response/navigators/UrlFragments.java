@@ -1,4 +1,4 @@
-package no.guttab.raven.search.response;
+package no.guttab.raven.search.response.navigators;
 
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;

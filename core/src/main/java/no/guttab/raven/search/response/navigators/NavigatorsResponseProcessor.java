@@ -3,19 +3,18 @@ package no.guttab.raven.search.response.navigators;
 import no.guttab.raven.search.response.MutableSearchResponse;
 import no.guttab.raven.search.response.Navigators;
 import no.guttab.raven.search.response.ResponseProcessor;
-import no.guttab.raven.search.response.SearchRequestTypeInfo;
 import org.apache.solr.client.solrj.response.QueryResponse;
 
 import java.util.List;
 
 public class NavigatorsResponseProcessor<T> implements ResponseProcessor<T> {
-    private SearchRequestTypeInfo searchRequestTypeInfo;
+    private Class<?> requestType;
     private NavigatorStrategyProvider navigatorStrategyProvider;
 
     public NavigatorsResponseProcessor(
-            SearchRequestTypeInfo searchRequestTypeInfo,
+            Class<?> requestType,
             NavigatorStrategyProvider navigatorStrategyProvider) {
-        this.searchRequestTypeInfo = searchRequestTypeInfo;
+        this.requestType = requestType;
         this.navigatorStrategyProvider = navigatorStrategyProvider;
     }
 
@@ -31,11 +30,15 @@ public class NavigatorsResponseProcessor<T> implements ResponseProcessor<T> {
     }
 
     private NavigatorUrls buildNavigatorUrls(List<NavigatorStrategy> navigatorStrategies) {
-        final NavigatorUrls navigatorUrls = new NavigatorUrls(searchRequestTypeInfo);
+        final NavigatorUrls navigatorUrls = new NavigatorUrls(searchRequestTypeInfo());
         for (NavigatorStrategy navigatorStrategy : navigatorStrategies) {
             navigatorStrategy.addUrlFragments(navigatorUrls);
         }
         return navigatorUrls;
+    }
+
+    private SearchRequestTypeInfo searchRequestTypeInfo() {
+        return new SearchRequestTypeInfo(requestType);
     }
 
     private Navigators buildNavigators(List<NavigatorStrategy> navigatorStrategies, NavigatorUrls navigatorUrls) {

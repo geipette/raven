@@ -1,6 +1,8 @@
-package no.guttab.raven.search.response;
+package no.guttab.raven.search.response.navigators;
 
-import no.guttab.raven.annotations.*;
+import no.guttab.raven.annotations.AnnotationsWithCallback;
+import no.guttab.raven.annotations.FacetField;
+import no.guttab.raven.annotations.FilterQuery;
 import no.guttab.raven.common.ReverseLookupMap;
 
 import java.lang.annotation.Annotation;
@@ -8,7 +10,6 @@ import java.lang.reflect.Field;
 import java.util.Map;
 
 import static no.guttab.raven.annotations.AnnotationUtils.doForEachAnnotatedFieldOn;
-import static no.guttab.raven.annotations.AnnotationUtils.doForFirstAnnotatedFieldOn;
 import static no.guttab.raven.annotations.SearchAnnotationUtils.getIndexFieldName;
 import static no.guttab.raven.reflection.ClassUtils.isCollectionType;
 import static org.apache.commons.lang3.reflect.FieldUtils.getDeclaredField;
@@ -16,36 +17,10 @@ import static org.apache.commons.lang3.reflect.FieldUtils.getDeclaredField;
 public class SearchRequestTypeInfo {
     private ReverseLookupMap<String, String> indexFieldNameMap = new ReverseLookupMap<String, String>();
     private Class<?> requestType;
-    private String sortFieldName;
-    private String pageFieldName;
-    private Integer resultsPerPage;
 
     public SearchRequestTypeInfo(Class<?> requestType) {
         this.requestType = requestType;
         initializeIndexFieldMap(requestType);
-        initializeSortField(requestType);
-        initializeResultsPerPage(requestType);
-    }
-
-    private void initializeResultsPerPage(Class<?> requestType) {
-        doForFirstAnnotatedFieldOn(requestType, Page.class, new AnnotatedFieldCallback<Page>() {
-            @Override
-            public void doFor(Field field, Page annotation) {
-                resultsPerPage = annotation.resultsPerPage();
-                pageFieldName = field.getName();
-                indexFieldNameMap.put(pageFieldName, pageFieldName);
-            }
-        });
-    }
-
-    private void initializeSortField(Class<?> requestType) {
-        doForFirstAnnotatedFieldOn(requestType, Sort.class, new AnnotatedFieldCallback<Sort>() {
-            @Override
-            public void doFor(Field field, Sort annotation) {
-                sortFieldName = field.getName();
-                indexFieldNameMap.put(sortFieldName, sortFieldName);
-            }
-        });
     }
 
     private void initializeIndexFieldMap(Class<?> requestType) {
@@ -57,24 +32,14 @@ public class SearchRequestTypeInfo {
         });
     }
 
-    public String getSortFieldName() {
-        return sortFieldName;
-    }
-
-    public String getPageFieldName() {
-        return pageFieldName;
-    }
-
-    public Integer getResultsPerPage() {
-        return resultsPerPage;
-    }
-
     public String indexFieldNameFor(String requestFieldName) {
-        return indexFieldNameMap.get(requestFieldName);
+        final String indexFieldName = indexFieldNameMap.get(requestFieldName);
+        return indexFieldName == null ? requestFieldName : indexFieldName;
     }
 
     public String requestFieldNameFor(String indexFieldName) {
-        return indexFieldNameMap.getByValue(indexFieldName);
+        final String requestFieldName = indexFieldNameMap.getByValue(indexFieldName);
+        return requestFieldName == null ? indexFieldName : requestFieldName;
     }
 
     public boolean isIndexFieldMultiSelect(String indexFieldName) {

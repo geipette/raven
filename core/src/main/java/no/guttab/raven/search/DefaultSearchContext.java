@@ -3,7 +3,6 @@ package no.guttab.raven.search;
 import no.guttab.raven.search.query.*;
 import no.guttab.raven.search.response.ResponseBuilder;
 import no.guttab.raven.search.response.ResponseProcessor;
-import no.guttab.raven.search.response.SearchRequestTypeInfo;
 import no.guttab.raven.search.response.content.DefaultDocumentBuilder;
 import no.guttab.raven.search.response.content.DocumentBuilder;
 import no.guttab.raven.search.response.content.DocumentContentResponseProcessor;
@@ -45,7 +44,7 @@ public class DefaultSearchContext<T> implements SearchContext<T> {
     @SuppressWarnings({"unchecked"})
     protected List<ResponseProcessor<T>> responseProcessors() {
         return asList(
-                new NavigatorsResponseProcessor<T>(searchRequestTypeInfo(searchRequest), navigatorStrategyProvider()),
+                new NavigatorsResponseProcessor<T>(requestType(searchRequest), navigatorStrategyProvider()),
                 new DocumentContentResponseProcessor<T>(documentBuilder(responseDocumentType))
         );
     }
@@ -55,11 +54,7 @@ public class DefaultSearchContext<T> implements SearchContext<T> {
     }
 
     protected NavigatorStrategyProvider navigatorStrategyProvider() {
-        return new DefaultNavigatorStrategyProvider(searchRequestTypeInfo(searchRequest), responseDocumentType);
-    }
-
-    private SearchRequestTypeInfo searchRequestTypeInfo(Object searchRequest) {
-        return new SearchRequestTypeInfo(requestType(searchRequest));
+        return new DefaultNavigatorStrategyProvider(requestType(searchRequest), responseDocumentType);
     }
 
     private Class<?> requestType(Object searchRequest) {

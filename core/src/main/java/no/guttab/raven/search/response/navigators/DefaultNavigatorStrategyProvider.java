@@ -1,8 +1,8 @@
 package no.guttab.raven.search.response.navigators;
 
 import no.guttab.raven.search.filter.FilterQueries;
-import no.guttab.raven.search.response.SearchRequestTypeInfo;
 import no.guttab.raven.search.response.navigators.select.SelectNavigatorStrategy;
+import no.guttab.raven.search.response.navigators.sort.SortAnnotationConfig;
 import no.guttab.raven.search.response.navigators.sort.SortNavigatorStrategy;
 import org.apache.solr.client.solrj.response.QueryResponse;
 
@@ -11,12 +11,12 @@ import java.util.List;
 import static java.util.Arrays.asList;
 
 public class DefaultNavigatorStrategyProvider implements NavigatorStrategyProvider {
-    private SearchRequestTypeInfo searchRequestTypeInfo;
-    private Class<?> responseType;
+    private Class<?> responseDocumentType;
+    private Class<?> requestType;
 
-    public DefaultNavigatorStrategyProvider(SearchRequestTypeInfo searchRequestTypeInfo, Class<?> responseType) {
-        this.searchRequestTypeInfo = searchRequestTypeInfo;
-        this.responseType = responseType;
+    public DefaultNavigatorStrategyProvider(Class<?> requestType, Class<?> responseDocumentType) {
+        this.requestType = requestType;
+        this.responseDocumentType = responseDocumentType;
     }
 
     @Override
@@ -30,7 +30,11 @@ public class DefaultNavigatorStrategyProvider implements NavigatorStrategyProvid
             QueryResponse queryResponse, QueryResponseHeaderParams headerParams, FilterQueries filterQueries) {
         return asList(
                 new SelectNavigatorStrategy(filterQueries, queryResponse.getFacetFields()),
-                new SortNavigatorStrategy(searchRequestTypeInfo, responseType, headerParams)
+                new SortNavigatorStrategy(sortConfig(), responseDocumentType, headerParams)
         );
+    }
+
+    private SortAnnotationConfig sortConfig() {
+        return new SortAnnotationConfig(requestType);
     }
 }

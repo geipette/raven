@@ -1,12 +1,14 @@
-package no.guttab.raven.search.response;
+package no.guttab.raven.search.response.navigators;
 
-import no.guttab.raven.annotations.*;
+import no.guttab.raven.annotations.FacetField;
+import no.guttab.raven.annotations.FilterQuery;
+import no.guttab.raven.annotations.IndexFieldName;
+import no.guttab.raven.annotations.Sort;
 import org.junit.Test;
 
 import java.util.List;
 
 import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.assertThat;
 
 public class SearchRequestTypeInfoTest {
@@ -146,32 +148,5 @@ public class SearchRequestTypeInfoTest {
 
         assertThat(actual, is(true));
     }
-
-    @Test
-    public void when_request_is_annotated_with_Page_pageCount_should_reflect_annotated_value() {
-        class TestRequest {
-            @Page(resultsPerPage = 10)
-            int page;
-        }
-        SearchRequestTypeInfo searchRequestTypeInfo = new SearchRequestTypeInfo(TestRequest.class);
-
-        int actual = searchRequestTypeInfo.getResultsPerPage();
-
-        assertThat(actual, is(10));
-
-    }
-
-    @Test
-    public void when_request_is_not_annotated_with_Page_pageCount_should_be_null() {
-        class TestRequest {
-        }
-        SearchRequestTypeInfo searchRequestTypeInfo = new SearchRequestTypeInfo(TestRequest.class);
-
-        Integer actual = searchRequestTypeInfo.getResultsPerPage();
-
-        assertThat(actual, is(nullValue()));
-
-    }
-
 
 }

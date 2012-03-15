@@ -1,4 +1,4 @@
-package no.guttab.raven.search.response;
+package no.guttab.raven.search.response.navigators;
 
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
@@ -8,8 +8,8 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import static no.guttab.raven.search.response.UrlFragmentsTest.FragmentCount.hasElementCount;
-import static no.guttab.raven.search.response.UrlFragmentsTest.FragmentsContainsEntry.containsEntry;
+import static no.guttab.raven.search.response.navigators.UrlFragmentsTest.FragmentCount.hasElementCount;
+import static no.guttab.raven.search.response.navigators.UrlFragmentsTest.FragmentsContainsEntry.containsEntry;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
 

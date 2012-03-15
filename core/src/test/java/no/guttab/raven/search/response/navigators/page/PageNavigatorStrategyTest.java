@@ -1,6 +1,5 @@
 package no.guttab.raven.search.response.navigators.page;
 
-import no.guttab.raven.search.response.SearchRequestTypeInfo;
 import no.guttab.raven.search.response.navigators.NavigatorUrls;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocumentList;
@@ -17,7 +16,7 @@ public class PageNavigatorStrategyTest {
     @Mock
     private QueryResponse queryResponse;
     @Mock
-    private SearchRequestTypeInfo searchRequestTypeInfo;
+    private PageConfig pageConfig;
     @Mock
     private NavigatorUrls navigatorUrls;
     @Mock
@@ -32,19 +31,19 @@ public class PageNavigatorStrategyTest {
     public void addUrlFragments_should_do_nothing_when_response_is_on_first_page() throws Exception {
         when(solrDocumentList.getStart()).thenReturn(0L);
 
-        PageNavigatorStrategy pageNavigatorStrategy = new PageNavigatorStrategy(searchRequestTypeInfo, queryResponse);
+        PageNavigatorStrategy pageNavigatorStrategy = new PageNavigatorStrategy(pageConfig, queryResponse);
         pageNavigatorStrategy.addUrlFragments(navigatorUrls);
 
         verifyNoMoreInteractions(navigatorUrls);
     }
 
     @Test
-    public void addUrlFragments_should_add_page_url_fragment_when_response_is_on_second_page() throws Exception {
+    public void addUrlFragments_should_add_page_url_fragment_when_response_is_on_second_page_and_page_annotation_is_defined() throws Exception {
         when(solrDocumentList.getStart()).thenReturn(1L);
-        when(searchRequestTypeInfo.getResultsPerPage()).thenReturn(1);
-        when(searchRequestTypeInfo.getPageFieldName()).thenReturn("page");
+        when(pageConfig.getResultsPerPage()).thenReturn(1);
+        when(pageConfig.getPageRequestFieldName()).thenReturn("page");
 
-        PageNavigatorStrategy pageNavigatorStrategy = new PageNavigatorStrategy(searchRequestTypeInfo, queryResponse);
+        PageNavigatorStrategy pageNavigatorStrategy = new PageNavigatorStrategy(pageConfig, queryResponse);
         pageNavigatorStrategy.addUrlFragments(navigatorUrls);
 
         verify(navigatorUrls).addUrlFragment("page", "1");

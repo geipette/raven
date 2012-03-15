@@ -1,18 +1,17 @@
 package no.guttab.raven.search.response.navigators.page;
 
 import no.guttab.raven.search.response.Navigators;
-import no.guttab.raven.search.response.SearchRequestTypeInfo;
 import no.guttab.raven.search.response.navigators.NavigatorStrategy;
 import no.guttab.raven.search.response.navigators.NavigatorUrls;
 import org.apache.solr.client.solrj.response.QueryResponse;
 
 public class PageNavigatorStrategy implements NavigatorStrategy {
-    private SearchRequestTypeInfo searchRequestTypeInfo;
     private QueryResponse queryResponse;
+    private PageConfig pageConfig;
 
 
-    public PageNavigatorStrategy(SearchRequestTypeInfo searchRequestTypeInfo, QueryResponse queryResponse) {
-        this.searchRequestTypeInfo = searchRequestTypeInfo;
+    public PageNavigatorStrategy(PageConfig pageConfig, QueryResponse queryResponse) {
+        this.pageConfig = pageConfig;
         this.queryResponse = queryResponse;
     }
 
@@ -25,16 +24,16 @@ public class PageNavigatorStrategy implements NavigatorStrategy {
 //        }
     }
 
+    @Override
+    public void addNavigators(NavigatorUrls navigatorUrls, Navigators navigators) {
+
+    }
+
     private boolean requestHasPagination() {
-        return searchRequestTypeInfo.getResultsPerPage() != null;
+        return pageConfig.getResultsPerPage() != null;
     }
 
     private boolean onFirstPage() {
         return queryResponse.getResults().getStart() == 0;
-    }
-
-    @Override
-    public void addNavigators(NavigatorUrls navigatorUrls, Navigators navigators) {
-
     }
 }

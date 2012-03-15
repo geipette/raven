@@ -1,4 +1,4 @@
-package no.guttab.raven.search.response;
+package no.guttab.raven.search.response.navigators;
 
 public class UrlFragmentEntry {
     private String indexFieldName;
