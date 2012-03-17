@@ -15,7 +15,9 @@ public class PageNavigator implements Navigator<PageNavigatorItem> {
     }
 
     private void initializeNavigatorItems() {
-
+        for (int i = 1; i <= pageNavigation.getNumberOfPages(); i++) {
+            navigatorItems.add(new PageNavigatorItem(i));
+        }
     }
 
     @Override

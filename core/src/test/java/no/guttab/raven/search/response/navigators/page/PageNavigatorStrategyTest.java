@@ -95,10 +95,10 @@ public class PageNavigatorStrategyTest {
     }
 
     @Test
-    public void addNavigators_should_add_navigator_with_5_pages_when_pageSize_is_2_and_number_of_results_is_10() throws Exception {
+    public void addNavigators_should_add_navigator_with_correct_number_of_items() throws Exception {
         when(pageNavigation.getPageRequestFieldName()).thenReturn("page");
-//        when(pageNavigation.getResults().getNumFound()).thenReturn(10L);
-//        when(pageConfig.getResultsPerPage()).thenReturn(2);
+        when(pageNavigation.requestHasPagination()).thenReturn(true);
+        when(pageNavigation.getNumberOfPages()).thenReturn(5L);
 
         PageNavigatorStrategy pageNavigatorStrategy = new PageNavigatorStrategy(pageNavigation);
         pageNavigatorStrategy.addNavigators(navigatorUrls, navigators);
