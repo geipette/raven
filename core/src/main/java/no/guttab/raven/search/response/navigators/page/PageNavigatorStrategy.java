@@ -7,12 +7,12 @@ import no.guttab.raven.search.response.navigators.NavigatorUrls;
 public class PageNavigatorStrategy implements NavigatorStrategy {
     private final PageNavigation pageNavigation;
     private final PageNavigatorUrlProcessor pageNavigatorUrlProcessor;
-    private final PageNavigator pageNavigator;
+    private final PageNavigatorBuilder pageNavigatorBuilder;
 
     public PageNavigatorStrategy(PageNavigation pageNavigation) {
         this.pageNavigation = pageNavigation;
         pageNavigatorUrlProcessor = new PageNavigatorUrlProcessor(pageNavigation);
-        pageNavigator = new PageNavigator(pageNavigation);
+        pageNavigatorBuilder = new PageNavigatorBuilder(pageNavigation);
     }
 
     @Override
@@ -23,7 +23,7 @@ public class PageNavigatorStrategy implements NavigatorStrategy {
     @Override
     public void addNavigators(NavigatorUrls navigatorUrls, Navigators navigators) {
         if (pageNavigation.requestHasPagination()) {
-            navigators.addNavigator(pageNavigator);
+            navigators.addNavigator(pageNavigatorBuilder.build(navigatorUrls));
         }
     }
 

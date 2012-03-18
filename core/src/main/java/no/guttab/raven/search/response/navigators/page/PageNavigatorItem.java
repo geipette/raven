@@ -4,9 +4,13 @@ import no.guttab.raven.search.response.NavigatorItem;
 
 public class PageNavigatorItem implements NavigatorItem {
     private int page;
+    private String url;
+    private String deselectUrl;
 
-    public PageNavigatorItem(int page) {
+    public PageNavigatorItem(int page, String url, String deselectUrl) {
         this.page = page;
+        this.url = url;
+        this.deselectUrl = deselectUrl;
     }
 
     @Override
@@ -16,11 +20,11 @@ public class PageNavigatorItem implements NavigatorItem {
 
     @Override
     public String getUrl() {
-        return null;
+        return url;
     }
 
     @Override
     public String getDeselectUrl() {
-        return null;
+        return deselectUrl;
     }
 }

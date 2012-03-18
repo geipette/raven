@@ -7,17 +7,14 @@ import java.util.List;
 
 public class PageNavigator implements Navigator<PageNavigatorItem> {
     private List<PageNavigatorItem> navigatorItems = new ArrayList<PageNavigatorItem>();
-    private PageNavigation pageNavigation;
+    private List<PageNavigatorItem> selectedNavigatorItems = new ArrayList<PageNavigatorItem>();
 
-    public PageNavigator(PageNavigation pageNavigation) {
-        this.pageNavigation = pageNavigation;
-        initializeNavigatorItems();
+    void addNavigatorItem(PageNavigatorItem pageNavigatorItem) {
+        navigatorItems.add(pageNavigatorItem);
     }
 
-    private void initializeNavigatorItems() {
-        for (int i = 1; i <= pageNavigation.getNumberOfPages(); i++) {
-            navigatorItems.add(new PageNavigatorItem(i));
-        }
+    void addSelectedNavigatorItem(PageNavigatorItem pageNavigatorItem) {
+        selectedNavigatorItems.add(pageNavigatorItem);
     }
 
     @Override
@@ -27,12 +24,12 @@ public class PageNavigator implements Navigator<PageNavigatorItem> {
 
     @Override
     public boolean isSelected() {
-        return false;
+        return !selectedNavigatorItems.isEmpty();
     }
 
     @Override
     public PageNavigatorItem getFirstSelectedItem() {
-        return null;
+        return isSelected() ? selectedNavigatorItems.get(0) : null;
     }
 
     @Override
@@ -42,6 +39,6 @@ public class PageNavigator implements Navigator<PageNavigatorItem> {
 
     @Override
     public List<PageNavigatorItem> getSelectedItems() {
-        return null;
+        return selectedNavigatorItems;
     }
 }
