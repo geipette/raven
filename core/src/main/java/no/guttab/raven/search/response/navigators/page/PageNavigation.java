@@ -19,7 +19,8 @@ class PageNavigation {
     }
 
     public long getNumberOfPages() {
-        return queryResponse.getResults().getNumFound() / pageConfig.getResultsPerPage() + FIRST_PAGE;
+        return queryResponse.getResults().getNumFound() / pageConfig.getResultsPerPage()
+                + ((queryResponse.getResults().getNumFound() % pageConfig.getResultsPerPage()) > 0 ? 1 : 0);
     }
 
     public long getCurrentPage() {
