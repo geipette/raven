@@ -10,7 +10,7 @@ class PageNavigatorBuilder {
     }
 
     public PageNavigator build(NavigatorUrls navigatorUrls) {
-        final PageNavigator pageNavigator = new PageNavigator();
+        final PageNavigator pageNavigator = new PageNavigator(pageNavigation.getPageRequestFieldName());
         addNavigatorItemForEachPage(navigatorUrls, pageNavigator);
         return pageNavigator;
     }
@@ -25,9 +25,8 @@ class PageNavigatorBuilder {
         final PageNavigatorItem navigatorItem = createNavigatorItem(navigatorUrls, i);
         if (pageIsSelected(i)) {
             pageNavigator.addSelectedNavigatorItem(navigatorItem);
-        } else {
-            pageNavigator.addNavigatorItem(navigatorItem);
         }
+        pageNavigator.addNavigatorItem(navigatorItem);
     }
 
     private PageNavigatorItem createNavigatorItem(NavigatorUrls navigatorUrls, int i) {
@@ -37,6 +36,6 @@ class PageNavigatorBuilder {
     }
 
     private boolean pageIsSelected(int i) {
-        return pageNavigation.getCurrentPage() == i;
+        return pageNavigation.getCurrentPage() > 0 ? pageNavigation.getCurrentPage() == i : i == 1;
     }
 }

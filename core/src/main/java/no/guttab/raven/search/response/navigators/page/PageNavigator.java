@@ -8,6 +8,11 @@ import java.util.List;
 public class PageNavigator implements Navigator<PageNavigatorItem> {
     private List<PageNavigatorItem> navigatorItems = new ArrayList<PageNavigatorItem>();
     private List<PageNavigatorItem> selectedNavigatorItems = new ArrayList<PageNavigatorItem>();
+    private String displayName;
+
+    public PageNavigator(String displayName) {
+        this.displayName = displayName;
+    }
 
     void addNavigatorItem(PageNavigatorItem pageNavigatorItem) {
         navigatorItems.add(pageNavigatorItem);
@@ -19,7 +24,7 @@ public class PageNavigator implements Navigator<PageNavigatorItem> {
 
     @Override
     public String getDisplayName() {
-        return null;
+        return displayName;
     }
 
     @Override
