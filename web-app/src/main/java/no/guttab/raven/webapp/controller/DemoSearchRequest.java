@@ -19,6 +19,9 @@ public class DemoSearchRequest {
     @Sort
     private String sort;
 
+    @Page(resultsPerPage = 5)
+    private int page;
+
     @Query
     @NotNull
     private String keyword = "*:*";
@@ -37,5 +40,9 @@ public class DemoSearchRequest {
 
     public void setSort(String sort) {
         this.sort = sort;
+    }
+
+    public void setPage(int page) {
+        this.page = page;
     }
 }

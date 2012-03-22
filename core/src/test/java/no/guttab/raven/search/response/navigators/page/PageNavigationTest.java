@@ -150,7 +150,6 @@ public class PageNavigationTest {
         assertThat(pageNavigation.getCurrentPage(), is(2L));
     }
 
-
     @Test
     public void when_start_is_within_the_second_page_then_currentPage_should_be_2() throws Exception {
         SolrDocumentList results = resultsThatStartsAt(15L);

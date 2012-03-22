@@ -16,6 +16,14 @@
 <c:forEach var="navigator" items="${searchResponse.navigators}">
     <h3>${navigator.displayName}</h3>
     <c:choose>
+        <c:when test="${navigator.displayName eq 'page'}">
+            <p>
+                <c:forEach var="item" items="${navigator.items}">
+                    <%--@elvariable id="item" type="no.guttab.raven.search.response.NavigatorItem"--%>
+                    <a href="${item.url}">${item.name}</a>&nbsp;&nbsp;
+                </c:forEach>
+            </p>
+        </c:when>
         <c:when test="${navigator.displayName eq 'sort'}">
             <c:forEach var="item" items="${navigator.items}">
                 <%--@elvariable id="item" type="no.guttab.raven.search.response.NavigatorItem"--%>

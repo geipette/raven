@@ -38,7 +38,8 @@ public class DefaultSearchContext<T> implements SearchContext<T> {
                 new FacetFieldQueryProcessor(),
                 new FilterQueryProcessor(),
                 new QueryStringQueryProcessor(),
-                new SortQueryProcessor());
+                new SortQueryProcessor(),
+                new PageQueryProcessor());
     }
 
     @SuppressWarnings({"unchecked"})
