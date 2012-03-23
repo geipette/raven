@@ -19,13 +19,29 @@ class PageAnnotatedFieldCallback implements AnnotatedFieldCallback<Page> {
 
     @Override
     public void doFor(Field field, Page annotation) {
-        int rows = annotation.resultsPerPage();
-        int start = calculateStartIndexForPageField(field, rows);
-        solrQuery.setStart(start);
-        solrQuery.setRows(rows);
+        Integer rows = applyResultsPerPage(annotation);
+        applyStartIndex(field, rows);
     }
 
-    private int calculateStartIndexForPageField(Field field, int rows) {
-        return rows * (Integer) getFieldValue(field, queryInput);
+    private Integer applyResultsPerPage(Page annotation) {
+        Integer rows = annotation.resultsPerPage();
+        solrQuery.setRows(rows);
+        return rows;
+    }
+
+    private void applyStartIndex(Field field, Integer rows) {
+        Integer start = calculateStartIndexForPageField(field, rows);
+        if (start != null && start > 0) {
+            solrQuery.setStart(start);
+        }
+    }
+
+    private Integer calculateStartIndexForPageField(Field field, int rows) {
+        final Integer currentPage = findCurrentPage(field);
+        return currentPage == null || currentPage <= 1 ? null : rows * (currentPage - 1);
+    }
+
+    private Integer findCurrentPage(Field field) {
+        return (Integer) getFieldValue(field, queryInput);
     }
 }
